@@ -8,6 +8,8 @@ import { BuscadorEmpleadosService } from 'src/app/services/buscador-empleados.se
 })
 export class ListadoEmpleadosComponent {
 
+  empleados: any;
+
   constructor(public buscadorService : BuscadorEmpleadosService) {
 
   }

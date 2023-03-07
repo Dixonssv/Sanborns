@@ -14,4 +14,8 @@ export class BuscadorComponent {
   constructor (public buscadorService : BuscadorEmpleadosService) {
 
   }
+
+  buscar() {
+    this.buscadorService.getEmpleado(this.input);
+  }
 }

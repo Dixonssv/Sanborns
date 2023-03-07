@@ -1,35 +1,31 @@
 import { Injectable } from '@angular/core';
 
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BuscadorEmpleadosService {
 
-  //urlJson = 'https://jsonplaceholder.typicode.com/posts';
-
   urlApi = 'https://administration.gsanborns.com.mx/api/empleados/buscar';
 
   result : any;
 
+  empleados : any;
+
   constructor(private http : HttpClient) { }
 
-  /*
-  getJson(id : number) {
-    let params = new HttpParams().append("userId", id);
-
-    const req = this.http.get(this.urlJson, {params : params});
-    
-    req.subscribe(data => {this.result = data});
-  }
-  */
-
   getEmpleado(empleado : string) {
-    let params = new HttpParams();
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Basic ${btoa('santiago:2LchKVi2$EX*w*&8TlE64FpaSX0uCp4MqoEUC%yr0o*yf6FGEX')}`
+      }),
+      params: new HttpParams().set("query", empleado)
+    }
 
-    params.append("query", empleado);
-
-    this.http.get(this.urlApi, {params: params}).subscribe(data => {this.result = data});
+    this.http.get(this.urlApi, options).subscribe((data:any) => {
+      this.result = data.body;
+    });
   }
 }
