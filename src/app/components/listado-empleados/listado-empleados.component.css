@@ -1,7 +1,18 @@
 div.card {
     width: 80%;
     margin: 10px;
-    padding: 10px 30px;
     border-radius: 10px;
-    background-color: #CCCCCC;
+    background-color: #DDDDDD;
+}
+
+a.card-btn {
+    display: block;
+    padding: 10px 30px;
+    text-decoration: none;
+    color: black;
+    border-radius: 10px;
+}
+
+a.card-btn:hover {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;;
 }

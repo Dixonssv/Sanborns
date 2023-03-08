@@ -1,12 +1,12 @@
-<hr>
 <h3>Expediente Empleados</h3>
-<a *ngFor="let empleado of this.buscadorService.result">
-    <div class="card">
+<div class="card" *ngFor="let empleado of this.buscadorService.result">
+    <a routerLink="/detalles" class="card-btn">
         <p><strong>{{empleado.nombre}}</strong></p>
         <p>{{empleado.numeroEmpleado}}</p>
         <p>{{empleado.departamento}}</p>
         <p>{{empleado.puesto}}</p>
-    </div>
-</a>
+    </a>
+</div>
+
 
 
