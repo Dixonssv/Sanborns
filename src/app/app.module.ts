@@ -13,6 +13,7 @@ import { DetallesComponent } from './detalles/detalles.component';
 
 const routes: Routes = [
   {path: 'inicio', component: ListadoEmpleadosComponent},
+  {path: 'detalles/:index', component: DetallesComponent}
 ];
 
 @NgModule({

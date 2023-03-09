@@ -11,8 +11,6 @@ export class BuscadorEmpleadosService {
 
   result : any;
 
-  empleados : any;
-
   constructor(private http : HttpClient) { }
 
   getEmpleado(empleado : string) {

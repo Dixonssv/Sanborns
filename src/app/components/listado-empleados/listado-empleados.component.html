@@ -1,6 +1,6 @@
 <hr>
 <h3>Expediente Empleados</h3>
-<a *ngFor="let empleado of this.buscadorService.result">
+<a *ngFor="let empleado of this.buscadorService.result; let i = index" [routerLink]="['/detalles', i]">
     <div class="card">
         <p><strong>{{empleado.nombre}}</strong></p>
         <p>{{empleado.numeroEmpleado}}</p>
