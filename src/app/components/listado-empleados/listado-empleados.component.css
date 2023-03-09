@@ -1,15 +1,10 @@
-div.card {
-    width: 80%;
-    margin: 10px;
-    border-radius: 10px;
-    background-color: #DDDDDD;
-}
-
 a.card-btn {
     display: block;
     padding: 10px 30px;
+    margin: 10px;
     text-decoration: none;
     color: black;
+    background-color: #DDDDDD;
     border-radius: 10px;
 }
 
