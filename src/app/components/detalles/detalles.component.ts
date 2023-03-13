@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BuscadorEmpleadosService } from '../services/buscador-empleados.service';
+import { BuscadorEmpleadosService } from '../../services/buscador-empleados.service';
 
 import { ActivatedRoute, ParamMap } from '@angular/router';
 

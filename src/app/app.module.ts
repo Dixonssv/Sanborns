@@ -9,7 +9,8 @@ import { HttpClientTestComponent } from './http-client-test/http-client-test.com
 import { BuscadorComponent } from './components/buscador/buscador.component';
 import { BuscadorEmpleadosService } from './services/buscador-empleados.service';
 import { ListadoEmpleadosComponent } from './components/listado-empleados/listado-empleados.component';
-import { DetallesComponent } from './detalles/detalles.component';
+import { DetallesComponent } from './components/detalles/detalles.component';
+import { HeaderComponent } from './components/header/header.component';
 
 const routes: Routes = [
   {path: 'inicio', component: ListadoEmpleadosComponent},
@@ -23,7 +24,8 @@ const routes: Routes = [
     HttpClientTestComponent,
     BuscadorComponent,
     ListadoEmpleadosComponent,
-    DetallesComponent
+    DetallesComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
