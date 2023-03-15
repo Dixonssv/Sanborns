@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-//import { Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { BuscadorEmpleadosService } from 'src/app/services/buscador-empleados.service';
 
@@ -12,7 +12,7 @@ export class BuscadorComponent {
 
   input : string = "";
 
-  constructor (/*private router: Router,*/ public buscadorService : BuscadorEmpleadosService) {
+  constructor (private router: Router, public buscadorService : BuscadorEmpleadosService) {
 
   }
 
@@ -20,9 +20,7 @@ export class BuscadorComponent {
     this.buscadorService.getEmpleado(this.input);
   }
 
-  /*
   irA(ruta:string) {
-    this.router.navigate(['ruta']);
+    this.router.navigate([ruta]);
   }
-  */
 }

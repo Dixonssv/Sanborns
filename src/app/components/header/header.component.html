@@ -1,19 +1,25 @@
-<header class="grid grid-cols-3 gap-4 bg-red-700 shadow-lg">
-    <!--Logo-->
-    <div class="py-2.5 px-10">
-        <div class="h-10 bg-white rounded-3xl">
-            <img 
-            src="http://www.gsanborns.com.mx/images/logos/logo_Sanborns.png" 
-            alt="logo_sanborns"
-            class="object-contain w-full h-full">
+<header class="shadow-lg">
+    <div class="bg-red-700 grid grid-cols-1 sm:gap-4 sm:grid-cols-3">
+        <!--Logo-->
+        <div class="p-2.5">
+            <div class="h-10 bg-white rounded-3xl">
+                <img 
+                src="http://www.gsanborns.com.mx/images/logos/logo_Sanborns.png" 
+                alt="logo_sanborns"
+                class="object-contain w-full h-full">
+            </div>
+        </div>
+        <!--Titulo-->
+        <div id="titulo-lg" class="p-2.5">
+            <h1 class="text-center text-white text-xl font-light p-2">Expediente de Personal</h1>
+        </div>
+        <!--Buscador-->
+        <div id="buscador-lg" class="hidden p-2.5 sm:block">
+            <app-buscador></app-buscador>
         </div>
     </div>
-    <!--Titulo-->
-    <div class="p-2.5">
-        <h1 class="text-center text-white text-xl font-thin p-2">Expediente Personal</h1>
-    </div>
     <!--Buscador-->
-    <div class="p-2.5">
+    <div id="buscador-lg" class="block p-2.5 sm:hidden">
         <app-buscador></app-buscador>
     </div>
 </header>

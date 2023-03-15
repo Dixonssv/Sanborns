@@ -13,7 +13,7 @@ export class BuscadorEmpleadosService {
 
   constructor(private http : HttpClient) { }
 
-  getEmpleado(empleado : string) {
+  async getEmpleado(empleado : string) {
     const options = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -22,10 +22,14 @@ export class BuscadorEmpleadosService {
       params: new HttpParams().set("query", empleado)
     }
 
-    this.http.get(this.urlApi, options).subscribe((data:any) => {
-      this.result = data.body;
-    });
-
+    if(empleado != "") {
+      this.http.get(this.urlApi, options).subscribe((data:any) => {
+        this.result = data.body;
+      });
+    } else {
+      this.result = [];
+    }
+    
     /*
     {
       "claveCompania": 1,
