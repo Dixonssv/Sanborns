@@ -12,8 +12,8 @@
             </div>
             <!--Datos-->
             <div class="float-left w-2/3 px-5">
-                <p class="font-bold">{{empleado.nombre}}</p>
-                <p>{{empleado.numeroEmpleado}}</p>
+                <p class="font-bold" [innerHTML]="empleado._formatted.nombre"></p>
+                <p>{{empleado._formatted.numeroEmpleado}}</p>
                 <p>{{empleado.departamento}}</p>
                 <p>{{empleado.puesto}}</p>
             </div>
