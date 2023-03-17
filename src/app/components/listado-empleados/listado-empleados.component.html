@@ -1,3 +1,7 @@
+<div *ngIf="this.buscadorService.buscando" class="text-gray-400 italic p-5">
+    <p>Buscando...</p>
+</div>
+
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-8">
     <a 
         *ngFor="let empleado of this.buscadorService.result; let i = index" 

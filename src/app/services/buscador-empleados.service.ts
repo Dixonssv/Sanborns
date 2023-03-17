@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import { NumberFormatStyle } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -10,14 +9,30 @@ export class BuscadorEmpleadosService {
 
   urlApi = 'https://administration.gsanborns.com.mx/api/empleados/buscar';
 
-  result : any = [];
+  result : any;
+
+  buscando : boolean;
   
-  constructor(private http : HttpClient) { }
+  constructor(private http : HttpClient) { 
+    this.buscando = false;
+    this.result = [];
+  }
 
   getEmpleado(cadena : string) {
+    this.buscando = true;
+    
+    /*
     if(cadena == "") {
       this.result = []
     } else if(!this.buscarEnSet(cadena)) {
+      this.buscarEnApi(cadena);
+    }
+    */
+
+    if(cadena == "") {
+      this.result = [];
+      this.buscando = false;
+    } else {
       this.buscarEnApi(cadena);
     }
   }
@@ -32,12 +47,16 @@ export class BuscadorEmpleadosService {
       }),
       params: new HttpParams().set("query", cadena)
     }
-    
+
     this.http.get(this.urlApi, options).subscribe((data:any) => {
       this.result = data.body;
+      this.buscando = false;
     });
   }
 
+  /**
+   * @deprecated
+   */
   buscarEnSet(cadena:string) {
     cadena = cadena.toUpperCase();
 
