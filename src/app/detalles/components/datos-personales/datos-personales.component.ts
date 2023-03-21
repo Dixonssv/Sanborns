@@ -17,10 +17,10 @@ export class DatosPersonalesComponent {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      console.log(this.buscador.result);
-      console.log(+params['id']);
-      console.log(this.buscador.result[+params['index']]);
-      this.empleado = this.buscador.result[+params['index']];
+      //console.log(this.buscador.result);
+      //console.log(+params['id']);
+      //console.log(this.buscador.result[+params['index']]);
+      //this.empleado = this.buscador.result[+params['index']];
     });
   }
 }
