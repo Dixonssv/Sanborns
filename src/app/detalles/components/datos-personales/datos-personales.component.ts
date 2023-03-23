@@ -6,7 +6,7 @@ import { BuscadorEmpleadosService } from 'src/app/services/buscador-empleados.se
 @Component({
   selector: 'app-datos-personales',
   templateUrl: './datos-personales.component.html',
-  styleUrls: ['./datos-personales.component.css']
+  styleUrls: ['./datos-personales.component.css', '../../detalles.css']
 })
 export class DatosPersonalesComponent {
   empleado:any;
