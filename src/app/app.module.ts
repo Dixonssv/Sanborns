@@ -13,6 +13,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { BuscadorComponent } from './components/buscador/buscador.component';
 import { ListadoEmpleadosComponent } from './components/listado-empleados/listado-empleados.component';
 import { OrganigramaComponent } from './components/organigrama/organigrama.component';
+import { AdDirectiveDirective } from './detalles/directives/adDirective/ad-directive.directive';
 //import { HttpClientTestComponent } from './http-client-test/http-client-test.component';
 
 const routes: Routes = [
@@ -29,7 +30,8 @@ const routes: Routes = [
     BuscadorComponent,
     ListadoEmpleadosComponent,
     HeaderComponent,
-    OrganigramaComponent
+    OrganigramaComponent,
+    AdDirectiveDirective
   ],
   imports: [
     BrowserModule,
