@@ -9,18 +9,31 @@ module.exports = {
     "./src/app/components/listado-empleados/listado-empleados.component.html",
 
     "./src/app/detalles/components/detalles/detalles.component.html",
+    "./src/app/detalles/components/dashboard/dashboard.component.html",
     "./src/app/detalles/components/sidebar/sidebar.component.html",
-    "./src/app/detalles/components/datos-personales/datos-personales.component.html",
-    "./src/app/detalles/components/curriculum/curriculum.component.html",
-    "./src/app/detalles/components/estudios/estudios.component.html",
-    "./src/app/detalles/components/contrato/contrato.component.html",
-    "./src/app/detalles/components/horario/horario.component.html",
-    "./src/app/detalles/components/documentos/documentos.component.html",
-    "./src/app/detalles/components/nomina/nomina.component.html",
-    "./src/app/detalles/components/actas/actas.component.html",
-    "./src/app/detalles/components/trayectoria/trayectoria.component.html",
-    "./src/app/detalles/components/cursos/cursos.component.html"
+    "./src/app/detalles/components/cards/datos-personales/datos-personales.component.html",
+    "./src/app/detalles/components/cards/curriculum/curriculum.component.html",
+    "./src/app/detalles/components/cards/estudios/estudios.component.html",
+    "./src/app/detalles/components/cards/contrato/contrato.component.html",
+    "./src/app/detalles/components/cards/horario/horario.component.html",
+    "./src/app/detalles/components/cards/documentos/documentos.component.html",
+    "./src/app/detalles/components/cards/nomina/nomina.component.html",
+    "./src/app/detalles/components/cards/actas/actas.component.html",
+    "./src/app/detalles/components/cards/trayectoria/trayectoria.component.html",
+    "./src/app/detalles/components/cards/cursos/cursos.component.html"
 
+  ],
+  safelist: [
+
+    'dash-card',
+    'dash-card-x1',
+    'dash-card-x2',
+    'dash-card-x3',
+    'dash-card-x4',
+    'dash-card-y1',
+    'dash-card-y2',
+    'dash-card-y3',
+    'dash-card-y4',
   ],
   theme: {
     extend: {},

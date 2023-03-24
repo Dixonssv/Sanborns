@@ -1,18 +1,22 @@
+/*
+  Referencia: https://stackblitz.com/run?file=src%2Fapp%2Fad-banner.component.ts,src%2Fapp%2Fad.component.ts,src%2Fapp%2Fapp.component.ts,src%2Fapp%2Fhero-job-ad.component.ts,src%2Fapp%2Fad-item.ts
+*/
+
 import { Injectable, Type } from '@angular/core';
 import { Subject } from 'rxjs';
 import { AdComponent } from './ad-component';
 
 import { DashboardComponent } from '../components/dashboard/dashboard.component';
-import { CurriculumComponent } from '../components/curriculum/curriculum.component';
-import { EstudiosComponent } from '../components/estudios/estudios.component';
-import { ContratoComponent } from '../components/contrato/contrato.component';
-import { HorarioComponent } from '../components/horario/horario.component';
-import { DocumentosComponent } from '../components/documentos/documentos.component';
-import { NominaComponent } from '../components/nomina/nomina.component';
-import { ActasComponent } from '../components/actas/actas.component';
-import { TrayectoriaComponent } from '../components/trayectoria/trayectoria.component';
-import { CursosComponent } from '../components/cursos/cursos.component';
-import { DatosPersonalesComponent } from '../components/datos-personales/datos-personales.component';
+import { CurriculumComponent } from '../components/cards/curriculum/curriculum.component';
+import { EstudiosComponent } from '../components/cards/estudios/estudios.component';
+import { ContratoComponent } from '../components/cards/contrato/contrato.component';
+import { HorarioComponent } from '../components/cards/horario/horario.component';
+import { DocumentosComponent } from '../components/cards/documentos/documentos.component';
+import { NominaComponent } from '../components/cards/nomina/nomina.component';
+import { ActasComponent } from '../components/cards/actas/actas.component';
+import { TrayectoriaComponent } from '../components/cards/trayectoria/trayectoria.component';
+import { CursosComponent } from '../components/cards/cursos/cursos.component';
+import { DatosPersonalesComponent } from '../components/cards/datos-personales/datos-personales.component';
 
 @Injectable({
   providedIn: 'root'

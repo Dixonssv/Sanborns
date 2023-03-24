@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    .dash-card {
+        @apply h-20;
+
+        @apply p-2;
+        @apply m-2;
+
+        @apply border-dashed;
+        @apply border-2;
+        @apply border-gray-700;
+        @apply rounded-md;
+
+        @apply bg-gray-100;
+    }
+
+    /* 1 recuadro vertical */
+    .dash-card-x1 {
+        @apply col-span-1;
+    }
+
+    /* 2 recuadros verticales */
+    .dash-card-x2 {
+        @apply col-span-2;
+    }
+
+    /* 3 recuadros verticales */
+    .dash-card-x3 {
+        @apply col-span-3;
+    }
+
+    /* 4 recuadros verticales */
+    .dash-card-x4 {
+        @apply col-span-4;
+    }
+
+    /* 1 recuadro vertical */
+    .dash-card-y1 {
+        @apply h-20;
+        @apply row-span-1;
+    }
+
+    /* 2 recuadros verticales */
+    .dash-card-y2 {
+        @apply h-40;
+        @apply row-span-2;
+    }
+
+    /* 3 recuadros verticales */
+    .dash-card-y3 {
+        @apply h-60;
+        @apply row-span-3;
+    }
+
+    /* 4 recuadros verticales */
+    .dash-card-y4 {
+        @apply h-80;
+        @apply row-span-4;
+    }
+}

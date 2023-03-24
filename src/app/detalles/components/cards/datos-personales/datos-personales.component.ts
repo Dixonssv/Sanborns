@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostBinding, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { BuscadorEmpleadosService } from 'src/app/services/buscador-empleados.service';
@@ -6,10 +6,13 @@ import { BuscadorEmpleadosService } from 'src/app/services/buscador-empleados.se
 @Component({
   selector: 'app-datos-personales',
   templateUrl: './datos-personales.component.html',
-  styleUrls: ['./datos-personales.component.css', '../../detalles.css']
+  styleUrls: ['./datos-personales.component.css', '../cards.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class DatosPersonalesComponent {
   empleado:any;
+
+  @HostBinding('class') classAttribute: string = 'dash-card dash-card-x2 dash-card-y2';
 
   constructor(private buscador:BuscadorEmpleadosService, private route: ActivatedRoute) {
     
