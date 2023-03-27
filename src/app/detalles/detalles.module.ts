@@ -17,6 +17,7 @@ import { CursosComponent } from './components/cards/cursos/cursos.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { DashboardComponentsService } from './services/dashboard-components.service';
 import { AddDirective } from './directives/add/add.directive';
+import { CardTemplateComponent } from './components/cards/card/card-template/card-template.component';
 
 const routes: Routes = [
   {
@@ -73,7 +74,8 @@ const routes: Routes = [
     TrayectoriaComponent,
     CursosComponent,
     DashboardComponent,
-    AddDirective
+    AddDirective,
+    CardTemplateComponent
   ],
   imports: [
     CommonModule,

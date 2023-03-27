@@ -6,6 +6,8 @@ import { Injectable, Type } from '@angular/core';
 import { Subject } from 'rxjs';
 import { AdComponent } from './ad-component';
 
+import { Card } from '../components/cards/card/card';
+
 import { DashboardComponent } from '../components/dashboard/dashboard.component';
 import { CurriculumComponent } from '../components/cards/curriculum/curriculum.component';
 import { EstudiosComponent } from '../components/cards/estudios/estudios.component';
@@ -23,77 +25,82 @@ import { DatosPersonalesComponent } from '../components/cards/datos-personales/d
 })
 export class DashboardComponentsService {
   
-  private adds:any;
+  private cards:Card[];
 
-  addsChanged = new Subject<string>();
+  cardsChanged = new Subject<string>();
 
   constructor() {
-    this.adds = [];
+    this.cards = [];
   }
 
-  addComponent(component: string) {
-    let adComponent:AdComponent;
+  addCard(type: string) {
+    let card:any;
 
-    switch(component) {
+    switch(type) {
       case "Datos personales": {
-        adComponent = new AdComponent(DatosPersonalesComponent);
-        this.adds.push(adComponent);
+        card = new Card(DatosPersonalesComponent, 4, 2);
         break;
       }
       case "Curriculum": {
-        adComponent = new AdComponent(CurriculumComponent);
-        this.adds.push(adComponent);
+        card = new Card(CurriculumComponent, 4, 2);
         break;
       }
       case "Estudios": {
-        adComponent = new AdComponent(EstudiosComponent);
-        this.adds.push(adComponent);
+        card = new Card(EstudiosComponent, 4, 2);
         break;
       }
       case "Contrato": {
-        adComponent = new AdComponent(ContratoComponent);
-        this.adds.push(adComponent);
+        card = new Card(ContratoComponent, 4, 2);
         break;
       }
       case "Horario": {
-        adComponent = new AdComponent(HorarioComponent);
-        this.adds.push(adComponent);
+        card = new Card(HorarioComponent, 4, 2);
         break;
       }
       case "Documentos": {
-        adComponent = new AdComponent(DocumentosComponent);
-        this.adds.push(adComponent);
+        card = new Card(DocumentosComponent, 4, 2);
         break;
       }
       case "Nomina": {
-        adComponent = new AdComponent(NominaComponent);
-        this.adds.push(adComponent);
+        card = new Card(NominaComponent, 4, 2);
         break;
       }
       case "Actas": {
-        adComponent = new AdComponent(ActasComponent);
-        this.adds.push(adComponent);
+        card = new Card(ActasComponent, 4, 2);
         break;
       }
       case "Trayectoria": {
-        adComponent = new AdComponent(TrayectoriaComponent);
-        this.adds.push(adComponent);
+        card = new Card(TrayectoriaComponent, 4, 2);
         break;
       }
       case "Cursos": {
-        adComponent = new AdComponent(CursosComponent);
-        this.adds.push(adComponent);
+        card = new Card(CursosComponent, 4, 2);
         break;
       }
-      
+    }
+
+    if(!this.isInDashboard(card)) {
+      this.cards.push(card);      
     }
 
     // Llamada al observer
-    this.addsChanged.next(component);
+    this.cardsChanged.next(type);
   }
 
-  getComponents() {
-    return this.adds;
+  getCards() {
+    return this.cards;
+  }
+
+  isInDashboard(newCard: AdComponent) {
+    let result = false;
+
+    this.cards.forEach(card => {
+      if(card.component == newCard.component) {
+        result = true;
+      }
+    });
+
+    return result;
   }
 
 /*

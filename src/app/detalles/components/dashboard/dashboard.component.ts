@@ -1,10 +1,11 @@
-import { Component,Input, OnDestroy, OnInit, ViewChild, ViewContainerRef  } from '@angular/core';
+import { Component,Input, OnDestroy, OnInit, Type, ViewChild, ViewContainerRef  } from '@angular/core';
 
 import { AddDirective } from '../../directives/add/add.directive';
 
 import {DashboardComponentsService} from 'src/app/detalles/services/dashboard-components.service'
 
-import { AdComponent } from '../../services/ad-component';
+import { Card } from '../cards/card/card';
+import { CardComponent } from '../cards/card/card.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,22 +16,20 @@ export class DashboardComponent implements OnInit, OnDestroy{
 
   @ViewChild(AddDirective, {static: true}) adHost!: AddDirective;
 
-  constructor(private dashboardService : DashboardComponentsService) {
-    
-  }
+
+  constructor(private dashboardService : DashboardComponentsService) {  }
 
   ngOnInit(): void {
     const viewContainerRef = this.adHost.viewContainerRef;
 
-    this.dashboardService.addsChanged.pipe().subscribe(() => {
+    this.dashboardService.cardsChanged.pipe().subscribe(() => {
       
       viewContainerRef.clear();
 
-      let components = this.dashboardService.getComponents();
+      let cards = this.dashboardService.getCards();
 
-      components.forEach((component:any) => {
-        this.loadComponent(component, viewContainerRef);
-        //console.log(component.component);
+      cards.forEach(card => {
+          this.loadCard(card, viewContainerRef);
       });
     })
   }
@@ -39,9 +38,13 @@ export class DashboardComponent implements OnInit, OnDestroy{
     
   }
 
-  loadComponent(component:any, viewContainerRef:ViewContainerRef) {
-    viewContainerRef.createComponent<AdComponent>(component.component);
+  loadCard(card:any, viewContainerRef:ViewContainerRef) {
+    const cardComponent = viewContainerRef.createComponent<CardComponent>(card.component);
+    cardComponent.instance.x = card.x;
+    cardComponent.instance.y = card.y;
   }
+
+
 
   /*
   @Input() ads: AdItem[] = [];
