@@ -42,8 +42,9 @@ export class DashboardComponent implements OnInit, OnDestroy{
 
   loadCard(card:Card, viewContainerRef:ViewContainerRef) {
     const cardComponent = viewContainerRef.createComponent(CardComponent);
-    cardComponent.instance.setSize(card.x, card.y);
-    cardComponent.instance.setContent(card.component);
+    //cardComponent.instance.setSize(card.x, card.y);
+    //cardComponent.instance.setContent(card.component);
+    cardComponent.instance.setCard(card);
   }
 
 

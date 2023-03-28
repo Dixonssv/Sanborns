@@ -27,7 +27,7 @@ export class DashboardComponentsService {
   
   private cards:Card[];
 
-  cardsChanged = new Subject<string>();
+  cardsChanged = new Subject<boolean>();
 
   constructor() {
     this.cards = [];
@@ -42,15 +42,15 @@ export class DashboardComponentsService {
         break;
       }
       case "Curriculum": {
-        card = new Card(CurriculumComponent, 2, 3);
+        card = new Card(CurriculumComponent, 1, 3);
         break;
       }
       case "Estudios": {
-        card = new Card(EstudiosComponent, 3, 3);
+        card = new Card(EstudiosComponent, 2, 3);
         break;
       }
       case "Contrato": {
-        card = new Card(ContratoComponent, 2, 2);
+        card = new Card(ContratoComponent, 1, 2);
         break;
       }
       case "Horario": {
@@ -58,15 +58,15 @@ export class DashboardComponentsService {
         break;
       }
       case "Documentos": {
-        card = new Card(DocumentosComponent, 2, 3);
+        card = new Card(DocumentosComponent, 2, 4);
         break;
       }
       case "Nomina": {
-        card = new Card(NominaComponent, 4, 2);
+        card = new Card(NominaComponent, 1, 1);
         break;
       }
       case "Actas": {
-        card = new Card(ActasComponent, 4, 2);
+        card = new Card(ActasComponent, 2, 1);
         break;
       }
       case "Trayectoria": {
@@ -74,33 +74,49 @@ export class DashboardComponentsService {
         break;
       }
       case "Cursos": {
-        card = new Card(CursosComponent, 4, 2);
+        card = new Card(CursosComponent, 3, 1);
         break;
       }
     }
 
-    if(!this.isInDashboard(card)) {
+    if(this.isInDashboard(card) == -1) {
       this.cards.push(card);      
     }
 
     // Llamada al observer
-    this.cardsChanged.next(type);
+    this.cardsChanged.next(true);
   }
 
   getCards() {
     return this.cards;
   }
 
-  isInDashboard(newCard: AdComponent) {
-    let result = false;
+  isInDashboard(newCard: Card) {
+    // Regresa el indice si se encuentra en el arreglo. Si no, -1.
+
+    let i = 0;
+    let index = -1;
 
     this.cards.forEach(card => {
       if(card.component == newCard.component) {
-        result = true;
+        index = i;
       }
+      i++;
     });
 
-    return result;
+    return index;
+  }
+
+  deleteCard(card: Card) {
+    let index = this.isInDashboard(card);
+
+    if(index >= 0) {
+      // Se encuentra en el array
+
+      this.cards.splice(index, 1);
+
+      this.cardsChanged.next(true);
+    }
   }
 
 /*
