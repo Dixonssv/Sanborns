@@ -6,13 +6,10 @@ import { BuscadorEmpleadosService } from 'src/app/services/buscador-empleados.se
 @Component({
   selector: 'app-datos-personales',
   templateUrl: './datos-personales.component.html',
-  styleUrls: ['./datos-personales.component.css', '../cards.css'],
-  encapsulation: ViewEncapsulation.None,
+  styleUrls: ['./datos-personales.component.css', '../cards.css']
 })
 export class DatosPersonalesComponent {
   empleado:any;
-
-  @HostBinding('class') classAttribute: string = 'dash-card dash-card-x2 dash-card-y2';
 
   constructor(private buscador:BuscadorEmpleadosService, private route: ActivatedRoute) {
     

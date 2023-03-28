@@ -1,14 +1,11 @@
-import { Component, HostBinding, ViewEncapsulation } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-nomina',
   templateUrl: './nomina.component.html',
-  styleUrls: ['./nomina.component.css', '../cards.css'],
-  encapsulation: ViewEncapsulation.None,
+  styleUrls: ['./nomina.component.css', '../cards.css']
 
 })
 export class NominaComponent {
-  
-  @HostBinding('class') classAttribute: string = 'dash-card dash-card-x1 dash-card-y1';
 
 }

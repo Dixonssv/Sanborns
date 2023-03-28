@@ -38,27 +38,27 @@ export class DashboardComponentsService {
 
     switch(type) {
       case "Datos personales": {
-        card = new Card(DatosPersonalesComponent, 4, 2);
+        card = new Card(DatosPersonalesComponent, 2, 2);
         break;
       }
       case "Curriculum": {
-        card = new Card(CurriculumComponent, 4, 2);
+        card = new Card(CurriculumComponent, 2, 3);
         break;
       }
       case "Estudios": {
-        card = new Card(EstudiosComponent, 4, 2);
+        card = new Card(EstudiosComponent, 3, 3);
         break;
       }
       case "Contrato": {
-        card = new Card(ContratoComponent, 4, 2);
+        card = new Card(ContratoComponent, 2, 2);
         break;
       }
       case "Horario": {
-        card = new Card(HorarioComponent, 4, 2);
+        card = new Card(HorarioComponent, 4, 1);
         break;
       }
       case "Documentos": {
-        card = new Card(DocumentosComponent, 4, 2);
+        card = new Card(DocumentosComponent, 2, 3);
         break;
       }
       case "Nomina": {

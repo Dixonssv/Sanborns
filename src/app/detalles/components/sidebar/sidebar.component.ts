@@ -13,8 +13,8 @@ export class SidebarComponent {
 
   }
 
-  addComponentToDashboard(component:string) {
-    this.dashboard.addComponent(component);
+  addCardToDashboard(component:string) {
+    this.dashboard.addCard(component);
   }
 
 }

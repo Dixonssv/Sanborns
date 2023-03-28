@@ -1,11 +1,13 @@
-import { Component,Input, OnDestroy, OnInit, Type, ViewChild, ViewContainerRef  } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef  } from '@angular/core';
 
 import { AddDirective } from '../../directives/add/add.directive';
 
 import {DashboardComponentsService} from 'src/app/detalles/services/dashboard-components.service'
 
 import { Card } from '../cards/card/card';
-import { CardComponent } from '../cards/card/card.component';
+
+import { CardComponent } from '../cards/card/card/card.component';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -38,10 +40,10 @@ export class DashboardComponent implements OnInit, OnDestroy{
     
   }
 
-  loadCard(card:any, viewContainerRef:ViewContainerRef) {
-    const cardComponent = viewContainerRef.createComponent<CardComponent>(card.component);
-    cardComponent.instance.x = card.x;
-    cardComponent.instance.y = card.y;
+  loadCard(card:Card, viewContainerRef:ViewContainerRef) {
+    const cardComponent = viewContainerRef.createComponent(CardComponent);
+    cardComponent.instance.setSize(card.x, card.y);
+    cardComponent.instance.setContent(card.component);
   }
 
 
