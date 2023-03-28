@@ -7,6 +7,7 @@
         @apply h-20;
 
         @apply p-2;
+        @apply pt-0;
         @apply m-2;
 
         @apply border-dashed;
