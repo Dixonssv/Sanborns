@@ -1,7 +1,7 @@
 <header class="shadow-lg">
-    <div class="bg-red-700 grid grid-cols-1 sm:gap-4 sm:grid-cols-3">
+    <div class="bg-red-700 flex flex-row">
         <!--Logo-->
-        <div class="p-2.5">
+        <div class="flex-none p-2.5 w-32 inline-block">
             <div class="h-10 bg-white rounded-3xl">
                 <img 
                 src="http://www.gsanborns.com.mx/images/logos/logo_Sanborns.png" 
@@ -10,16 +10,16 @@
             </div>
         </div>
         <!--Titulo-->
-        <div id="titulo-lg" class="p-2.5">
-            <h1 class="text-center text-white text-xl font-light p-2">Expediente de Personal</h1>
+        <div id="titulo-lg" class="flex-none p-2.5 inline-block">
+            <h1 class="text-left text-white text-xl font-light px-10 py-2 mr-20">Expediente Digital</h1>
         </div>
         <!--Buscador-->
-        <div id="buscador-lg" class="hidden p-2.5 sm:block">
+        <div id="buscador-lg" class="flex grow w-80 hidden p-2.5 sm:block">
             <app-buscador></app-buscador>
         </div>
     </div>
     <!--Buscador-->
-    <div id="buscador-lg" class="block p-2.5 sm:hidden">
+    <div id="buscador-lg" class="block p-2.5 sm:hidden inline-block">
         <app-buscador></app-buscador>
     </div>
 </header>
