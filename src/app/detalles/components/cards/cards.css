@@ -8,7 +8,6 @@
 
         @apply p-2;
         @apply pt-0;
-        @apply m-2;
 
         @apply border-dashed;
         @apply border-2;
@@ -40,25 +39,26 @@
 
     /* 1 recuadro vertical */
     .dash-card-y1 {
-        @apply h-20;
+        /* h-20 = 5rem */
+        height: calc(5rem * 1);
         @apply row-span-1;
     }
 
     /* 2 recuadros verticales */
     .dash-card-y2 {
-        @apply h-40;
+        height: calc(5rem * 2 + 1rem);
         @apply row-span-2;
     }
 
     /* 3 recuadros verticales */
     .dash-card-y3 {
-        @apply h-60;
+        height: calc(5rem * 3 + 2rem);
         @apply row-span-3;
     }
 
     /* 4 recuadros verticales */
     .dash-card-y4 {
-        @apply h-80;
+        height: calc(5rem * 4 + 3rem);
         @apply row-span-4;
     }
 }
