@@ -1,4 +1,4 @@
-<div class="grid grid-cols-4 grid-flow-dense gap-4 p-4 pl-0">
+<div #dashboard class="grid grid-cols-4 grid-flow-row items-start divide-y divide-dashed gap-4 p-4 pl-0" cdkDropList (cdkDropListDropped)="drop($event)">
     <ng-template adHost></ng-template>
 </div>
 

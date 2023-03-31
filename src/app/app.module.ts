@@ -13,6 +13,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { BuscadorComponent } from './components/buscador/buscador.component';
 import { ListadoEmpleadosComponent } from './components/listado-empleados/listado-empleados.component';
 import { OrganigramaComponent } from './components/organigrama/organigrama.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 //import { HttpClientTestComponent } from './http-client-test/http-client-test.component';
 
 const routes: Routes = [
@@ -36,7 +37,8 @@ const routes: Routes = [
     HttpClientModule,
     [RouterModule.forRoot(routes)],
     FormsModule,
-    OrgChartModule
+    OrgChartModule,
+    BrowserAnimationsModule
   ],
   providers: [
     BuscadorEmpleadosService

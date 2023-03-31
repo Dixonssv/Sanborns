@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 import { DetallesComponent } from './components/detalles/detalles.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
@@ -19,6 +20,8 @@ import { DashboardComponentsService } from './services/dashboard-components.serv
 import { AddDirective } from './directives/add/add.directive';
 import { CardComponent } from './components/cards/card/card/card.component';
 import { CardContentDirective } from './components/cards/card/card-content.directive';
+import { DraggableDirective } from './components/cards/card/draggable.directive';
+import { TestComponent } from './components/cards/test/test.component';
 
 const routes: Routes = [
   {
@@ -77,11 +80,14 @@ const routes: Routes = [
     DashboardComponent,
     AddDirective,
     CardComponent,
-    CardContentDirective
+    CardContentDirective,
+    TestComponent,
   ],
   imports: [
     CommonModule,
     [RouterModule.forChild(routes)],
+    DraggableDirective,
+    DragDropModule
   ],
   exports: [
     DetallesComponent,

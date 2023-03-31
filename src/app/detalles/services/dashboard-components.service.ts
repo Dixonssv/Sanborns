@@ -19,6 +19,7 @@ import { ActasComponent } from '../components/cards/actas/actas.component';
 import { TrayectoriaComponent } from '../components/cards/trayectoria/trayectoria.component';
 import { CursosComponent } from '../components/cards/cursos/cursos.component';
 import { DatosPersonalesComponent } from '../components/cards/datos-personales/datos-personales.component';
+import { TestComponent } from '../components/cards/test/test.component';
 
 @Injectable({
   providedIn: 'root'
@@ -75,6 +76,11 @@ export class DashboardComponentsService {
       }
       case "Cursos": {
         card = new Card(CursosComponent, 3, 1);
+        break;
+      }
+      case "Test": {
+        card = new Card(TestComponent, 1, 1);
+        this.cards.push(card);
         break;
       }
     }
