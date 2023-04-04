@@ -4,11 +4,12 @@
 
 import { Injectable, Type } from '@angular/core';
 import { Subject } from 'rxjs';
-import { AdComponent } from './ad-component';
+
+import { CdkDrag, CdkDragDrop, CdkDragMove, CdkDragStart, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
+import { ViewportRuler } from '@angular/cdk/overlay';
 
 import { Card } from '../components/cards/card/card';
 
-import { DashboardComponent } from '../components/dashboard/dashboard.component';
 import { CurriculumComponent } from '../components/cards/curriculum/curriculum.component';
 import { EstudiosComponent } from '../components/cards/estudios/estudios.component';
 import { ContratoComponent } from '../components/cards/contrato/contrato.component';
@@ -21,16 +22,28 @@ import { CursosComponent } from '../components/cards/cursos/cursos.component';
 import { DatosPersonalesComponent } from '../components/cards/datos-personales/datos-personales.component';
 import { TestComponent } from '../components/cards/test/test.component';
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class DashboardComponentsService {
+
+  public dashboard: any;
   
   private cards:Card[];
 
   cardsChanged = new Subject<boolean>();
 
-  constructor() {
+  //----- Drag and Drop -----
+  private dragIndex = 0;
+  private dropIndex = 0;
+
+  private dragItem: any;
+  private dropItem: any;
+
+  private currentDropItem: any;
+
+  constructor(private viewportRuler: ViewportRuler) {
     this.cards = [];
   }
 
@@ -125,26 +138,107 @@ export class DashboardComponentsService {
     }
   }
 
-/*
-    getAds() {
-      return [
-        new AdItem(
-          HeroProfileComponent,
-          { name: 'Bombasto', bio: 'Brave as they come' }
-        ),
-        new AdItem(
-          HeroProfileComponent,
-          { name: 'Dr. IQ', bio: 'Smart as they come' }
-        ),
-        new AdItem(
-          HeroJobAdComponent,
-          { headline: 'Hiring for several positions', body: 'Submit your resume today!' }
-        ),
-        new AdItem(
-          HeroJobAdComponent,
-          { headline: 'Openings in all departments', body: 'Apply today' }
-        )
-      ];
+    //------------------ DRAG AND DROP ---------------------------
+
+  canDrop() {
+    return false;
+  }
+
+  dragStarted(e: CdkDragStart) {
+    let point = this.getPointerPositionOnPage(e.event);
+
+    this.dashboard._items.forEach((dropList: any) => {
+      if (this.isInsideDropList(dropList, point.x, point.y)) {
+        this.dragItem = dropList;
+        return;
+      }
+    });
+
+    this.currentDropItem = this.dragItem;
+  }
+
+  dragMoved(e: CdkDragMove) {
+    let point = this.getPointerPositionOnPage(e.event);
+
+    this.dashboard._items.forEach((dropList: any) => {
+      if (this.isInsideDropList(dropList, point.x, point.y)) {
+        this.dropItem = dropList;
+        return;
+      }
+    });
+
+    if(this.dragItem == this.dropItem) {
+      this.currentDropItem == this.dragItem;
     }
-    */
+
+    if(this.currentDropItem != this.dropItem) {
+
+      let drag = this.dragItem.element.nativeElement;
+      let drop = this.dropItem.element.nativeElement;
+      let parent = drop.parentElement;
+
+      let dragIndex = this.indexOf(parent, drag);
+      let dropIndex = this.indexOf(parent, drop);
+
+      //console.log("DragIndex = " + dragIndex);
+      //console.log("DropIndex = " + dropIndex);
+
+      //parent.insertBefore(drag, dropIndex == 0 ? drop.nextSibling : drop);
+      //parent.insertBefore(drag, dragIndex < dropIndex ? drop.nextSibling : drop);
+      parent.insertBefore(drag, drop.nextSibling);
+      //parent.insertBefore(drag, drop);
+
+      moveItemInArray(this.cards, dragIndex, dropIndex);
+
+      this.currentDropItem = this.dropItem;
+    } 
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    //this.dashboard.nativeElement.removeChild(event.);
+    //parent.appendChild(phElement);
+    //parent.insertBefore(this.source.element.nativeElement, parent.children
+
+    
+    this.dashboard.insertBefore(
+      event.previousContainer,
+      this.dashboard.children[event.currentIndex]
+    );
+    
+
+    //moveItemInArray(this.cards, event.previousIndex, event.currentIndex);
+
+    //this.cardsChanged.next(true);
+  }
+  
+
+  getPointerPositionOnPage(event: MouseEvent | TouchEvent) {
+    // `touches` will be empty for start/end events so we have to fall back to `changedTouches`.
+    const point = this.isTouchEvent(event)
+      ? event.touches[0] || event.changedTouches[0]
+      : event;
+    const scrollPosition = this.viewportRuler.getViewportScrollPosition();
+
+    return {
+      x: point.pageX - scrollPosition.left,
+      y: point.pageY - scrollPosition.top,
+
+      //x: point.pageX,
+      //y: point.pageY,
+    };
+  }
+
+  indexOf(collection: any, node: any) {
+    return Array.from(collection.children).indexOf(node);
+  }
+
+  /** Determines whether an event is a touch event. */
+  isTouchEvent(event: MouseEvent | TouchEvent): event is TouchEvent {
+    return event.type.startsWith('touch');
+  }
+
+  isInsideDropList(dropList: CdkDropList, x: number, y: number) {
+    const { top, bottom, left, right } = dropList.element.nativeElement.getBoundingClientRect();
+    return y >= top && y <= bottom && x >= left && x <= right;
+  }
 }

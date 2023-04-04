@@ -22,6 +22,7 @@ import { CardComponent } from './components/cards/card/card/card.component';
 import { CardContentDirective } from './components/cards/card/card-content.directive';
 import { DraggableDirective } from './components/cards/card/draggable.directive';
 import { TestComponent } from './components/cards/test/test.component';
+import { DragAndDropFlexComponent } from './components/drag-and-drop-flex/drag-and-drop-flex.component';
 
 const routes: Routes = [
   {
@@ -60,7 +61,7 @@ const routes: Routes = [
     ]
   },
   //{path: '', redirectTo: 'main/datos_personales', pathMatch: 'full'}
-  {path: '', redirectTo: 'datos_personales', pathMatch: 'full'}
+  //{path: '', redirectTo: 'datos_personales', pathMatch: 'full'}
 ];
 
 @NgModule({
@@ -82,6 +83,7 @@ const routes: Routes = [
     CardComponent,
     CardContentDirective,
     TestComponent,
+    DragAndDropFlexComponent,
   ],
   imports: [
     CommonModule,

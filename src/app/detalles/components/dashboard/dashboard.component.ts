@@ -7,7 +7,7 @@ import {DashboardComponentsService} from 'src/app/detalles/services/dashboard-co
 import { Card } from '../cards/card/card';
 
 import { CardComponent } from '../cards/card/card/card.component';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragDrop, CdkDropList, CdkDropListGroup, moveItemInArray } from '@angular/cdk/drag-drop';
 
 
 @Component({
@@ -15,17 +15,18 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit, OnDestroy{
+export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
 
   @ViewChild(AddDirective, {static: true}) adHost!: AddDirective;
 
-  @ViewChild('dashboard') dashboard!: ElementRef;
+  @ViewChild(CdkDropListGroup, {static: false}) dashboard!: CdkDropListGroup<CdkDropList>;
 
-  constructor(private dashboardService : DashboardComponentsService) {  
+  constructor(public dashboardService : DashboardComponentsService) {  
 
   }
 
   ngOnInit(): void {
+
     const viewContainerRef = this.adHost.viewContainerRef;
 
     this.dashboardService.cardsChanged.pipe().subscribe(() => {
@@ -40,8 +41,8 @@ export class DashboardComponent implements OnInit, OnDestroy{
     })
   }
 
-  ngAfterViewInit() {
-    console.log(this.dashboard);
+  ngAfterViewInit(): void {
+    this.dashboardService.dashboard = this.dashboard;
   }
 
   ngOnDestroy(): void {
@@ -94,15 +95,5 @@ export class DashboardComponent implements OnInit, OnDestroy{
 
   //---------------------------------------------------------------------------------------------------
 
-  drop(event: CdkDragDrop<string[]>) {
-    //this.dashboard.nativeElement.removeChild(event.);
-    //parent.appendChild(phElement);
-    //parent.insertBefore(this.source.element.nativeElement, parent.children
-
-    let cards = this.dashboardService.getCards();
-
-    moveItemInArray(cards, event.previousIndex, event.currentIndex);
-
-    this.dashboardService.cardsChanged.next(true);
-  }
+  
 }

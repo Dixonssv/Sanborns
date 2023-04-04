@@ -4,8 +4,10 @@ import { DashboardComponentsService } from 'src/app/detalles/services/dashboard-
 import {
   CdkDrag,
   CdkDragStart,
-  CdkDropList, CdkDropListGroup, CdkDragMove, CdkDragEnter,
-  moveItemInArray
+  CdkDropList,
+  CdkDropListGroup, 
+  moveItemInArray,
+  CdkDragDrop,
 } from "@angular/cdk/drag-drop";
 
 import { Card } from '../card';
@@ -21,7 +23,7 @@ import { DraggableDirective } from '../draggable.directive';
   encapsulation: ViewEncapsulation.None,
   hostDirectives: [
     //{directive: DraggableDirective},
-    CdkDrag
+    CdkDropList,
   ]
 })
 export class CardComponent {
@@ -50,7 +52,7 @@ export class CardComponent {
   setSize(x:number, y:number) {
     this.x = x;
     this.y = y;
-    this.classAttribute = 'dash-card dash-card-x' + this.x + ' dash-card-y' + this.y;
+    this.classAttribute = 'dash-card-x' + this.x + ' dash-card-y' + this.y;
   }
 
   setContent(component:Type<any>) {
@@ -67,8 +69,4 @@ export class CardComponent {
     this.dashboard.deleteCard(this.card);
   }
 
-  @HostListener ('cdkDragMoved', ['$event'])
-  onDrag(e: CdkDragMove) {
-    console.log(e.event)
-  }
 }
