@@ -38,6 +38,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
       cards.forEach(card => {
           this.loadCard(card, viewContainerRef);
       });
+
+      //this.loadCard(cards.at(cards.length - 1)!, viewContainerRef);
     })
   }
 
@@ -55,6 +57,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
     //cardComponent.instance.setContent(card.component);
     cardComponent.instance.setCard(card);
   }
+  
 
 
 

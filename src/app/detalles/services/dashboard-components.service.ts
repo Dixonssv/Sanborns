@@ -178,7 +178,7 @@ export class DashboardComponentsService {
       let parent = drop.parentElement;
 
       let dragIndex = this.indexOf(parent, drag);
-      let dropIndex = this.indexOf(parent, drop);
+      let dropIndex = this.indexOf(parent, drop.nextSibling);
 
       //console.log("DragIndex = " + dragIndex);
       //console.log("DropIndex = " + dropIndex);
@@ -188,7 +188,7 @@ export class DashboardComponentsService {
       parent.insertBefore(drag, drop.nextSibling);
       //parent.insertBefore(drag, drop);
 
-      moveItemInArray(this.cards, dragIndex, dropIndex);
+      //moveItemInArray(this.cards, dropIndex, dragIndex);
 
       this.currentDropItem = this.dropItem;
     } 
