@@ -155,6 +155,8 @@ export class DashboardComponentsService {
     });
 
     this.currentDropItem = this.dragItem;
+
+    console.log(this.cards);
   }
 
   dragMoved(e: CdkDragMove) {
@@ -171,7 +173,8 @@ export class DashboardComponentsService {
       this.currentDropItem == this.dragItem;
     }
 
-    if(this.currentDropItem != this.dropItem) {
+    
+    if(this.currentDropItem != this.dropItem && this.dropItem != this.dragItem) {
 
       let drag = this.dragItem.element.nativeElement;
       let drop = this.dropItem.element.nativeElement;
@@ -185,13 +188,18 @@ export class DashboardComponentsService {
 
       //parent.insertBefore(drag, dropIndex == 0 ? drop.nextSibling : drop);
       //parent.insertBefore(drag, dragIndex < dropIndex ? drop.nextSibling : drop);
-      parent.insertBefore(drag, drop.nextSibling);
       //parent.insertBefore(drag, drop);
 
-      //moveItemInArray(this.cards, dropIndex, dragIndex);
+      moveItemInArray(this.cards, dragIndex, dropIndex);
+
+      parent.insertBefore(drag, drop.nextSibling);
+
+      console.log("Switch: " + (dragIndex) + ", " + (dropIndex));
+      console.log(this.cards);
 
       this.currentDropItem = this.dropItem;
     } 
+    
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -209,6 +217,8 @@ export class DashboardComponentsService {
     //moveItemInArray(this.cards, event.previousIndex, event.currentIndex);
 
     //this.cardsChanged.next(true);
+
+    console.log("drop");
   }
   
 
@@ -229,7 +239,11 @@ export class DashboardComponentsService {
   }
 
   indexOf(collection: any, node: any) {
-    return Array.from(collection.children).indexOf(node);
+    let index = Array.from(collection.children).indexOf(node);
+
+    // verifica si el nodo esta fuera de la coleccion (indice -1)
+    // si es asi, regresa el ultimo indice de la collecion
+    return index == -1 ? collection.children.length - 1 : index;
   }
 
   /** Determines whether an event is a touch event. */
@@ -237,8 +251,23 @@ export class DashboardComponentsService {
     return event.type.startsWith('touch');
   }
 
+  
   isInsideDropList(dropList: CdkDropList, x: number, y: number) {
     const { top, bottom, left, right } = dropList.element.nativeElement.getBoundingClientRect();
     return y >= top && y <= bottom && x >= left && x <= right;
+  }
+  
+
+  
+  intersects(card: CdkDrag, dropList: CdkDropList) {
+    let A = card.element.nativeElement.getBoundingClientRect();
+    let B = card.element.nativeElement.getBoundingClientRect();
+
+    if ((A.left <= B.right || A.right >= B.left) && (A.bottom >= B.top || A.top <= B.bottom)) {
+      console.log("Intersect!");
+      return true;
+    };
+
+    return false;
   }
 }
