@@ -45,7 +45,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
       //this.loadCard(cards.at(cards.length - 1)!, viewContainerRef);
     })
 
-    /*
     this.dashboardService.cardInDashboard.pipe().subscribe((index: number) => {
       setTimeout(() => {
         this.loadedCards[index].addClass("shake");
@@ -54,7 +53,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
       this.loadedCards[index].removeClass("shake");
       //console.log(this.loadedCards[index].classAttribute);
     });
-    */
+    
     
   }
 
