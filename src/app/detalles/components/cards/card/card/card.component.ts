@@ -52,7 +52,7 @@ export class CardComponent {
   setSize(x:number, y:number) {
     this.x = x;
     this.y = y;
-    this.classAttribute = 'dash-card-x' + this.x + ' dash-card-y' + this.y;
+    this.classAttribute = 'dash-card-x' + this.x + ' dash-card-y' + this.y + ' ';
   }
 
   setContent(component:Type<any>) {
@@ -67,6 +67,15 @@ export class CardComponent {
   removeFromDashboard() {
     console.log("Remove");
     this.dashboard.deleteCard(this.card);
+  }
+
+  addClass(styleClass: string) {
+    this.classAttribute += styleClass;
+  }
+
+  removeClass(styleClass: string) {
+    var re = new RegExp(styleClass);
+    this.classAttribute = this.classAttribute.replace(re, "");
   }
 
 }

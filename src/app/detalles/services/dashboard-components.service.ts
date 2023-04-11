@@ -33,6 +33,7 @@ export class DashboardComponentsService {
   private cards:Card[];
 
   cardsChanged = new Subject<boolean>();
+  cardInDashboard = new Subject<number>();
 
   //----- Drag and Drop -----
   private dragIndex = 0;
@@ -98,12 +99,16 @@ export class DashboardComponentsService {
       }
     }
 
-    if(this.isInDashboard(card) == -1) {
-      this.cards.push(card);      
+    let i = this.isInDashboard(card);
+    if(i == -1) {
+      this.cards.push(card);
+      this.cardsChanged.next(true);      
+    } else {
+      this.cardInDashboard.next(i);
     }
 
     // Llamada al observer
-    this.cardsChanged.next(true);
+    
   }
 
   getCards() {
@@ -138,7 +143,7 @@ export class DashboardComponentsService {
     }
   }
 
-    //------------------ DRAG AND DROP ---------------------------
+  //------------------ DRAG AND DROP ---------------------------
 
   canDrop() {
     return false;
@@ -157,6 +162,7 @@ export class DashboardComponentsService {
     this.currentDropItem = this.dragItem;
 
     console.log(this.cards);
+    console.log("dragIndex = " + this.indexOf(this.dragItem.element.nativeElement.parentElement, this.dragItem.element.nativeElement));
   }
 
   dragMoved(e: CdkDragMove) {
@@ -180,26 +186,47 @@ export class DashboardComponentsService {
       let drop = this.dropItem.element.nativeElement;
       let parent = drop.parentElement;
 
-      let dragIndex = this.indexOf(parent, drag);
-      let dropIndex = this.indexOf(parent, drop.nextSibling);
+      let dragIndex = this.indexOf(parent, drag) - 1;
+      let dropIndex = this.indexOf(parent, drop) - 1;
 
-      //console.log("DragIndex = " + dragIndex);
-      //console.log("DropIndex = " + dropIndex);
+      dragIndex < 0 ? 0 : dragIndex;
+      dropIndex < 0 ? 0 : dropIndex;
+
+      this.moveCard(dragIndex, dropIndex + 1);
 
       //parent.insertBefore(drag, dropIndex == 0 ? drop.nextSibling : drop);
       //parent.insertBefore(drag, dragIndex < dropIndex ? drop.nextSibling : drop);
       //parent.insertBefore(drag, drop);
-
-      moveItemInArray(this.cards, dragIndex, dropIndex);
-
       parent.insertBefore(drag, drop.nextSibling);
 
-      console.log("Switch: " + (dragIndex) + ", " + (dropIndex));
-      console.log(this.cards);
+      //console.log("Switch: " + (dragIndex) + ", " + (dropIndex));
+      //console.log(this.cards);
 
       this.currentDropItem = this.dropItem;
     } 
     
+  }
+
+  moveCard(from_index: number, to_index:number) {
+    // CASO: insertar carta al final
+    if(to_index == this.cards.length) {
+      let card = this.cards.splice(from_index, 1);
+      this.cards.push(card[0]);
+      return;
+    }
+
+    // CASO: insertar carta en medio
+    // remueve la carta del arreglo
+    let card = this.cards.splice(from_index, 1);
+
+    // inserta la carta en la nueva posicion
+    // Se suma 1 debido a que en la linea anterior, el tamanio del arreglo se disminuyo en uno. Esto solo afecta
+    // cuando la carta se inserta en una posicion anterior.
+    if(from_index < to_index) {
+      this.cards.splice(to_index - 1, 0, card[0]);
+    } else {
+      this.cards.splice(to_index, 0, card[0]);
+    }
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -242,22 +269,19 @@ export class DashboardComponentsService {
     let index = Array.from(collection.children).indexOf(node);
 
     // verifica si el nodo esta fuera de la coleccion (indice -1)
-    // si es asi, regresa el ultimo indice de la collecion
-    return index == -1 ? collection.children.length - 1 : index;
+    // si es asi, regresa el indice sobrecargado de la collecion
+    return index == -1 ? collection.children.length : index;
   }
 
   /** Determines whether an event is a touch event. */
   isTouchEvent(event: MouseEvent | TouchEvent): event is TouchEvent {
     return event.type.startsWith('touch');
   }
-
   
   isInsideDropList(dropList: CdkDropList, x: number, y: number) {
     const { top, bottom, left, right } = dropList.element.nativeElement.getBoundingClientRect();
     return y >= top && y <= bottom && x >= left && x <= right;
   }
-  
-
   
   intersects(card: CdkDrag, dropList: CdkDropList) {
     let A = card.element.nativeElement.getBoundingClientRect();

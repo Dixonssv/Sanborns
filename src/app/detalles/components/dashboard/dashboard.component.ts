@@ -21,6 +21,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
 
   @ViewChild(CdkDropListGroup, {static: false}) dashboard!: CdkDropListGroup<CdkDropList>;
 
+  loadedCards:any = [];
+
   constructor(public dashboardService : DashboardComponentsService) {  
 
   }
@@ -32,6 +34,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
     this.dashboardService.cardsChanged.pipe().subscribe(() => {
       
       viewContainerRef.clear();
+      this.loadedCards = [];
 
       let cards = this.dashboardService.getCards();
 
@@ -41,6 +44,18 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
 
       //this.loadCard(cards.at(cards.length - 1)!, viewContainerRef);
     })
+
+    /*
+    this.dashboardService.cardInDashboard.pipe().subscribe((index: number) => {
+      setTimeout(() => {
+        this.loadedCards[index].addClass("shake");
+        //console.log(this.loadedCards[index].classAttribute);
+      },200);
+      this.loadedCards[index].removeClass("shake");
+      //console.log(this.loadedCards[index].classAttribute);
+    });
+    */
+    
   }
 
   ngAfterViewInit(): void {
@@ -56,6 +71,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
     //cardComponent.instance.setSize(card.x, card.y);
     //cardComponent.instance.setContent(card.component);
     cardComponent.instance.setCard(card);
+
+    this.loadedCards.push(cardComponent.instance);
   }
   
 
