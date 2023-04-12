@@ -7,7 +7,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 })
 export class BuscadorEmpleadosService {
 
-  urlApi = 'https://administration.gsanborns.com.mx/api/empleados/buscar';
+  urlApi = 'https://checkpoints.gsanborns.com.mx/api/empleados/buscar';
 
   result : any;
 
