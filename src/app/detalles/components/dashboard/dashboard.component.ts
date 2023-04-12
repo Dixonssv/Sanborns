@@ -15,7 +15,7 @@ import { CdkDrag, CdkDragDrop, CdkDropList, CdkDropListGroup, moveItemInArray } 
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
+export class DashboardComponent implements OnInit, AfterViewInit{
 
   @ViewChild(AddDirective, {static: true}) adHost!: AddDirective;
 
@@ -41,28 +41,23 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
       cards.forEach(card => {
           this.loadCard(card, viewContainerRef);
       });
-
-      //this.loadCard(cards.at(cards.length - 1)!, viewContainerRef);
     })
 
-    this.dashboardService.cardInDashboard.pipe().subscribe((index: number) => {
+    // SHAKE ANIMATION
+    this.dashboardService.cardInDashboard.pipe().subscribe((index: number) =>  {
+      let card = this.getDropListAt(index);
+      console.log("Shake!");
+
+      card.element.nativeElement.classList.add("shake");
       setTimeout(() => {
-        this.loadedCards[index].addClass("shake");
-        //console.log(this.loadedCards[index].classAttribute);
+        card.element.nativeElement.classList.remove("shake");
       },200);
-      this.loadedCards[index].removeClass("shake");
-      //console.log(this.loadedCards[index].classAttribute);
+      
     });
-    
-    
   }
 
   ngAfterViewInit(): void {
     this.dashboardService.dashboard = this.dashboard;
-  }
-
-  ngOnDestroy(): void {
-    
   }
 
   loadCard(card:Card, viewContainerRef:ViewContainerRef) {
@@ -72,6 +67,21 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
     cardComponent.instance.setCard(card);
 
     this.loadedCards.push(cardComponent.instance);
+  }
+
+  getDropListAt(index: number) {
+    let i = -1;
+    let dropList:any;
+
+    this.dashboard._items.forEach((card:any) => {
+      if(i == index) {
+        dropList = card;
+      }
+
+      i++;
+    });
+
+    return dropList;
   }
   
 
