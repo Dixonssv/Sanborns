@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import {NgxPrintModule} from 'ngx-print';
 
 import { DetallesComponent } from './components/detalles/detalles.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
@@ -89,7 +90,8 @@ const routes: Routes = [
     CommonModule,
     [RouterModule.forChild(routes)],
     DraggableDirective,
-    DragDropModule
+    DragDropModule,
+    NgxPrintModule
   ],
   exports: [
     DetallesComponent,

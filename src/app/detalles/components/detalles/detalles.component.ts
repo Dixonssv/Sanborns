@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { BuscadorEmpleadosService } from 'src/app/services/buscador-empleados.service';
+import { DashboardComponentsService } from '../../services/dashboard-components.service';
 
 @Component({
   selector: 'app-detalles',
@@ -12,7 +13,7 @@ import { BuscadorEmpleadosService } from 'src/app/services/buscador-empleados.se
 export class DetallesComponent {
   empleado: any;
 
-  constructor (private buscador:BuscadorEmpleadosService, private route: ActivatedRoute) {
+  constructor (private buscador:BuscadorEmpleadosService, private route: ActivatedRoute, public dashboardService: DashboardComponentsService) {
 
   }
 

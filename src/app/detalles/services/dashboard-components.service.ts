@@ -143,6 +143,10 @@ export class DashboardComponentsService {
     }
   }
 
+  cardsCount() {
+    return this.cards.length;
+  }
+
   //------------------ DRAG AND DROP ---------------------------
 
   canDrop() {
@@ -293,5 +297,10 @@ export class DashboardComponentsService {
     };
 
     return false;
+  }
+
+  //----------- PDF -------------------------
+  print() {
+    //this.dashboard
   }
 }
