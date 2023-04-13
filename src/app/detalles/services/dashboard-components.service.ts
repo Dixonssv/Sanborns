@@ -5,7 +5,7 @@
 import { Injectable, Type } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { CdkDrag, CdkDragDrop, CdkDragMove, CdkDragStart, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragDrop, CdkDragEnd, CdkDragMove, CdkDragStart, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ViewportRuler } from '@angular/cdk/overlay';
 
 import { Card } from '../components/cards/card/card';
@@ -100,6 +100,7 @@ export class DashboardComponentsService {
     }
 
     let i = this.isInDashboard(card);
+
     if(i == -1) {
       this.cards.push(card);
       this.cardsChanged.next(true);      
@@ -233,23 +234,12 @@ export class DashboardComponentsService {
     }
   }
 
-  drop(event: CdkDragDrop<string[]>) {
-    //this.dashboard.nativeElement.removeChild(event.);
-    //parent.appendChild(phElement);
-    //parent.insertBefore(this.source.element.nativeElement, parent.children
+  dropped(event: CdkDragEnd<any>) {
 
+    console.log("Dropped!");
+
+    this.cardsChanged.next(true);
     
-    this.dashboard.insertBefore(
-      event.previousContainer,
-      this.dashboard.children[event.currentIndex]
-    );
-    
-
-    //moveItemInArray(this.cards, event.previousIndex, event.currentIndex);
-
-    //this.cardsChanged.next(true);
-
-    console.log("drop");
   }
   
 
@@ -289,7 +279,7 @@ export class DashboardComponentsService {
   
   intersects(card: CdkDrag, dropList: CdkDropList) {
     let A = card.element.nativeElement.getBoundingClientRect();
-    let B = card.element.nativeElement.getBoundingClientRect();
+    let B = dropList.element.nativeElement.getBoundingClientRect();
 
     if ((A.left <= B.right || A.right >= B.left) && (A.bottom >= B.top || A.top <= B.bottom)) {
       console.log("Intersect!");
