@@ -53,7 +53,7 @@ export class DashboardComponentsService {
 
     switch(type) {
       case "Datos personales": {
-        card = new Card(DatosPersonalesComponent, 2, 2);
+        card = new Card(DatosPersonalesComponent, 2, 1);
         break;
       }
       case "Curriculum": {

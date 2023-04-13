@@ -8,6 +8,7 @@ import { Card } from '../cards/card/card';
 
 import { CardComponent } from '../cards/card/card/card.component';
 import { CdkDrag, CdkDragDrop, CdkDropList, CdkDropListGroup, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class DashboardComponent implements OnInit, AfterViewInit{
 
   loadedCards:any = [];
 
-  constructor(public dashboardService : DashboardComponentsService) {  
+  constructor(public dashboardService : DashboardComponentsService, private router: Router) {  
 
   }
 
@@ -43,11 +44,13 @@ export class DashboardComponent implements OnInit, AfterViewInit{
       });
     })
 
-    // SHAKE ANIMATION
+    
     this.dashboardService.cardInDashboard.pipe().subscribe((index: number) =>  {
       let card = this.getDropListAt(index);
       console.log("Shake!");
+      //this.router.navigate([], {fragment: card});
 
+      // SHAKE ANIMATION
       card.element.nativeElement.classList.add("shake");
       setTimeout(() => {
         card.element.nativeElement.classList.remove("shake");

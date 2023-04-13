@@ -50,26 +50,26 @@
 
     /* 1 recuadro vertical */
     .dash-card-y1 {
-        /* h-20 = 5rem */
-        height: calc(5rem * 1);
+        /* h-40 = 10rem */
+        height: calc(10rem * 1);
         @apply row-span-1;
     }
 
     /* 2 recuadros verticales */
     .dash-card-y2 {
-        height: calc(5rem * 2 + 1rem);
+        height: calc(10rem * 2 + 1rem);
         @apply row-span-2;
     }
 
     /* 3 recuadros verticales */
     .dash-card-y3 {
-        height: calc(5rem * 3 + 2rem);
+        height: calc(10rem * 3 + 2rem);
         @apply row-span-3;
     }
 
     /* 4 recuadros verticales */
     .dash-card-y4 {
-        height: calc(5rem * 4 + 3rem);
+        height: calc(10rem * 4 + 3rem);
         @apply row-span-4;
     }
     

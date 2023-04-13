@@ -24,6 +24,7 @@ import { CardContentDirective } from './components/cards/card/card-content.direc
 import { DraggableDirective } from './components/cards/card/draggable.directive';
 import { TestComponent } from './components/cards/test/test.component';
 import { DragAndDropFlexComponent } from './components/drag-and-drop-flex/drag-and-drop-flex.component';
+import { PdfDownloadBtnComponent } from './components/pdf-download-btn/pdf-download-btn.component';
 
 const routes: Routes = [
   {
@@ -85,6 +86,7 @@ const routes: Routes = [
     CardContentDirective,
     TestComponent,
     DragAndDropFlexComponent,
+    PdfDownloadBtnComponent,
   ],
   imports: [
     CommonModule,
