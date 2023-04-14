@@ -36,9 +36,6 @@ export class DashboardComponentsService {
   cardInDashboard = new Subject<number>();
 
   //----- Drag and Drop -----
-  private dragIndex = 0;
-  private dropIndex = 0;
-
   private dragItem: any;
   private dropItem: any;
 
@@ -101,6 +98,7 @@ export class DashboardComponentsService {
 
     let i = this.isInDashboard(card);
 
+    // Llamada al observer
     if(i == -1) {
       this.cards.push(card);
       this.cardsChanged.next(true);      
@@ -108,8 +106,6 @@ export class DashboardComponentsService {
       this.cardInDashboard.next(i);
     }
 
-    // Llamada al observer
-    
   }
 
   getCards() {
@@ -146,6 +142,10 @@ export class DashboardComponentsService {
 
   cardsCount() {
     return this.cards.length;
+  }
+
+  destroy() {
+    this.cards = [];
   }
 
   //------------------ DRAG AND DROP ---------------------------

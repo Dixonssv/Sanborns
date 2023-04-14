@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit, AfterViewInit{
+export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
 
   @ViewChild(AddDirective, {static: true}) adHost!: AddDirective;
 
@@ -57,6 +57,10 @@ export class DashboardComponent implements OnInit, AfterViewInit{
       },200);
       
     });
+  }
+
+  ngOnDestroy():void {
+    this.dashboardService.destroy();
   }
 
   ngAfterViewInit(): void {

@@ -21,7 +21,6 @@ import { DashboardComponentsService } from './services/dashboard-components.serv
 import { AddDirective } from './directives/add/add.directive';
 import { CardComponent } from './components/cards/card/card/card.component';
 import { CardContentDirective } from './components/cards/card/card-content.directive';
-import { DraggableDirective } from './components/cards/card/draggable.directive';
 import { TestComponent } from './components/cards/test/test.component';
 import { DragAndDropFlexComponent } from './components/drag-and-drop-flex/drag-and-drop-flex.component';
 import { PdfDownloadBtnComponent } from './components/pdf-download-btn/pdf-download-btn.component';
@@ -91,7 +90,6 @@ const routes: Routes = [
   imports: [
     CommonModule,
     [RouterModule.forChild(routes)],
-    DraggableDirective,
     DragDropModule,
     NgxPrintModule
   ],
