@@ -2,6 +2,7 @@ import { Component, HostBinding, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { BuscadorEmpleadosService } from 'src/app/services/buscador-empleados.service';
+import { ExpedienteService } from 'src/app/services/expediente/expediente.service';
 
 @Component({
   selector: 'app-datos-personales',
@@ -11,8 +12,9 @@ import { BuscadorEmpleadosService } from 'src/app/services/buscador-empleados.se
 export class DatosPersonalesComponent {
   empleado:any;
 
-  constructor(private buscador:BuscadorEmpleadosService, private route: ActivatedRoute) {
-    
+  constructor(
+    private route: ActivatedRoute,
+    public expediente: ExpedienteService) {
   }
 
   ngOnInit() {
@@ -22,5 +24,7 @@ export class DatosPersonalesComponent {
       //console.log(this.buscador.result[+params['index']]);
       //this.empleado = this.buscador.result[+params['index']];
     });
+
+    this.empleado = this.expediente.getEmpleado();
   }
 }

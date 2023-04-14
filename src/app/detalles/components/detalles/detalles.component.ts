@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { BuscadorEmpleadosService } from 'src/app/services/buscador-empleados.service';
 import { DashboardComponentsService } from '../../services/dashboard-components.service';
+import { ExpedienteService } from 'src/app/services/expediente/expediente.service';
 
 @Component({
   selector: 'app-detalles',
@@ -13,7 +14,11 @@ import { DashboardComponentsService } from '../../services/dashboard-components.
 export class DetallesComponent {
   empleado: any;
 
-  constructor (private buscador:BuscadorEmpleadosService, private route: ActivatedRoute, public dashboardService: DashboardComponentsService) {
+  constructor (
+    private buscador:BuscadorEmpleadosService, 
+    private route: ActivatedRoute, 
+    public dashboardService: DashboardComponentsService,
+    public expediente: ExpedienteService) {
 
   }
 
@@ -22,7 +27,7 @@ export class DetallesComponent {
       //console.log(this.buscador.result);
       console.log(+params['index']);
       console.log(this.buscador.result[+params['index']]);
-      this.empleado = this.buscador.result[+params['index']];
+      this.expediente.setEmpleado(this.buscador.result[+params['index']]) ;
     });
   }
 }
