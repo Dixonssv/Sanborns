@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 
 import { ActivatedRoute } from '@angular/router';
 
-import { BuscadorEmpleadosService } from 'src/app/services/buscador-empleados.service';
-import { DashboardComponentsService } from '../../services/dashboard-components.service';
+import { BuscadorEmpleadosService } from 'src/app/services/buscador-empleados/buscador-empleados.service';
+import { DashboardComponentsService } from '../../services/dashboard-components/dashboard-components.service';
 import { ExpedienteService } from 'src/app/services/expediente/expediente.service';
 
 @Component({

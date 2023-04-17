@@ -8,19 +8,19 @@ import { Subject } from 'rxjs';
 import { CdkDrag, CdkDragDrop, CdkDragEnd, CdkDragMove, CdkDragStart, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ViewportRuler } from '@angular/cdk/overlay';
 
-import { Card } from '../components/cards/card/card';
+import { Card } from '../../components/cards/card/card';
 
-import { CurriculumComponent } from '../components/cards/curriculum/curriculum.component';
-import { EstudiosComponent } from '../components/cards/estudios/estudios.component';
-import { ContratoComponent } from '../components/cards/contrato/contrato.component';
-import { HorarioComponent } from '../components/cards/horario/horario.component';
-import { DocumentosComponent } from '../components/cards/documentos/documentos.component';
-import { NominaComponent } from '../components/cards/nomina/nomina.component';
-import { ActasComponent } from '../components/cards/actas/actas.component';
-import { TrayectoriaComponent } from '../components/cards/trayectoria/trayectoria.component';
-import { CursosComponent } from '../components/cards/cursos/cursos.component';
-import { DatosPersonalesComponent } from '../components/cards/datos-personales/datos-personales.component';
-import { TestComponent } from '../components/cards/test/test.component';
+import { CurriculumComponent } from '../../components/cards/curriculum/curriculum.component';
+import { EstudiosComponent } from '../../components/cards/estudios/estudios.component';
+import { ContratoComponent } from '../../components/cards/contrato/contrato.component';
+import { HorarioComponent } from '../../components/cards/horario/horario.component';
+import { DocumentosComponent } from '../../components/cards/documentos/documentos.component';
+import { NominaComponent } from '../../components/cards/nomina/nomina.component';
+import { ActasComponent } from '../../components/cards/actas/actas.component';
+import { TrayectoriaComponent } from '../../components/cards/trayectoria/trayectoria.component';
+import { CursosComponent } from '../../components/cards/cursos/cursos.component';
+import { DatosPersonalesComponent } from '../../components/cards/datos-personales/datos-personales.component';
+import { TestComponent } from '../../components/cards/test/test.component';
 
 
 @Injectable({

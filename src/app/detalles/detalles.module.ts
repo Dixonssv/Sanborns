@@ -17,12 +17,11 @@ import { ActasComponent } from './components/cards/actas/actas.component';
 import { TrayectoriaComponent } from './components/cards/trayectoria/trayectoria.component';
 import { CursosComponent } from './components/cards/cursos/cursos.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { DashboardComponentsService } from './services/dashboard-components.service';
+import { DashboardComponentsService } from './services/dashboard-components/dashboard-components.service';
 import { AddDirective } from './directives/add/add.directive';
-import { CardComponent } from './components/cards/card/card/card.component';
-import { CardContentDirective } from './components/cards/card/card-content.directive';
+import { CardComponent } from './components/cards/card/card.component';
+import { CardContentDirective } from './directives/card-content/card-content.directive';
 import { TestComponent } from './components/cards/test/test.component';
-import { DragAndDropFlexComponent } from './components/drag-and-drop-flex/drag-and-drop-flex.component';
 import { PdfDownloadBtnComponent } from './components/pdf-download-btn/pdf-download-btn.component';
 
 const routes: Routes = [
@@ -84,7 +83,6 @@ const routes: Routes = [
     CardComponent,
     CardContentDirective,
     TestComponent,
-    DragAndDropFlexComponent,
     PdfDownloadBtnComponent,
   ],
   imports: [

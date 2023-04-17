@@ -1,15 +1,15 @@
 import { Component, HostBinding, Type, ViewChild, ViewEncapsulation, ViewContainerRef, HostListener} from '@angular/core';
-import { DashboardComponentsService } from 'src/app/detalles/services/dashboard-components.service';
+import { DashboardComponentsService } from 'src/app/detalles/services/dashboard-components/dashboard-components.service';
 
 import { CdkDropList } from "@angular/cdk/drag-drop";
 
-import { Card } from '../card';
-import { CardContentDirective } from '../card-content.directive';
+import { Card } from './card';
+import { CardContentDirective } from 'src/app/detalles/directives/card-content/card-content.directive';
 
 @Component({
   selector: 'app-card',
   templateUrl: './card.component.html',
-  styleUrls: ['./card.component.css', '../../cards.css'],
+  styleUrls: ['./card.component.css', '../cards.css'],
   encapsulation: ViewEncapsulation.None,
   hostDirectives: [
     CdkDropList,

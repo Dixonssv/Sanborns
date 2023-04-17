@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { OrgChartModule } from 'angular-org-chart';
 //import { DetallesModule } from "./detalles/detalles.module";
 
-import { BuscadorEmpleadosService } from './services/buscador-empleados.service';
+import { BuscadorEmpleadosService } from './services/buscador-empleados/buscador-empleados.service';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';

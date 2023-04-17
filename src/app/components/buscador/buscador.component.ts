@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime, map, distinctUntilChanged, filter } from "rxjs/operators";
 
-import { BuscadorEmpleadosService } from 'src/app/services/buscador-empleados.service';
+import { BuscadorEmpleadosService } from 'src/app/services/buscador-empleados/buscador-empleados.service';
 
 
 

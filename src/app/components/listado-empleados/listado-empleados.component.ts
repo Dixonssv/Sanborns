@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { BuscadorEmpleadosService } from 'src/app/services/buscador-empleados.service';
+import { BuscadorEmpleadosService } from 'src/app/services/buscador-empleados/buscador-empleados.service';
 
 @Component({
   selector: 'app-listado-empleados',

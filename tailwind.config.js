@@ -12,7 +12,7 @@ module.exports = {
     "./src/app/detalles/components/dashboard/dashboard.component.html",
     "./src/app/detalles/components/pdf-download-btn/pdf-download-btn.component.html",
     "./src/app/detalles/components/sidebar/sidebar.component.html",
-    "./src/app/detalles/components/cards/card//card/card.component.html",
+    "./src/app/detalles/components/cards/card/card.component.html",
     "./src/app/detalles/components/cards/datos-personales/datos-personales.component.html",
     "./src/app/detalles/components/cards/curriculum/curriculum.component.html",
     "./src/app/detalles/components/cards/estudios/estudios.component.html",
