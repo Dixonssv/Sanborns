@@ -4,7 +4,7 @@ import { AddDirective } from '../../directives/add/add.directive';
 
 import {DashboardComponentsService} from 'src/app/detalles/services/dashboard-components/dashboard-components.service'
 
-import { Card } from '../cards/card/card';
+import { Card } from '../../domain/card.model';
 
 import { CardComponent } from '../cards/card/card.component';
 import { CdkDropList, CdkDropListGroup } from '@angular/cdk/drag-drop';

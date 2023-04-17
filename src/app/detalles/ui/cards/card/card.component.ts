@@ -3,7 +3,7 @@ import { DashboardComponentsService } from 'src/app/detalles/services/dashboard-
 
 import { CdkDropList } from "@angular/cdk/drag-drop";
 
-import { Card } from './card';
+import { Card } from '../../../domain/card.model';
 import { CardContentDirective } from 'src/app/detalles/directives/card-content/card-content.directive';
 
 @Component({

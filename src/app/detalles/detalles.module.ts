@@ -1,28 +1,33 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Routes, RouterModule } from '@angular/router';
-import {DragDropModule} from '@angular/cdk/drag-drop';
-import {NgxPrintModule} from 'ngx-print';
+import { NgModule } from              '@angular/core';
+import { CommonModule } from          '@angular/common';
+import { Routes, RouterModule } from  '@angular/router';
+import {DragDropModule} from          '@angular/cdk/drag-drop';
+import {NgxPrintModule} from          'ngx-print';
 
-import { DetallesComponent } from './components/detalles/detalles.component';
-import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { DatosPersonalesComponent } from './components/cards/datos-personales/datos-personales.component';
-import { CurriculumComponent } from './components/cards/curriculum/curriculum.component';
-import { EstudiosComponent } from './components/cards/estudios/estudios.component';
-import { ContratoComponent } from './components/cards/contrato/contrato.component';
-import { HorarioComponent } from './components/cards/horario/horario.component';
-import { DocumentosComponent } from './components/cards/documentos/documentos.component';
-import { NominaComponent } from './components/cards/nomina/nomina.component';
-import { ActasComponent } from './components/cards/actas/actas.component';
-import { TrayectoriaComponent } from './components/cards/trayectoria/trayectoria.component';
-import { CursosComponent } from './components/cards/cursos/cursos.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { DetallesComponent } from         './ui/detalles/detalles.component';
+import { SidebarComponent } from          './ui/sidebar/sidebar.component';
+import { DashboardComponent } from        './ui/dashboard/dashboard.component';
+import { PdfDownloadBtnComponent } from   './ui/pdf-download-btn/pdf-download-btn.component';
+import { CardComponent } from             './ui/cards/card/card.component';
+import { DatosPersonalesComponent } from  './ui/cards/datos-personales/datos-personales.component';
+import { CurriculumComponent } from       './ui/cards/curriculum/curriculum.component';
+import { EstudiosComponent } from         './ui/cards/estudios/estudios.component';
+import { ContratoComponent } from         './ui/cards/contrato/contrato.component';
+import { HorarioComponent } from          './ui/cards/horario/horario.component';
+import { DocumentosComponent } from       './ui/cards/documentos/documentos.component';
+import { NominaComponent } from           './ui/cards/nomina/nomina.component';
+import { ActasComponent } from            './ui/cards/actas/actas.component';
+import { TrayectoriaComponent } from      './ui/cards/trayectoria/trayectoria.component';
+import { CursosComponent } from           './ui/cards/cursos/cursos.component';
+import { TestComponent } from             './ui/cards/test/test.component';
+
+
 import { DashboardComponentsService } from './services/dashboard-components/dashboard-components.service';
-import { AddDirective } from './directives/add/add.directive';
-import { CardComponent } from './components/cards/card/card.component';
-import { CardContentDirective } from './directives/card-content/card-content.directive';
-import { TestComponent } from './components/cards/test/test.component';
-import { PdfDownloadBtnComponent } from './components/pdf-download-btn/pdf-download-btn.component';
+
+import { AddDirective } from          './directives/add/add.directive'; 
+import { CardContentDirective } from  './directives/card-content/card-content.directive';
+
+
 
 const routes: Routes = [
   {
