@@ -1,11 +1,12 @@
-<div *ngIf="this.buscadorService.buscando" class="text-gray-400 italic p-5">
+<button type="button" (click)="searchEmpleados('Santiago')">Buscar Santiago</button>
+
+<div *ngIf="this.buscadorEmpleados.buscando" class="text-gray-400 italic p-5">
     <p>Buscando...</p>
 </div>
 
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-8">
     <a 
-        *ngFor="let empleado of this.buscadorService.result; let i = index" 
-        [routerLink]="['/detalles', i]">
+        *ngFor="let empleado of this.empleados; let i = index" >
         <div class="flex bg-gray-300 rounded-lg float-left w-full hover:bg-gray-200 p-4">
             <!--Avatar-->
             <div class="flex items-center grow float-left w-1/3">
@@ -18,14 +19,15 @@
             </div>
             <!--Datos-->
             <div class="float-left w-2/3 px-5">
-                <p class="font-bold" [innerHTML]="empleado._formatted.nombre"></p>
-                <p [innerHTML]="empleado._formatted.numeroEmpleado"></p>
+                <p class="font-bold" [innerHTML]="empleado.nombre"></p>
+                <p [innerHTML]="empleado.numeroEmpleado"></p>
                 <p>{{empleado.departamento}}</p>
                 <p>{{empleado.puesto}}</p>
             </div>
         </div>
     </a>
 </div>
+
 
 
 
