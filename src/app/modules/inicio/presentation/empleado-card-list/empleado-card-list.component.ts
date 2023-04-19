@@ -24,6 +24,7 @@ export class EmpleadoCardListComponent {
 
     this.getEmpleados.execute(search).subscribe((empleado: EmpleadoModel) => {
       this.empleados.push(empleado);
+      console.log("Empleado: " + empleado.nombre);
     });
 
   }

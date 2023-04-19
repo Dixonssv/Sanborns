@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EmpleadoRepository } from '../../core/repositories/empleado.repository';
-import { Observable, map } from 'rxjs';
+import { Observable, flatMap, map, mergeMap } from 'rxjs';
 import { EmpleadoModel } from '../../core/domain/empleado.model';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { EmpleadoMapper } from './empleado.mapper';
@@ -32,12 +32,7 @@ export class BuscadorEmpleadosService extends EmpleadoRepository {
   }
 
   override getEmpleados(query: string): Observable<EmpleadoModel> {
-    if(query == "") {
-      this.result = [];
-      this.buscando = false;
-    } else {
-      this.buscarEnApi(query);
-    }
+    console.log("Buscando a: " + query);
 
     console.log("--> Llamada a la API -->");
 
@@ -49,11 +44,23 @@ export class BuscadorEmpleadosService extends EmpleadoRepository {
       params: new HttpParams().set("query", query)
     }
 
-    return this.http.get(this.urlApi, options).pipe(map(this.mapper.mapFrom));
+    let empleadosList:any;
+    this.http.get(this.urlApi, options).pipe<EmpleadoModel>(map(this.mapper.mapFrom));
+
+    console.log(empleadosList);
+    return empleadosList.pipe(map(this.mapper.mapFrom));
+    //return this.http.get(this.urlApi, options).pipe(map(this.mapper.mapFrom));
   }
 
   buscarEnApi(query:string) {
     console.log("--> Llamada a la API -->");
+
+    if(query == "") {
+      this.result = [];
+      this.buscando = false;
+    } else {
+      this.buscarEnApi(query);
+    }
 
     const options = {
       headers: new HttpHeaders({
