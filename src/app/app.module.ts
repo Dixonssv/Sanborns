@@ -20,6 +20,7 @@ import { EmpleadoCardListComponent } from './modules/inicio/presentation/emplead
 import { OrganigramaComponent } from './components/organigrama/organigrama.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EmpleadoRepository } from './modules/inicio/core/repositories/empleado.repository';
+import { SearchBarComponent } from './modules/presentation/search-bar/search-bar.component';
 //import { HttpClientTestComponent } from './http-client-test/http-client-test.component';
 
 const routes: Routes = [
@@ -37,6 +38,7 @@ const routes: Routes = [
     BuscadorComponent,
     EmpleadoCardListComponent,
     OrganigramaComponent,
+    SearchBarComponent,
   ],
   imports: [
     BrowserModule,

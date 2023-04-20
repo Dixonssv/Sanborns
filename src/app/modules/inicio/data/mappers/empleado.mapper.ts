@@ -4,7 +4,9 @@ import { EmpleadoModel } from "../../core/domain/empleado.model";
 
 export class EmpleadoMapper extends Mapper<any, EmpleadoModel> {
     override mapFrom(param: any): EmpleadoModel {
-        console.log("Map from: " + param.body[0].nombre);
+
+        //console.log("Empleado mapper:");
+        //console.log(param);
 
         return {
             claveCompania: param.claveCompania,

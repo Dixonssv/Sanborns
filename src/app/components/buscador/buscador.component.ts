@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Subject } from 'rxjs';
-import { debounceTime, map, distinctUntilChanged, filter } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 
 import { BuscadorEmpleadosService } from 'src/app/services/buscador-empleados/buscador-empleados.service';
 
@@ -15,7 +15,7 @@ import { BuscadorEmpleadosService } from 'src/app/services/buscador-empleados/bu
 })
 export class BuscadorComponent {
 
-  input : string = "";
+  public input : string = "";
 
   searchTextChanged = new Subject<string>();
 
