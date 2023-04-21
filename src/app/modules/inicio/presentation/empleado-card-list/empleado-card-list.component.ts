@@ -1,31 +1,41 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { EmpleadoModel } from             '../../core/domain/empleado.model';
-import { GetEmpleadosUseCase } from       '../../core/usecases/get-empleados.usecase';
-import { EmpleadoRepositoryService } from  '../../data/repositories/empleado-repository.impl';
+import { SearchRepositoryImplService } from 'src/app/modules/common/data/repositories/search-repository.impl';
+import { EmpleadoRepositoryImplService } from 'src/app/modules/common/data/repositories/empleado-repository.impl';
 
 @Component({
   selector: 'app-empleado-card-list',
   templateUrl: './empleado-card-list.component.html',
-  styleUrls: ['./empleado-card-list.component.css']
+  styleUrls: ['./empleado-card-list.component.css'],
+  encapsulation: ViewEncapsulation.None, // Aplicar estilos a innerHTML
 })
-export class EmpleadoCardListComponent {
+export class EmpleadoCardListComponent implements OnInit{
   
   empleados: Array<EmpleadoModel>;
+  public searching : boolean;
 
   constructor(
-    public empleadosRepository: EmpleadoRepositoryService,
-    private getEmpleados: GetEmpleadosUseCase
+    public searchRepository:SearchRepositoryImplService,
+    public empleadosRepository:EmpleadoRepositoryImplService,
     ) {
-    this.empleados = [];
+      this.searching = false;
+
+      this.empleados = [];
   }
 
-  searchEmpleados(search: string) {
-    this.empleados = [];
-
-    this.getEmpleados.execute(search).subscribe((empleado: EmpleadoModel) => {
-      this.empleados.push(empleado);
+  ngOnInit(): void {
+    this.searchRepository.searchStarted.subscribe(() => {
+      // Searching...
+      console.log("Buscando...");
+      this.searching = true;
     });
 
+    this.searchRepository.searchCompleted.subscribe(() => {
+      // SearchCompleted
+      console.log("Busqueda terminada!...");
+      this.searching = false;
+      this.empleados = this.searchRepository.empleados;
+    });
   }
 
 }

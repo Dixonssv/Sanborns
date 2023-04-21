@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { BuscadorEmpleadosService } from './buscador-empleados.service';
+import { EmpleadoRepositoryService } from './empleado-repository.impl';
 
 describe('BuscadorEmpleadosService', () => {
-  let service: BuscadorEmpleadosService;
+  let service: EmpleadoRepositoryService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(BuscadorEmpleadosService);
+    service = TestBed.inject(EmpleadoRepositoryService);
   });
 
   it('should be created', () => {

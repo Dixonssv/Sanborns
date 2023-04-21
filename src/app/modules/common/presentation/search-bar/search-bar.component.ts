@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { EmpleadoRepositoryService } from 'src/app/modules/inicio/data/repositories/empleado-repository.impl';
+import { SearchRepository } from '../../core/repositories/search.repository';
+import { SearchRepositoryImplService } from '../../data/repositories/search-repository.impl';
 
 @Component({
   selector: 'app-search-bar',
@@ -17,14 +19,15 @@ export class SearchBarComponent {
 
   constructor(
     private router: Router, 
+    private searchRepository: SearchRepositoryImplService,
     private empleadoRepository: EmpleadoRepositoryService) {
 
   }
 
   ngOnInit() {
-    this.searchTextChanged.pipe(debounceTime(1000), distinctUntilChanged())
-    .subscribe((cadena) => {
-      this.empleadoRepository.getEmpleados(cadena);
+    this.searchTextChanged.pipe(debounceTime(500), distinctUntilChanged())
+    .subscribe((input) => {
+      this.searchRepository.searchEmpleados(input).subscribe();
      });
   }
 

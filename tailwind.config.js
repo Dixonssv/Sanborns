@@ -4,9 +4,10 @@ module.exports = {
     "./src/index.html",
     "./src/app/app.component.html",
     
-    "./src/app/components/header/header.component.html",
-    "./src/app/components/buscador/buscador.component.html",
-    "./src/app/components/listado-empleados/listado-empleados.component.html",
+    "./src/app/modules/common/presentation/header/header.component.html",
+    "./src/app/modules/common/presentation/search-bar/search-bar.component.html",
+
+    "./src/app/modules/inicio/presentation/empleado-card-list/empleado-card-list.component.html",
 
     "./src/app/detalles/ui/detalles/detalles.component.html",
     "./src/app/detalles/ui/dashboard/dashboard.component.html",
