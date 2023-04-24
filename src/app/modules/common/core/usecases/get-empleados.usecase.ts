@@ -1,7 +1,6 @@
 import { Observable } from 'rxjs';
 import { UseCase } from '../base/use-case';
 import { EmpleadoModel } from '../domain/empleado.model';
-import { EmpleadoRepository } from '../repositories/empleado.repository';
 import { Injectable } from '@angular/core';
 import { EmpleadoRepositoryImplService } from '../../data/repositories/empleado-repository.impl';
 

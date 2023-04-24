@@ -10,6 +10,10 @@ import { CommonCoreModule } from './modules/common/core/common.core.module';
 import { CommonDataModule } from './modules/common/data/common.data.module';
 import { CommonPresentationModule } from './modules/common/presentation/common.presentation.module';
 
+import { DetallesCoreModule } from './modules/detalles/core/core.module';
+import { DetallesDataModule } from './modules/detalles/data/data.module';
+import { DetallesPresentationModule } from './modules/detalles/presentation/presentation.module';
+
 import { CoreModule } from './modules/inicio/core/core.module';
 import { DataModule } from './modules/inicio/data/data.module';
 import { PresentationModule } from './modules/inicio/presentation/presentation.module';
@@ -23,6 +27,7 @@ import { EmpleadoCardListComponent } from './modules/inicio/presentation/emplead
 import { OrganigramaComponent } from './components/organigrama/organigrama.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EmpleadoRepository } from './modules/inicio/core/repositories/empleado.repository';
+import { TestDashboardComponent } from './modules/detalles/presentation/test-dashboard/test-dashboard.component';
 //import { HttpClientTestComponent } from './http-client-test/http-client-test.component';
 
 const routes: Routes = [
@@ -30,6 +35,7 @@ const routes: Routes = [
   {path: 'inicio', component: EmpleadoCardListComponent},
   {path: 'detalles/:index', loadChildren: () =>import(`./detalles/detalles.module`).then((m) => m.DetallesModule),},
   {path: 'orgchart', component: OrganigramaComponent},
+  {path: 'testDashboard', component: TestDashboardComponent},
   {path: '', redirectTo: 'inicio', pathMatch: 'full'},
 ];
 
