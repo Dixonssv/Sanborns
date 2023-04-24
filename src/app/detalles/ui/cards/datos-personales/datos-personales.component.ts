@@ -24,6 +24,6 @@ export class DatosPersonalesComponent {
       //this.empleado = this.buscador.result[+params['index']];
     });
 
-    this.empleado = this.expediente.getEmpleado();
+    //this.empleado = this.expediente.getEmpleado();
   }
 }

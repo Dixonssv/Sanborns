@@ -1,12 +1,12 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewContainerRef, AfterViewInit  } from '@angular/core';
 
-import { AddDirective } from '../../directives/add/add.directive';
+import { AddDirective } from 'src/app/detalles/directives/add/add.directive';
 
 import {DashboardComponentsService} from 'src/app/detalles/services/dashboard-components/dashboard-components.service'
 
-import { Card } from '../../domain/card';
+import { Card } from 'src/app/detalles/domain/card.model';
 
-import { CardComponent } from '../cards/card/card.component';
+import { CardComponent } from '../card/card.component';
 import { CdkDropList, CdkDropListGroup } from '@angular/cdk/drag-drop';
 import { Router } from '@angular/router';
 
