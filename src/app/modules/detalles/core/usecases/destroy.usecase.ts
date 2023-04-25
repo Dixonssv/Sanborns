@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UseCase } from 'src/app/modules/common/core/base/use-case';
-import { CardModel } from '../domain/card.model';
+import { DashboardRepositoryImplService } from '../../data/repositories/dashboard-repository.impl';
 
 @Injectable({
     providedIn: 'root'
 })
 export class destroy implements UseCase<void, void> {
+    constructor(public dashboardRepository: DashboardRepositoryImplService) { }
+
     execute(params: void): Observable<void> {
-        throw new Error('Method not implemented.');
+        return this.dashboardRepository.destroy();
     }
 }

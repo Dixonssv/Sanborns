@@ -85,9 +85,14 @@ export class DragAndDropRepositoryImplService extends DragAndDropRepository {
     })
   }
 
-  override canDrop(): Observable<boolean> {
-    return new Observable<boolean>(observable => observable.next(false));
+  override canDrop(): boolean {
+    return false;
   }
+  /*
+  override canDrop(): Observable<boolean> {
+    return new Observable<boolean>(observable => observable.next(false)).pipe((canDrop) => canDrop);
+  }
+  */
 
   private getPointerPositionOnPage(event: MouseEvent | TouchEvent) {
     // `touches` will be empty for start/end events so we have to fall back to `changedTouches`.

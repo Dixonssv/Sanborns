@@ -42,6 +42,7 @@ export class DashboardRepositoryImplService extends DashboardRepository {
       this.searchCard(card).subscribe((index) => {
         if (index == -1) {
           this.cards.push(card);
+
           this.cardsChanged.next(true);
         } else {
           this.cardInDashboard.next(index);

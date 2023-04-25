@@ -28,12 +28,14 @@ import { OrganigramaComponent } from './components/organigrama/organigrama.compo
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EmpleadoRepository } from './modules/inicio/core/repositories/empleado.repository';
 import { TestDashboardComponent } from './modules/detalles/presentation/test-dashboard/test-dashboard.component';
+import { DetallesComponent } from './modules/detalles/presentation/detalles/detalles.component';
 //import { HttpClientTestComponent } from './http-client-test/http-client-test.component';
 
 const routes: Routes = [
   //{path: 'inicio', component: ListadoEmpleadosComponent},
   {path: 'inicio', component: EmpleadoCardListComponent},
-  {path: 'detalles/:index', loadChildren: () =>import(`./detalles/detalles.module`).then((m) => m.DetallesModule),},
+  //{path: 'detalles/:index', loadChildren: () =>import(`./detalles/detalles.module`).then((m) => m.DetallesModule),},
+  {path: 'detalles', component: DetallesComponent},
   {path: 'orgchart', component: OrganigramaComponent},
   {path: 'testDashboard', component: TestDashboardComponent},
   {path: '', redirectTo: 'inicio', pathMatch: 'full'},
