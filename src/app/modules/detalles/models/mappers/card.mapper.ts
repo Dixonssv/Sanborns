@@ -1,0 +1,105 @@
+import { Mapper } from "src/app/modules/inicio/core/base/mapper";
+import { CardModel } from "../card.model";
+import { DatosPersonalesComponent } from "src/app/detalles/ui/cards/datos-personales/datos-personales.component";
+import { CurriculumComponent } from "src/app/detalles/ui/cards/curriculum/curriculum.component";
+import { EstudiosComponent } from "src/app/detalles/ui/cards/estudios/estudios.component";
+import { ContratoComponent } from "src/app/detalles/ui/cards/contrato/contrato.component";
+import { HorarioComponent } from "src/app/detalles/ui/cards/horario/horario.component";
+import { DocumentosComponent } from "src/app/detalles/ui/cards/documentos/documentos.component";
+import { NominaComponent } from "src/app/detalles/ui/cards/nomina/nomina.component";
+import { ActasComponent } from "src/app/detalles/ui/cards/actas/actas.component";
+import { TrayectoriaComponent } from "src/app/detalles/ui/cards/trayectoria/trayectoria.component";
+import { CursosComponent } from "src/app/detalles/ui/cards/cursos/cursos.component";
+import { TestComponent } from "src/app/detalles/ui/cards/test/test.component";
+
+export class CardMapper extends Mapper<string, CardModel> {
+    override mapFrom(param: string): CardModel {
+        //console.log("Map from: " + param);
+
+        switch(param) {
+            case "Datos personales": {
+                return {
+                    component: DatosPersonalesComponent,
+                    x: 2,
+                    y: 1
+                }
+            }
+            case "Curriculum": {
+                return {
+                    component: CurriculumComponent,
+                    x: 1,
+                    y: 3
+                }
+            }
+            case "Estudios": {
+                return {
+                    component: EstudiosComponent,
+                    x: 2,
+                    y: 3
+                }
+            }
+            case "Contrato": {
+                return {
+                    component: ContratoComponent,
+                    x: 1,
+                    y: 2
+                }
+            }
+            case "Horario": {
+                return {
+                    component: HorarioComponent,
+                    x: 4,
+                    y: 1
+                }
+            }
+            case "Documentos": {
+                return {
+                    component: DocumentosComponent,
+                    x: 2,
+                    y: 4
+                }
+            }
+            case "Nomina": {
+                return {
+                    component: NominaComponent,
+                    x: 1,
+                    y: 1
+                }
+            }
+            case "Actas": {
+                return {
+                    component: ActasComponent,
+                    x: 2,
+                    y: 1
+                }
+            }
+            case "Trayectoria": {
+                return {
+                    component: TrayectoriaComponent,
+                    x: 4,
+                    y: 2
+                }
+            }
+            case "Cursos": {
+                return {
+                    component: CursosComponent,
+                    x: 3,
+                    y: 1
+                }
+            }
+            //Test
+            default: {
+                return {
+                    component: TestComponent,
+                    x: 1,
+                    y: 1
+                }
+            }
+          }
+    }
+
+    override mapTo(param: CardModel): string {
+        throw new Error("Method not implemented.");
+    }
+    
+}
