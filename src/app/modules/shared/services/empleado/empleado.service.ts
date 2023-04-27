@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { EmpleadoMapper } from '../models/mappers/empleado.mapper';
-import { ApiResponseMapper } from '../models/mappers/api-response.mapper';
+import { EmpleadoMapper } from '../../models/mappers/empleado.mapper';
+import { ApiResponseMapper } from '../../models/mappers/api-response.mapper';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { EmpleadoModel } from '../models/empleado.model';
+import { EmpleadoModel } from '../../models/empleado.model';
 import { Observable, map, mergeMap } from 'rxjs';
 
 @Injectable({

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { DashboardService } from '../../services/dashboard.service';
+import { DashboardService } from '../../services/dashboard/dashboard.service';
 
 @Component({
   selector: 'app-sidebar',

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { EmpleadoModel } from '../../models/empleado.model';
 
 @Injectable({
   providedIn: 'root'
@@ -19,11 +20,13 @@ export class ExpedienteService {
 
   constructor() { }
 
-  getEmpleado() {
+  getEmpleado(): EmpleadoModel {
     return this.empleado;
   }
 
-  setEmpleado(empleado: any) {
+  setEmpleado(empleado: EmpleadoModel) {
     this.empleado = empleado;
   }
+
+  
 }

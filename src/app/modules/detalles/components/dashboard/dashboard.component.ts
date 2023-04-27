@@ -6,8 +6,8 @@ import { CardModel } from '../../models/card.model';
 
 import { CardComponent } from '../cards/card/card.component';
 import { CdkDropList, CdkDropListGroup } from '@angular/cdk/drag-drop';
-import { DashboardService } from '../../services/dashboard.service';
-import { DragAndDropService } from '../../services/drag-and-drop.service';
+import { DashboardService } from '../../services/dashboard/dashboard.service';
+import { DragAndDropService } from '../../services/drag-and-drop/drag-and-drop.service';
 
 
 @Component({

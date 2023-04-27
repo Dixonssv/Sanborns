@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { CardModel } from '../models/card.model';
-import { CardMapper } from '../models/mappers/card.mapper';
+import { CardModel } from '../../models/card.model';
+import { CardMapper } from '../../models/mappers/card.mapper';
 import { Observable, Subject, from } from 'rxjs';
 
 @Injectable({

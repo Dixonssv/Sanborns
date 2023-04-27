@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
-import { SearchService } from '../../services/search.service';
-import { EmpleadoService } from '../../services/empleado.service';
+import { SearchService } from '../../services/search/search.service';
 
 @Component({
   selector: 'app-search-bar',
@@ -23,15 +22,16 @@ export class SearchBarComponent {
   }
 
   ngOnInit() {
-    this.searchTextChanged.pipe(debounceTime(500), distinctUntilChanged())
-    .subscribe((input) => {
-      this.searchService.searchEmpleados(input).subscribe();
-     });
+    this.searchTextChanged.pipe(debounceTime(500), distinctUntilChanged()).subscribe((input) => {
+      this.router.navigate(["inicio"]).then(() => {
+        this.searchService.searchEmpleados(input).subscribe();
+      });
+    });
   }
 
   search() {
     this.searchTextChanged.next(this.input);
-    this.searchService.searchStarted.next(true);
+    //this.searchService.searchStarted.next(true);
   }
 
   goTo(ruta:string) {

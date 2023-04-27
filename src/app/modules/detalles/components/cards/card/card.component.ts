@@ -4,8 +4,8 @@ import { CdkDragEnd, CdkDragMove, CdkDragStart, CdkDropList } from "@angular/cdk
 
 import { CardModel } from '../../../models/card.model';
 import { CardContentDirective } from 'src/app/modules/shared/directives/card-content/card-content.directive';
-import { DashboardService } from '../../../services/dashboard.service';
-import { DragAndDropService } from '../../../services/drag-and-drop.service';
+import { DashboardService } from '../../../services/dashboard/dashboard.service';
+import { DragAndDropService } from '../../../services/drag-and-drop/drag-and-drop.service';
 
 @Component({
   selector: 'app-card',
@@ -48,10 +48,6 @@ export class CardComponent {
   }
 
   setCard(card: CardModel) {
-    console.log("Set card:");
-    console.log(card);
-    console.log("Size: " + card.x + ", " + card.y);
-
     this.card = card;
     this.setSize(this.card.x, this.card.y);
     this.setContent(this.card.component);
@@ -76,7 +72,6 @@ export class CardComponent {
   }
 
   removeFromDashboard() {
-    console.log("Remove");
     this.dashboardService.deleteCard(this.card).subscribe();
   }
 
