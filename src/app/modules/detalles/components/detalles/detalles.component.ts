@@ -4,9 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 
 //import { BuscadorEmpleadosService } from 'src/app/services/buscador-empleados/buscador-empleados.service';
 import { ExpedienteService } from 'src/app/services/expediente/expediente.service';
-import { SearchRepositoryImplService } from 'src/app/modules/common/data/repositories/search-repository.impl';
-import { DashboardRepositoryImplService } from '../../data/repositories/dashboard-repository.impl';
-import { getCardsCountUseCase } from '../../core/usecases/get-cards-count.usecase';
+import { SearchService } from 'src/app/modules/shared/services/search.service';
+import { DashboardService } from '../../services/dashboard.service';
 
 @Component({
   selector: 'app-detalles',
@@ -17,11 +16,10 @@ export class DetallesComponent {
 
   showDownloadBtn: boolean;
 
-
   constructor ( 
     private route: ActivatedRoute, 
-    public searchRepository: SearchRepositoryImplService,
-    public getCardsCount: getCardsCountUseCase,
+    public searchService: SearchService,
+    public dashboardService: DashboardService,
     public expediente: ExpedienteService) {
 
       this.showDownloadBtn = false;
@@ -35,7 +33,7 @@ export class DetallesComponent {
       //--> this.expediente.setEmpleado(this.searchRepository.empleados[+params['index']]) ;
     });
 
-    this.getCardsCount.execute().subscribe((count) => {
+    this.dashboardService.getCardsCount().subscribe((count) => {
       this.showDownloadBtn = count > 0;
     });
   }

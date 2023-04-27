@@ -1,13 +1,14 @@
-import { Injectable } from '@angular/core';
-import { DragAndDropRepository } from '../../core/repositories/drag-and-drop.repository';
-import { CdkDragStart, CdkDragMove, CdkDragEnd, CdkDropList, CdkDropListGroup } from '@angular/cdk/drag-drop';
-import { Observable, from } from 'rxjs';
+import { CdkDragEnd, CdkDragMove, CdkDragStart, CdkDropList, CdkDropListGroup } from '@angular/cdk/drag-drop';
 import { ViewportRuler } from '@angular/cdk/overlay';
+import { Injectable } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DragAndDropRepositoryImplService extends DragAndDropRepository {
+export class DragAndDropService {
+
+  itemsMoved = new Subject<{ from_index: number; to_index: number; }>();
 
   dropListGroup!: CdkDropListGroup<CdkDropList>;
 
@@ -16,11 +17,9 @@ export class DragAndDropRepositoryImplService extends DragAndDropRepository {
 
   private currentDropItem: any;
 
-  constructor(private viewportRuler: ViewportRuler) {
-    super();
-  }
+  constructor(private viewportRuler: ViewportRuler) { }
 
-  override dragStarted(event: CdkDragStart<any>): Observable<void> {
+  dragStarted(event: CdkDragStart<any>): Observable<void> {
     return new Observable<void>(observable => {
       let point = this.getPointerPositionOnPage(event.event);
 
@@ -35,7 +34,7 @@ export class DragAndDropRepositoryImplService extends DragAndDropRepository {
     });
   }
 
-  override dragMoved(event: CdkDragMove<any>): Observable<void> {
+  dragMoved(event: CdkDragMove<any>): Observable<void> {
     return new Observable<void>(observable => {
       let point = this.getPointerPositionOnPage(event.event);
 
@@ -56,7 +55,7 @@ export class DragAndDropRepositoryImplService extends DragAndDropRepository {
     });
   }
 
-  override moveItem<CdkDropList>(dragItem: CdkDropList, dropItem: CdkDropList): Observable<{ from_index: number; to_index: number; }> {
+  moveItem<CdkDropList>(dragItem: CdkDropList, dropItem: CdkDropList) {
     let drag = (dragItem as any).element.nativeElement;
     let drop = (dropItem as any).element.nativeElement;
     let parent = drop.parentElement;
@@ -74,18 +73,16 @@ export class DragAndDropRepositoryImplService extends DragAndDropRepository {
 
     this.currentDropItem = this.dropItem;
 
-    return new Observable<{ from_index: number; to_index: number; }>(observable => {
-      observable.next({from_index: dragIndex, to_index: dropIndex});
-    })
+    this.itemsMoved.next({from_index: dragIndex, to_index: dropIndex});
   }
 
-  override onDropped(event: CdkDragEnd<any>): Observable<void> {
+  onDropped(event: CdkDragEnd<any>): Observable<void> {
     return new Observable<void>(observable => {
       observable.next();
     })
   }
 
-  override canDrop(): boolean {
+  canDrop(): boolean {
     return false;
   }
   /*
@@ -94,7 +91,7 @@ export class DragAndDropRepositoryImplService extends DragAndDropRepository {
   }
   */
 
-  private getPointerPositionOnPage(event: MouseEvent | TouchEvent) {
+  getPointerPositionOnPage(event: MouseEvent | TouchEvent) {
     // `touches` will be empty for start/end events so we have to fall back to `changedTouches`.
     const point = this.isTouchEvent(event)
       ? event.touches[0] || event.changedTouches[0]
@@ -110,7 +107,7 @@ export class DragAndDropRepositoryImplService extends DragAndDropRepository {
     };
   }
 
-  private indexOf(collection: any, node: any) {
+  indexOf(collection: any, node: any) {
     let index = Array.from(collection.children).indexOf(node);
 
     // verifica si el nodo esta fuera de la coleccion (indice -1)
@@ -118,14 +115,12 @@ export class DragAndDropRepositoryImplService extends DragAndDropRepository {
     return index == -1 ? collection.children.length : index;
   }
 
-  private isTouchEvent(event: MouseEvent | TouchEvent): event is TouchEvent {
+  isTouchEvent(event: MouseEvent | TouchEvent): event is TouchEvent {
     return event.type.startsWith('touch');
   }
 
-  private isInsideDropList(dropList: CdkDropList, x: number, y: number) {
+  isInsideDropList(dropList: CdkDropList, x: number, y: number) {
     const { top, bottom, left, right } = dropList.element.nativeElement.getBoundingClientRect();
     return y >= top && y <= bottom && x >= left && x <= right;
   }
-
-
 }

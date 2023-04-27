@@ -9,8 +9,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { PdfDownloadBtnComponent } from './pdf-download-btn/pdf-download-btn.component';
 
 import { CardComponent } from './cards/card/card.component';
-import { TestDashboardComponent } from './test-dashboard/test-dashboard.component';
-
+import { SharedModule } from '../../shared/shared.module';
 
 
 @NgModule({
@@ -19,14 +18,11 @@ import { TestDashboardComponent } from './test-dashboard/test-dashboard.componen
     DashboardComponent,
     SidebarComponent,
     PdfDownloadBtnComponent,
-    CardComponent,
-    TestDashboardComponent
+    CardComponent
   ],
   imports: [
     CommonModule,
-    DetallesCoreModule,
-    DetallesDataModule,
-    DetallesSharedModule,
+    SharedModule,
     DragDropModule,
     NgxPrintModule
   ],
@@ -35,8 +31,7 @@ import { TestDashboardComponent } from './test-dashboard/test-dashboard.componen
     DashboardComponent,
     SidebarComponent,
     PdfDownloadBtnComponent,
-    CardComponent,
-    TestDashboardComponent
+    CardComponent
   ]
 })
 export class ComponentsModule { }

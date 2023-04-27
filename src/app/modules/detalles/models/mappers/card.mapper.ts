@@ -1,16 +1,16 @@
-import { Mapper } from "src/app/modules/inicio/core/base/mapper";
+import { Mapper } from "src/app/modules/shared/base/mapper";
 import { CardModel } from "../card.model";
-import { DatosPersonalesComponent } from "src/app/detalles/ui/cards/datos-personales/datos-personales.component";
-import { CurriculumComponent } from "src/app/detalles/ui/cards/curriculum/curriculum.component";
-import { EstudiosComponent } from "src/app/detalles/ui/cards/estudios/estudios.component";
-import { ContratoComponent } from "src/app/detalles/ui/cards/contrato/contrato.component";
-import { HorarioComponent } from "src/app/detalles/ui/cards/horario/horario.component";
-import { DocumentosComponent } from "src/app/detalles/ui/cards/documentos/documentos.component";
-import { NominaComponent } from "src/app/detalles/ui/cards/nomina/nomina.component";
-import { ActasComponent } from "src/app/detalles/ui/cards/actas/actas.component";
-import { TrayectoriaComponent } from "src/app/detalles/ui/cards/trayectoria/trayectoria.component";
-import { CursosComponent } from "src/app/detalles/ui/cards/cursos/cursos.component";
-import { TestComponent } from "src/app/detalles/ui/cards/test/test.component";
+import { DatosPersonalesComponent } from "../../components/cards/datos-personales/datos-personales.component";
+import { CurriculumComponent } from "../../components/cards/curriculum/curriculum.component";
+import { EstudiosComponent } from "../../components/cards/estudios/estudios.component";
+import { ContratoComponent } from "../../components/cards/contrato/contrato.component";
+import { HorarioComponent } from "../../components/cards/horario/horario.component";
+import { DocumentosComponent } from "../../components/cards/documentos/documentos.component";
+import { NominaComponent } from "../../components/cards/nomina/nomina.component";
+import { ActasComponent } from "../../components/cards/actas/actas.component";
+import { TrayectoriaComponent } from "../../components/cards/trayectoria/trayectoria.component";
+import { CursosComponent } from "../../components/cards/cursos/cursos.component";
+import { TestComponent } from "../../components/cards/test/test.component";
 
 export class CardMapper extends Mapper<string, CardModel> {
     override mapFrom(param: string): CardModel {

@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
-import { DashboardRepository } from '../../core/repositories/dashboard.repository';
-import { Observable, Subject, from, map } from 'rxjs';
-import { CardModel } from '../../models/card.model';
-import { CardMapper } from '../../models/mappers/card.mapper';
+import { CardModel } from '../models/card.model';
+import { CardMapper } from '../models/mappers/card.mapper';
+import { Observable, Subject, from } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DashboardRepositoryImplService extends DashboardRepository {
-
+export class DashboardService {
   private cards: CardModel[];
 
   private cardMapper: CardMapper;
@@ -17,24 +15,22 @@ export class DashboardRepositoryImplService extends DashboardRepository {
   cardInDashboard = new Subject<number>();
 
   constructor() {
-    super();
-
     this.cards = [];
 
     this.cardMapper = new CardMapper();
   }
 
-  override getCards(): Observable<CardModel> {
+  getCards(): Observable<CardModel> {
     return from(this.cards).pipe((cards) => cards);
   }
 
-  override getCardsCount(): Observable<number> {
+  getCardsCount(): Observable<number> {
     return new Observable<number>(observable => {
       observable.next(this.cards.length)
     }).pipe((count) => count);
   }
 
-  override addCard(type: string): Observable<void> {
+  addCard(type: string): Observable<void> {
     return new Observable<void>(observable => {
 
       let card = this.cardMapper.mapFrom(type);
@@ -55,7 +51,7 @@ export class DashboardRepositoryImplService extends DashboardRepository {
     });
   }
 
-  override moveCard(from_index: number, to_index: number): Observable<void> {
+  moveCard(from_index: number, to_index: number): Observable<void> {
     return new Observable<void>(observable => {
       // CASO: insertar carta al final
       if (to_index == this.cards.length) {
@@ -79,7 +75,7 @@ export class DashboardRepositoryImplService extends DashboardRepository {
     });
   }
 
-  override deleteCard(card: CardModel): Observable<void> {
+  deleteCard(card: CardModel): Observable<void> {
     return new Observable<void>(observable => {
       this.searchCard(card).subscribe((index) => {
         if (index >= 0) {
@@ -93,7 +89,7 @@ export class DashboardRepositoryImplService extends DashboardRepository {
     });
   }
 
-  override searchCard(searchCard: CardModel): Observable<number> {
+  searchCard(searchCard: CardModel): Observable<number> {
 
     return new Observable<number>(observable => {
       let i = 0;
@@ -110,11 +106,9 @@ export class DashboardRepositoryImplService extends DashboardRepository {
     });
   }
 
-  override destroy(): Observable<void> {
+  destroy(): Observable<void> {
     return new Observable<void>(observable => {
       this.cards = [];
     });
   }
-
-
 }

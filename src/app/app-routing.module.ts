@@ -4,8 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   //{path: 'inicio', component: EmpleadoCardListComponent},
   {path: 'inicio',          loadChildren: () =>import('./modules/inicio/inicio.module').then((m) => m.InicioModule)},
-  {path: 'detalles/:index', loadChildren: () =>import(`./detalles/detalles.module`).then((m) => m.DetallesModule),},
-  //{path: 'detalles', component: DetallesComponent},
+  //{path: 'detalles/:index', loadChildren: () =>import(`./detalles/detalles.module`).then((m) => m.DetallesModule),},
+  {path: 'detalles', loadChildren: () =>import(`./modules/detalles/detalles.module`).then((m) => m.DetallesModule)},
   //{path: 'orgchart', component: OrganigramaComponent},
   //{path: 'testDashboard', component: TestDashboardComponent},
   {path: '', redirectTo: 'inicio', pathMatch: 'full'},

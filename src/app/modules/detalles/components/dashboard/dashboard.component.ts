@@ -1,14 +1,13 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewContainerRef, AfterViewInit  } from '@angular/core';
 
-import { AddDirective } from '../../shared/directives/add/add.directive';
+import { AddDirective } from 'src/app/modules/shared/directives/add/add.directive';
 
 import { CardModel } from '../../models/card.model';
 
 import { CardComponent } from '../cards/card/card.component';
 import { CdkDropList, CdkDropListGroup } from '@angular/cdk/drag-drop';
-import { DashboardRepositoryImplService } from '../../data/repositories/dashboard-repository.impl';
-import { DragAndDropRepositoryImplService } from '../../data/repositories/drag-and-drop-repository.impl';
-import { getCardsUseCase } from '../../core/usecases/get-cards.usecase';
+import { DashboardService } from '../../services/dashboard.service';
+import { DragAndDropService } from '../../services/drag-and-drop.service';
 
 
 @Component({
@@ -25,28 +24,27 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
   loadedCards:any;
 
   constructor(
-    public dashboardRepository: DashboardRepositoryImplService,
-    public dragAndDropRepository: DragAndDropRepositoryImplService,
-    public getCards: getCardsUseCase) {  
+    public dashboarService: DashboardService,
+    public dragAndDropService: DragAndDropService) {  
 
   }
 
   ngOnInit(): void {
 
+    console.log("Adhost: " + this.adHost);
+
     const viewContainerRef = this.adHost.viewContainerRef;
 
-    this.dashboardRepository.cardsChanged.pipe().subscribe(() => {
+    this.dashboarService.cardsChanged.pipe().subscribe(() => {
       
       viewContainerRef.clear();
 
-      this.getCards.execute().subscribe((card) => {
+      this.dashboarService.getCards().subscribe((card) => {
         this.loadCard(card, viewContainerRef);
       });
-      
-    })
-
+    });
     
-    this.dashboardRepository.cardInDashboard.pipe().subscribe((index: number) =>  {
+    this.dashboarService.cardInDashboard.pipe().subscribe((index: number) =>  {
       let card = this.getDropListAt(index);
       //console.log("Shake!");
       //this.router.navigate([], {fragment: card});
@@ -58,14 +56,18 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
       },200);
       
     });
+
+    this.dragAndDropService.itemsMoved.pipe().subscribe((positions) => {
+      this.dashboarService.moveCard(positions.from_index, positions.to_index + 1).subscribe();
+    })
   }
 
   ngOnDestroy():void {
-    this.dashboardRepository.destroy();
+    this.dashboarService.destroy();
   }
 
   ngAfterViewInit(): void {
-    this.dragAndDropRepository.dropListGroup = this.dashboard;
+    this.dragAndDropService.dropListGroup = this.dashboard;
   }
 
   loadCard(card:CardModel, viewContainerRef:ViewContainerRef) {

@@ -1,13 +1,11 @@
 import { Component, HostBinding, Type, ViewChild, ViewEncapsulation, ViewContainerRef, HostListener} from '@angular/core';
-import { DashboardRepository } from '../../../core/repositories/dashboard.repository';
 
 import { CdkDragEnd, CdkDragMove, CdkDragStart, CdkDropList } from "@angular/cdk/drag-drop";
 
 import { CardModel } from '../../../models/card.model';
-import { CardContentDirective } from '../../../shared/directives/card-content/card-content.directive';
-import { DashboardRepositoryImplService } from '../../../data/repositories/dashboard-repository.impl';
-import { DragAndDropRepositoryImplService } from '../../../data/repositories/drag-and-drop-repository.impl';
-import { deleteCardUseCase } from '../../../core/usecases/delete-card.usecase';
+import { CardContentDirective } from 'src/app/modules/shared/directives/card-content/card-content.directive';
+import { DashboardService } from '../../../services/dashboard.service';
+import { DragAndDropService } from '../../../services/drag-and-drop.service';
 
 @Component({
   selector: 'app-card',
@@ -30,23 +28,23 @@ export class CardComponent {
   content: any;
 
   constructor(
-    public deleteCard: deleteCardUseCase,
-    public dragAndDropRepository: DragAndDropRepositoryImplService) {
+    public dashboardService: DashboardService,
+    public dragAndDropService: DragAndDropService) {
     this.x = 0;
     this.y = 0;  
     this.classAttribute = "";
   }
 
   cardDragStart(event: CdkDragStart<any>) {
-    this.dragAndDropRepository.dragStarted(event).subscribe();
+    this.dragAndDropService.dragStarted(event).subscribe();
   }
 
   cardDragMoved(event: CdkDragMove<any>) {
-    this.dragAndDropRepository.dragMoved(event).subscribe();
+    this.dragAndDropService.dragMoved(event).subscribe();
   }
 
   cardDropped(event: CdkDragEnd) {
-    this.dragAndDropRepository.onDropped(event).subscribe();
+    this.dragAndDropService.onDropped(event).subscribe();
   }
 
   setCard(card: CardModel) {
@@ -79,7 +77,7 @@ export class CardComponent {
 
   removeFromDashboard() {
     console.log("Remove");
-    this.deleteCard.execute(this.card).subscribe();
+    this.dashboardService.deleteCard(this.card).subscribe();
   }
 
   addClass(styleClass: string) {

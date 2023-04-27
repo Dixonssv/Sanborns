@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ComponentsModule } from './components/components.module';
-import { HeaderComponent } from './components/header/header.component';
+import { DirectivesModule } from './directives/directives.module';
 
 @NgModule({
   declarations: [
@@ -12,7 +12,8 @@ import { HeaderComponent } from './components/header/header.component';
     ComponentsModule
   ],
   exports: [
-    ComponentsModule
+    ComponentsModule,
+    DirectivesModule
   ]
 })
 export class SharedModule { }

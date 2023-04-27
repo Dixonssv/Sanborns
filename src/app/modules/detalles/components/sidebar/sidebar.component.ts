@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 
-import { DashboardRepositoryImplService } from '../../data/repositories/dashboard-repository.impl';
-import { addCardUseCase } from '../../core/usecases/add-card.usecase';
+import { DashboardService } from '../../services/dashboard.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,12 +9,10 @@ import { addCardUseCase } from '../../core/usecases/add-card.usecase';
 })
 export class SidebarComponent {
 
-  constructor(private addCard: addCardUseCase) {
-
-  }
+  constructor(private dashboardService: DashboardService) { }
 
   addCardToDashboard(component:string) {
-    this.addCard.execute(component).subscribe();
+    this.dashboardService.addCard(component).subscribe();
   }
 
 }
