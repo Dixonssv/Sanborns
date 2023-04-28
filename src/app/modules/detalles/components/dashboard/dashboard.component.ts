@@ -66,13 +66,10 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
     //cardComponent.instance.setSize(card.x, card.y);
     //cardComponent.instance.setContent(card.component);
     cardComponent.instance.setCard(card);
-
-    //this.loadedCards.push(cardComponent.instance);
   }
 
   dropListEnterPredicate() {
     return false;
-    //return this.dragAndDropRepository.canDrop().subscribe((result:boolean) => result) ;
   }
 
   getDropListAt(index: number) {
