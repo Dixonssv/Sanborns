@@ -1,12 +1,13 @@
 import { Mapper } from "../../base/mapper";
 import { EmpleadoModel } from "../empleado.model";
+import { EmpleadoFormattedMapper } from "./empleado-formatted.mapper";
 
 
 export class EmpleadoMapper extends Mapper<any, EmpleadoModel> {
+
     override mapFrom(param: any): EmpleadoModel {
 
-        //console.log("Empleado mapper:");
-        //console.log(param);
+        let formattedMapper: EmpleadoFormattedMapper = new EmpleadoFormattedMapper();
 
         return {
             claveCompania: param.claveCompania,
@@ -19,8 +20,9 @@ export class EmpleadoMapper extends Mapper<any, EmpleadoModel> {
             departamento: param.departamento,
             clavePuesto: param.clavePuesto,
             puesto: param.puesto,
-            numeroEmpleado: param._formatted.numeroEmpleado,
-            nombre: param._formatted.nombre
+            numeroEmpleado: param.numeroEmpleado,
+            nombre: param.nombre,
+            formatted: formattedMapper.mapFrom(param)
         };
     }
     override mapTo(param: EmpleadoModel): any {

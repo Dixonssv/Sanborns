@@ -31,8 +31,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
 
   ngOnInit(): void {
 
-    console.log("Adhost: " + this.adHost);
-
     const viewContainerRef = this.adHost.viewContainerRef;
 
     this.dashboarService.cardsChanged.pipe().subscribe(() => {
@@ -46,15 +44,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
     
     this.dashboarService.cardInDashboard.pipe().subscribe((index: number) =>  {
       let card = this.getDropListAt(index);
-      //console.log("Shake!");
-      //this.router.navigate([], {fragment: card});
 
-      // SHAKE ANIMATION
-      card.element.nativeElement.classList.add("shake");
-      setTimeout(() => {
-        card.element.nativeElement.classList.remove("shake");
-      },200);
-      
+      this.shake(card);
     });
 
     this.dragAndDropService.itemsMoved.pipe().subscribe((positions) => {
@@ -63,7 +54,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
   }
 
   ngOnDestroy():void {
-    this.dashboarService.destroy();
+    this.dashboarService.destroy().subscribe();
   }
 
   ngAfterViewInit(): void {
@@ -97,6 +88,14 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
     });
 
     return dropList;
+  }
+
+  shake(element: any) {
+      // SHAKE ANIMATION
+      element.element.nativeElement.classList.add("shake");
+      setTimeout(() => {
+        element.element.nativeElement.classList.remove("shake");
+      },200);
   }
   
 

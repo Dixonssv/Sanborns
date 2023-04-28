@@ -11,4 +11,5 @@ export interface EmpleadoModel {
     puesto: string;
     numeroEmpleado: string;
     nombre: string;
+    formatted?: EmpleadoModel;
 }

@@ -23,7 +23,6 @@ export class SearchService{
     this.empleados = [];
 
     return new Observable<void>(observable => {
-      console.log("Buscando a... " + input);
 
       //setTimeout(() => {
         if(input != "") {

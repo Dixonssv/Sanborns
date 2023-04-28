@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { EmpleadoModel } from 'src/app/modules/shared/models/empleado.model';
 import { SearchService } from 'src/app/modules/shared/services/search/search.service';
 import { EmpleadoService } from 'src/app/modules/shared/services/empleado/empleado.service';
@@ -10,22 +10,25 @@ import { Router } from '@angular/router';
   styleUrls: ['./empleado-card-list.component.css'],
   encapsulation: ViewEncapsulation.None, // Aplicar estilos a innerHTML
 })
-export class EmpleadoCardListComponent implements AfterViewInit{
+export class EmpleadoCardListComponent implements AfterViewInit, OnInit{
   
-  empleados: Array<EmpleadoModel>;
+  public empleados: Array<EmpleadoModel> = [];
   public searching : boolean;
 
   constructor(
     private router: Router,
+    private changeDetector: ChangeDetectorRef,
     public searchService:SearchService,
     public empleadoService:EmpleadoService,
     ) {
       this.searching = false;
 
-      this.empleados = [];
+      //this.empleados = [];
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
+
+    this.empleados = [];
 
     this.searchService.searchStarted.subscribe(() => {
       // Searching...
@@ -38,8 +41,12 @@ export class EmpleadoCardListComponent implements AfterViewInit{
       console.log("Busqueda terminada!...");
       this.searching = false;
       this.empleados = this.searchService.empleados;
-      console.log(this.searchService.empleados);
+      console.log(this.empleados);
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.empleados = this.searchService.empleados;
   }
 
   viewDetails(index: number) {

@@ -24,6 +24,7 @@ export class SearchBarComponent {
   ngOnInit() {
     this.searchTextChanged.pipe(debounceTime(500), distinctUntilChanged()).subscribe((input) => {
       this.router.navigate(["inicio"]).then(() => {
+        console.log("Se navego a inicio!");
         this.searchService.searchEmpleados(input).subscribe();
       });
     });

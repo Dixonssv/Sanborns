@@ -27,21 +27,21 @@ export class DetallesComponent {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      //console.log(this.buscador.result);
       let index = +params['index'];
 
-      if(Number.isNaN(index)) {
-        this.router.navigate(['inicio']);
-      } else {
+      if(!Number.isNaN(index)) {
         this.expedienteService.setEmpleado(this.searchService.empleados[index]);
       }
 
-      //console.log(this.buscador.result[+params['index']]);
-      //--> this.expediente.setEmpleado(this.searchRepository.empleados[+params['index']]) ;
+      if(this.expedienteService.getEmpleado() == null) {
+        this.router.navigate(['inicio']);
+      }
     });
 
-    this.dashboardService.getCardsCount().subscribe((count) => {
-      this.showDownloadBtn = count > 0;
+    this.dashboardService.cardsChanged.pipe().subscribe(() => {
+      this.dashboardService.getCardsCount().subscribe((count) => {
+        this.showDownloadBtn = count > 0;
+      });
     });
   }
 }

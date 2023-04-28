@@ -1,7 +1,6 @@
 <div *ngIf="this.searching" class="text-gray-400 italic p-5">
     <p>Buscando...</p>
 </div>
-
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-8">
     <a 
         *ngFor="let empleado of this.empleados; let i = index" (click)="viewDetails(i)">
@@ -17,10 +16,10 @@
             </div>
             <!--Datos-->
             <div class="float-left w-2/3 px-5">
-                <p class="font-bold" [innerHTML]="empleado.nombre"></p>
-                <p [innerHTML]="empleado.numeroEmpleado"></p>
-                <p>{{empleado.departamento}}</p>
-                <p>{{empleado.puesto}}</p>
+                <p class="font-bold" [innerHTML]="empleado.formatted!.nombre"></p>
+                <p [innerHTML]="empleado.formatted!.numeroEmpleado"></p>
+                <p [innerHTML]="empleado.formatted!.departamento"></p>
+                <p [innerHTML]="empleado.formatted!.puesto"></p>
             </div>
         </div>
     </a>

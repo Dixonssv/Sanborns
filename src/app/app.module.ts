@@ -10,11 +10,13 @@ import { AppRoutingModule } from './app-routing.module';
 //import { HttpClientTestComponent } from './http-client-test/http-client-test.component';
 
 import { SharedModule } from './modules/shared/shared.module';
+import { OrganigramaComponent } from './components/organigrama/organigrama.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    OrganigramaComponent
   ],
   imports: [
     BrowserModule,
