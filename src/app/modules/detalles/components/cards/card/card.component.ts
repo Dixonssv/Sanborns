@@ -1,4 +1,4 @@
-import { Component, HostBinding, Type, ViewChild, ViewEncapsulation, ViewContainerRef, HostListener} from '@angular/core';
+import { Component, HostBinding, Type, ViewChild, ViewEncapsulation, ViewContainerRef, HostListener, ElementRef, OnInit, Renderer2} from '@angular/core';
 
 import { CdkDragEnd, CdkDragMove, CdkDragStart, CdkDropList } from "@angular/cdk/drag-drop";
 
@@ -16,11 +16,15 @@ import { DragAndDropService } from '../../../services/drag-and-drop/drag-and-dro
     CdkDropList,
   ]
 })
-export class CardComponent {
+export class CardComponent implements OnInit{
 
   @HostBinding('class') classAttribute: string;
 
   @ViewChild(CardContentDirective, {static: true}) CardContent!: CardContentDirective;
+
+  // Style
+  defaultHeigh: number = 10; //rem
+  defaultGap:   number = 1;  //rem
 
   card: any;
   x: number;
@@ -28,11 +32,25 @@ export class CardComponent {
   content: any;
 
   constructor(
+    private renderer: Renderer2,
+    private hostElement: ElementRef,
     public dashboardService: DashboardService,
     public dragAndDropService: DragAndDropService) {
     this.x = 0;
     this.y = 0;  
     this.classAttribute = "";
+  }
+
+  ngOnInit(): void {
+    const styles = getComputedStyle(this.hostElement.nativeElement);
+
+    this.hostElement.nativeElement.height = "200px";
+
+    console.log("Height: ", +styles.height.replace("px", ""));
+
+    this.adjustHeight();
+
+    console.log("Height: ", +styles.height.replace("px", ""));
   }
 
   cardDragStart(event: CdkDragStart<any>) {
@@ -53,17 +71,56 @@ export class CardComponent {
     this.setContent(this.card.component);
   }
 
+  @HostListener('window:resize', ['$event'])
+  adjustHeight() {
+    
+    const gridCellHeight  = this.dashboardService.gridCellHeight;
+    const gridGap         = this.dashboardService.gridGap;
+    const interval        = gridCellHeight + gridGap;
+
+    // 1 - Recalcula la altura segun su contenido
+    this.renderer.setStyle(
+      this.hostElement.nativeElement,
+      "height",
+      "auto"
+    );
+
+    const styles = getComputedStyle(this.hostElement.nativeElement);
+
+    let currentHeight = +styles.height.replace("px", ""); // px
+    let adjustedHeight = gridCellHeight;
+    let span = 1;
+
+    // 2 - Redondea la altura segun el tamanio de las celdas del grid
+    while(adjustedHeight < currentHeight) {
+      adjustedHeight += interval;
+      span++;
+    }
+
+    // 3 - Aplica estilos para la altura y el row-span
+    this.renderer.setStyle(
+      this.hostElement.nativeElement,
+      "height",
+      adjustedHeight + "px"
+    );
+
+    this.renderer.setStyle(
+      this.hostElement.nativeElement,
+      "grid-row",
+      "span " + span + " / " + "span " + span
+    );
+  }
+
   setSize(x:number, y:number) {
     this.x = x;
     this.y = y;
-    this.classAttribute = 'dash-card-x' + this.x + ' dash-card-y' + this.y + ' ';
+    this.classAttribute = "dash-card-x" + this.x;
+    //this.classAttribute = 'dash-card-x' + this.x + ' dash-card-y' + this.y + ' ';
   }
 
   setContent(component:Type<any>) {
 
     this.content = component;
-
-    console.log(this.CardContent);
 
     const viewContainerRef:ViewContainerRef = this.CardContent.viewContainerRef;
 

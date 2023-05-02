@@ -7,6 +7,10 @@ import { Observable, Subject, from } from 'rxjs';
   providedIn: 'root'
 })
 export class DashboardService {
+  /* 1rem = 16px */
+  public gridCellHeight: number = 80; //px = 5rem
+  public gridGap: number        = 16; //px = 1rem
+
   private cards: CardModel[];
 
   private cardMapper: CardMapper;
