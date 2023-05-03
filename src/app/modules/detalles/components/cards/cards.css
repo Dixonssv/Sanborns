@@ -76,9 +76,14 @@
 }
 
 .h-adjust {
-    
-    --rounding-interval: calc(10rem + 1rem);
-    height: round(up, );
+    --grid-cell-height: 5rem;
+    --grid-gap: 1rem;
+    /*--rounding-interval: calc(10rem + 1rem);*/
+    /*height: var(--auto-height, auto);*/
+    --height: 350px;
+    height: round(up, 310px, 25px);
+    /*height: var(--height);*/
+    /*height: 300px;*/
 }
 
 .cdk-drag-placeholder {

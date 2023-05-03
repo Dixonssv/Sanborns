@@ -42,15 +42,7 @@ export class CardComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    const styles = getComputedStyle(this.hostElement.nativeElement);
-
-    this.hostElement.nativeElement.height = "200px";
-
-    console.log("Height: ", +styles.height.replace("px", ""));
-
     this.adjustHeight();
-
-    console.log("Height: ", +styles.height.replace("px", ""));
   }
 
   cardDragStart(event: CdkDragStart<any>) {
@@ -114,7 +106,7 @@ export class CardComponent implements OnInit{
   setSize(x:number, y:number) {
     this.x = x;
     this.y = y;
-    this.classAttribute = "dash-card-x" + this.x;
+    this.classAttribute = "dash-card-x" + this.x + " box h-adjust";
     //this.classAttribute = 'dash-card-x' + this.x + ' dash-card-y' + this.y + ' ';
   }
 

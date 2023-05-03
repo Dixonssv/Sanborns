@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-pdf-download-btn',
@@ -10,4 +10,9 @@ export class PdfDownloadBtnComponent {
   constructor() {
     
   }
+
+  @HostListener("window:beforeprint", ["$event"])
+    async beforePrint($event: any) {
+        await console.log("Printing");
+    }
 }
