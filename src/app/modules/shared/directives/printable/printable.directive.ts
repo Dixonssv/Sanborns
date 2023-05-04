@@ -11,6 +11,12 @@ export class PrintableDirective implements AfterViewInit{
   ) { }
 
   ngAfterViewInit(): void {
+    this.renderer.setStyle(
+      this.hostElement.nativeElement,
+      "margin",
+      "auto"
+    );
+
     this.setWith();
     //this.setHeight();
   }
@@ -19,20 +25,32 @@ export class PrintableDirective implements AfterViewInit{
   setWith() {
     console.log("Windows resize!!");
     
-    this.renderer.removeStyle(
-      this.hostElement.nativeElement,
-      "width"
-    );
+    this.renderer.removeStyle(this.hostElement.nativeElement, "width");
+    this.renderer.removeStyle(this.hostElement.nativeElement, "min-width");
 
     const styles = getComputedStyle(this.hostElement.nativeElement);
 
     let currentWidth = +styles.width.replace("px", "");
+
+    
 
     this.renderer.setStyle(
       this.hostElement.nativeElement,
       "width",
       currentWidth + "px"
     );
+
+    this.renderer.setStyle(
+      this.hostElement.nativeElement,
+      "min-width",
+      currentWidth + "px"
+    );
+
+    this.renderer.setStyle(
+      this.hostElement.nativeElement,
+      "z-index",
+      0
+    )
   }
 
   //@HostListener('window:resize', ['$event'])

@@ -25,29 +25,30 @@
 
     /* 1 recuadro vertical */
     .dash-card-x1 {
-        @apply col-span-1;
+        @apply col-span-2;
+        @apply @md:col-span-1;
+        @apply @lg:col-span-1;
     }
 
     /* 2 recuadros verticales */
     .dash-card-x2 {
-        @apply col-span-2;
-        /*@apply md:col-span-3;
-        @apply md:col-span-2;*/
+        @apply col-span-4;
+        @apply @md:col-span-3;
+        @apply @lg:col-span-2;
     }
 
     /* 3 recuadros verticales */
     .dash-card-x3 {
-        @apply col-span-3;
-        /*@apply col-span-2;
-        @apply md:col-span-3;*/
+        @apply col-span-4;
+        @apply @md:col-span-3;
+        @apply @lg:col-span-3;
     }
 
     /* 4 recuadros verticales */
     .dash-card-x4 {
         @apply col-span-4;
-        /*@apply col-span-2;
-        @apply md:col-span-3;
-        @apply lg:col-span-4;*/
+        @apply @md:col-span-4;
+        @apply @lg:col-span-4;
     }
 
     /* 1 recuadro vertical */

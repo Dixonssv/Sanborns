@@ -22,10 +22,6 @@ export class CardComponent implements AfterViewInit{
 
   @ViewChild(CardContentDirective, {static: true}) CardContent!: CardContentDirective;
 
-  // Style
-  defaultHeigh: number = 10; //rem
-  defaultGap:   number = 1;  //rem
-
   card: any;
   x: number;
   y: number;
@@ -40,6 +36,7 @@ export class CardComponent implements AfterViewInit{
     this.y = 0;  
     this.classAttribute = "";
   }
+
   ngAfterViewInit(): void {
     //const styles = getComputedStyle(this.hostElement.nativeElement);
     //console.log("Height: ", +styles.height.replace("px", ""));
@@ -110,7 +107,7 @@ export class CardComponent implements AfterViewInit{
   setSize(x:number, y:number) {
     this.x = x;
     this.y = y;
-    this.classAttribute = "dash-card-x" + this.x;
+    this.classAttribute = "dash-card-x" + this.x + " z-0";
     //this.classAttribute = 'dash-card-x' + this.x + ' dash-card-y' + this.y + ' ';
   }
 
