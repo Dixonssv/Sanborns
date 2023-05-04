@@ -8,8 +8,8 @@ import { Observable, Subject, from } from 'rxjs';
 })
 export class DashboardService {
   /* 1rem = 16px */
-  public gridCellHeight: number = 80; //px = 5rem
-  public gridGap: number        = 16; //px = 1rem
+  readonly gridCellHeight: number = 48; //px = 3rem
+  readonly gridGap: number        = 16; //px = 1rem
 
   private cards: CardModel[];
 

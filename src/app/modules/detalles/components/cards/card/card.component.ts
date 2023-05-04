@@ -1,4 +1,4 @@
-import { Component, HostBinding, Type, ViewChild, ViewEncapsulation, ViewContainerRef, HostListener, ElementRef, OnInit, Renderer2} from '@angular/core';
+import { Component, HostBinding, Type, ViewChild, ViewEncapsulation, ViewContainerRef, HostListener, ElementRef, OnInit, Renderer2, AfterViewInit} from '@angular/core';
 
 import { CdkDragEnd, CdkDragMove, CdkDragStart, CdkDropList } from "@angular/cdk/drag-drop";
 
@@ -16,7 +16,7 @@ import { DragAndDropService } from '../../../services/drag-and-drop/drag-and-dro
     CdkDropList,
   ]
 })
-export class CardComponent implements OnInit{
+export class CardComponent implements AfterViewInit{
 
   @HostBinding('class') classAttribute: string;
 
@@ -40,17 +40,13 @@ export class CardComponent implements OnInit{
     this.y = 0;  
     this.classAttribute = "";
   }
-
-  ngOnInit(): void {
-    const styles = getComputedStyle(this.hostElement.nativeElement);
-
-    this.hostElement.nativeElement.height = "200px";
-
-    console.log("Height: ", +styles.height.replace("px", ""));
+  ngAfterViewInit(): void {
+    //const styles = getComputedStyle(this.hostElement.nativeElement);
+    //console.log("Height: ", +styles.height.replace("px", ""));
 
     this.adjustHeight();
 
-    console.log("Height: ", +styles.height.replace("px", ""));
+    //console.log("Height: ", +styles.height.replace("px", ""));
   }
 
   cardDragStart(event: CdkDragStart<any>) {
@@ -71,7 +67,7 @@ export class CardComponent implements OnInit{
     this.setContent(this.card.component);
   }
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener('window:resize', ['$event']) 
   adjustHeight() {
     
     const gridCellHeight  = this.dashboardService.gridCellHeight;
