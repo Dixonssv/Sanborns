@@ -8,6 +8,8 @@ import { CardComponent } from '../cards/card/card.component';
 import { CdkDropList, CdkDropListGroup } from '@angular/cdk/drag-drop';
 import { DashboardService } from '../../services/dashboard/dashboard.service';
 import { DragAndDropService } from '../../services/drag-and-drop/drag-and-drop.service';
+import { PrintableDirective } from 'src/app/modules/shared/directives/printable/printable.directive';
+import { PrintService } from '../../services/print/print.service';
 
 
 @Component({
@@ -21,11 +23,14 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
 
   @ViewChild(CdkDropListGroup, {static: false}) dashboard!: CdkDropListGroup<CdkDropList>;
 
+  @ViewChild(PrintableDirective, {static: true}) printableArea!: PrintableDirective;
+
   loadedCards:any;
 
   constructor(
     public dashboarService: DashboardService,
-    public dragAndDropService: DragAndDropService) {  
+    public dragAndDropService: DragAndDropService,
+    public printService: PrintService) {  
 
   }
 
@@ -50,7 +55,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
 
     this.dragAndDropService.itemsMoved.pipe().subscribe((positions) => {
       this.dashboarService.moveCard(positions.from_index, positions.to_index + 1).subscribe();
-    })
+    });
   }
 
   ngOnDestroy():void {
@@ -59,6 +64,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
 
   ngAfterViewInit(): void {
     this.dragAndDropService.dropListGroup = this.dashboard;
+
+    this.printService.printableObject = this.printableArea;
   }
 
   loadCard(card:CardModel, viewContainerRef:ViewContainerRef) {
