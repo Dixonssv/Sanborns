@@ -1,5 +1,5 @@
 <div cdkDropList [cdkDropListEnterPredicate]="this.dragAndDropService.canDrop" class="w-full h-full">
-    <div class="dash-card" cdkDrag (cdkDragStarted)="cardDragStart($event)" (cdkDragMoved)="cardDragMoved($event)" (cdkDragEnded)="cardDropped($event)">
+    <div class="dash-card @container" cdkDrag (cdkDragStarted)="cardDragStart($event)" (cdkDragMoved)="cardDragMoved($event)" (cdkDragEnded)="cardDropped($event)">
         <!--Barra de opciones-->
         <div class="flex h-5 flex-row-reverse opacity-0 hover:opacity-100 z-10 transition duration-200 ">
             <button type="button" (click)="removeFromDashboard()" name="remove" class="h-full w-5 p-1 ml-1 rounded-full bg-gray-200 hover:bg-gray-300">
