@@ -44,12 +44,6 @@ export class PrintableDirective implements AfterViewInit{
       "min-width",
       currentWidth + "px"
     );
-
-    this.renderer.setStyle(
-      this.hostElement.nativeElement,
-      "z-index",
-      0
-    )
   }
 
   getWidth() {

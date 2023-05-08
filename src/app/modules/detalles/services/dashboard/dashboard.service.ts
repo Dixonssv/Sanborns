@@ -57,6 +57,8 @@ export class DashboardService {
 
   moveCard(from_index: number, to_index: number): Observable<void> {
     return new Observable<void>(observable => {
+      console.log("Move card from: " + from_index + " to: " + to_index);
+
       // CASO: insertar carta al final
       if (to_index == this.cards.length) {
         let card = this.cards.splice(from_index, 1);
