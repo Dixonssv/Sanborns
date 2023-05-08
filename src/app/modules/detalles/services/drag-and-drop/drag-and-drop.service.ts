@@ -15,7 +15,7 @@ export class DragAndDropService {
   private dragItem: any;
   private dropItem: any;
 
-  private currentDropItem: any;
+  private currentDropIndex: any;
 
   constructor(private viewportRuler: ViewportRuler) { }
 
@@ -24,13 +24,16 @@ export class DragAndDropService {
       let point = this.getPointerPositionOnPage(event.event);
 
       this.dropListGroup._items.forEach((dropList: any) => {
-        if (this.isInsideDropList(dropList, point.x, point.y)) {
+        if (this.isInsideDropList(dropList, point)) {
           this.dragItem = dropList;
           return;
         }
       });
 
-      this.currentDropItem = this.dragItem;
+      let drag = (this.dragItem as any).element.nativeElement;
+      let parent = drag.parentElement;
+      this.currentDropIndex = this.indexOf(parent, drag);
+      console.log("currentDropIndex = " + this.currentDropIndex);
     });
   }
 
@@ -39,41 +42,55 @@ export class DragAndDropService {
       let point = this.getPointerPositionOnPage(event.event);
 
       this.dropListGroup._items.forEach((dropList: any) => {
-        if (this.isInsideDropList(dropList, point.x, point.y)) {
+        if (this.isInsideDropList(dropList, point)) {
           this.dropItem = dropList;
           return;
         }
       });
 
-      if (this.dragItem == this.dropItem) {
-        this.currentDropItem == this.dragItem;
-      }
-
-      if (this.currentDropItem != this.dropItem && this.dropItem != this.dragItem) {
-        this.moveItem(this.dragItem, this.dropItem);
+      if (this.dropItem != this.dragItem) {
+        try {
+          this.moveItem(this.dragItem, this.dropItem);
+        } catch {}
       }
     });
   }
 
   moveItem<CdkDropList>(dragItem: CdkDropList, dropItem: CdkDropList) {
+    console.log("Try Moving Item...");
     let drag = (dragItem as any).element.nativeElement;
     let drop = (dropItem as any).element.nativeElement;
     let parent = drop.parentElement;
 
-    let dragIndex = this.indexOf(parent, drag) - 1;
-    let dropIndex = this.indexOf(parent, drop) - 1;
+    //let dragIndex = this.indexOf(parent, drag) - 1;
+    //let dropIndex = this.indexOf(parent, drop) - 1;
 
-    dragIndex < 0 ? 0 : dragIndex;
-    dropIndex < 0 ? 0 : dropIndex;
+    let dragIndex = this.indexOf(parent, drag);
+    let dropIndex = this.indexOf(parent, drop);
+
+    //dragIndex < 0 ? 0 : dragIndex;
+    //dropIndex < 0 ? 0 : dropIndex;
 
     //parent.insertBefore(drag, dropIndex == 0 ? drop.nextSibling : drop);
-    //parent.insertBefore(drag, dragIndex < dropIndex ? drop.nextSibling : drop);
+    console.log("currentDropIndex = " + this.currentDropIndex + " dropIndex = " + dropIndex);
+    if(this.currentDropIndex != dropIndex) {
+      parent.insertBefore(drag, dragIndex < dropIndex ? drop.nextSibling : drop);
+      this.itemsMoved.next({from_index: dragIndex, to_index: dropIndex});
+    } else {
+      throw Error();
+    }
+
+    this.currentDropIndex = dropIndex;
+    console.log("currentDropIndex = dropIndex = " + this.currentDropIndex);
+    
     //parent.insertBefore(drag, drop);
-    parent.insertBefore(drag, drop.nextSibling);
+    //parent.insertBefore(drag, drop.nextSibling);
 
-    this.currentDropItem = this.dropItem;
-
-    this.itemsMoved.next({from_index: dragIndex, to_index: dropIndex});
+    /*
+    dragIndex < dropIndex ? 
+    this.itemsMoved.next({from_index: dragIndex, to_index: dropIndex}) :
+    this.itemsMoved.next({from_index: dragIndex, to_index: dropIndex - 1 < 0 ? 0 : dropIndex - 1});
+    */
   }
 
   onDropped(event: CdkDragEnd<any>): Observable<void> {
@@ -119,8 +136,8 @@ export class DragAndDropService {
     return event.type.startsWith('touch');
   }
 
-  isInsideDropList(dropList: CdkDropList, x: number, y: number) {
+  isInsideDropList(dropList: CdkDropList, point: {x: number, y: number}) {
     const { top, bottom, left, right } = dropList.element.nativeElement.getBoundingClientRect();
-    return y >= top && y <= bottom && x >= left && x <= right;
+    return point.y >= top && point.y <= bottom && point.x >= left && point.x <= right;
   }
 }

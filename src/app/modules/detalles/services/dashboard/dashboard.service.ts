@@ -57,10 +57,12 @@ export class DashboardService {
 
   moveCard(from_index: number, to_index: number): Observable<void> {
     return new Observable<void>(observable => {
+      console.log("Subscribe");
       console.log("Move card from: " + from_index + " to: " + to_index);
 
       // CASO: insertar carta al final
-      if (to_index == this.cards.length) {
+      if (to_index == this.cards.length - 1) {
+        console.log("CASO 1");
         let card = this.cards.splice(from_index, 1);
         this.cards.push(card[0]);
         return;
@@ -74,8 +76,10 @@ export class DashboardService {
       // Se suma 1 debido a que en la linea anterior, el tamanio del arreglo se disminuyo en uno. Esto solo afecta
       // cuando la carta se inserta en una posicion anterior.
       if (from_index < to_index) {
+        console.log("CASO 2");
         this.cards.splice(to_index - 1, 0, card[0]);
       } else {
+        console.log("CASO 3");
         this.cards.splice(to_index, 0, card[0]);
       }
     });
