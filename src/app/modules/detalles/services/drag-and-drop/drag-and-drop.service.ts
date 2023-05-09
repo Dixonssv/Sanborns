@@ -16,6 +16,7 @@ export class DragAndDropService {
   private dropItem: any;
 
   private currentDropIndex: any;
+  private lastDropItem!: CdkDropList | null;
 
   constructor(private viewportRuler: ViewportRuler) { }
 
@@ -33,12 +34,12 @@ export class DragAndDropService {
       let drag = (this.dragItem as any).element.nativeElement;
       let parent = drag.parentElement;
       this.currentDropIndex = this.indexOf(parent, drag);
-      console.log("currentDropIndex = " + this.currentDropIndex);
     });
   }
 
   dragMoved(event: CdkDragMove<any>): Observable<void> {
     return new Observable<void>(observable => {
+      
       let point = this.getPointerPositionOnPage(event.event);
 
       this.dropListGroup._items.forEach((dropList: any) => {
@@ -48,16 +49,20 @@ export class DragAndDropService {
         }
       });
 
-      if (this.dropItem != this.dragItem) {
+      if(this.dropItem != this.lastDropItem) {
+        this.lastDropItem = null;
+      }
+
+      if (this.dropItem != this.dragItem && this.dropItem != this.lastDropItem) {
         try {
           this.moveItem(this.dragItem, this.dropItem);
+          this.lastDropItem = this.dropItem;
         } catch {}
       }
     });
   }
 
   moveItem<CdkDropList>(dragItem: CdkDropList, dropItem: CdkDropList) {
-    console.log("Try Moving Item...");
     let drag = (dragItem as any).element.nativeElement;
     let drop = (dropItem as any).element.nativeElement;
     let parent = drop.parentElement;
@@ -72,16 +77,17 @@ export class DragAndDropService {
     //dropIndex < 0 ? 0 : dropIndex;
 
     //parent.insertBefore(drag, dropIndex == 0 ? drop.nextSibling : drop);
-    console.log("currentDropIndex = " + this.currentDropIndex + " dropIndex = " + dropIndex);
     if(this.currentDropIndex != dropIndex) {
       parent.insertBefore(drag, dragIndex < dropIndex ? drop.nextSibling : drop);
+
       this.itemsMoved.next({from_index: dragIndex, to_index: dropIndex});
+
+      this.currentDropIndex = dropIndex;
     } else {
       throw Error();
     }
 
-    this.currentDropIndex = dropIndex;
-    console.log("currentDropIndex = dropIndex = " + this.currentDropIndex);
+    
     
     //parent.insertBefore(drag, drop);
     //parent.insertBefore(drag, drop.nextSibling);

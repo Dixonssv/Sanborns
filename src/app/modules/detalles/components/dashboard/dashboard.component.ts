@@ -10,6 +10,7 @@ import { DashboardService } from '../../services/dashboard/dashboard.service';
 import { DragAndDropService } from '../../services/drag-and-drop/drag-and-drop.service';
 import { PrintableDirective } from 'src/app/modules/shared/directives/printable/printable.directive';
 import { PrintService } from '../../services/print/print.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -23,44 +24,64 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
 
   @ViewChild(CdkDropListGroup, {static: false}) dashboard!: CdkDropListGroup<CdkDropList>;
 
+  //@ViewChild("dashboard") dashboardElement!: ElementRef;
+
   @ViewChild(PrintableDirective, {static: true}) printableArea!: PrintableDirective;
 
   loadedCards:any;
+
+  // Suscripciones
+  private subscriptions:Subscription[];
 
   constructor(
     public dashboarService: DashboardService,
     public dragAndDropService: DragAndDropService,
     public printService: PrintService) {  
-
+      this.subscriptions = [];
   }
 
   ngOnInit(): void {
 
     const viewContainerRef = this.adHost.viewContainerRef;
 
-    this.dashboarService.cardsChanged.pipe().subscribe(() => {
+    this.subscriptions.push(
+      // Cards Changed
+      this.dashboarService.cardsChanged.pipe().subscribe(() => {
       
-      viewContainerRef.clear();
-
-      this.dashboarService.getCards().subscribe((card) => {
-        this.loadCard(card, viewContainerRef);
-      });
-    });
-    
-    this.dashboarService.cardInDashboard.pipe().subscribe((index: number) =>  {
-      let card = this.getDropListAt(index);
-
-      this.shake(card);
-    });
-
-    this.dragAndDropService.itemsMoved.pipe().subscribe((positions) => {
-      this.dashboarService.moveCard(positions.from_index, positions.to_index).subscribe();
-      //this.dashboarService.moveCard(positions.from_index, positions.to_index);
-    });
+        viewContainerRef.clear();
+  
+        this.dashboarService.getCards().subscribe((card) => {
+          this.loadCard(card, viewContainerRef);
+        });
+      }),
+      // Card in Dashboard 
+      this.dashboarService.cardInDashboard.pipe().subscribe((index: number) =>  {
+        let card = this.getDropListAt(index);
+  
+        this.shake(card);
+      }),
+      // Items Moved
+      this.dragAndDropService.itemsMoved.pipe().subscribe((positions) => {
+        console.log("Items moved");
+  
+        this.dashboarService.moveCard(positions.from_index, positions.to_index).subscribe();
+  
+        
+        console.log("Cards:");
+        this.dashboarService.getCards().subscribe((card) => {
+          console.log(card);
+        });
+        
+      })
+    );
   }
 
   ngOnDestroy():void {
     this.dashboarService.destroy().subscribe();
+
+    this.subscriptions.forEach((subscription) => {
+      subscription.unsubscribe();
+    })
   }
 
   ngAfterViewInit(): void {
@@ -102,46 +123,5 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
         element.element.nativeElement.classList.remove("shake");
       },200);
   }
-  
-
-
-
-  /*
-  @Input() ads: AdItem[] = [];
-
-  currentAdIndex = -1;
-
-  @ViewChild(AdDirective, {static: true}) adHost!: AdDirective;
-  interval: number|undefined;
-
-  ngOnInit(): void {
-    this.loadComponent();
-    this.getAds();
-  }
-
-  ngOnDestroy() {
-    clearInterval(this.interval);
-  }
-
-  loadComponent() {
-    this.currentAdIndex = (this.currentAdIndex + 1) % this.ads.length;
-    const adItem = this.ads[this.currentAdIndex];
-
-    const viewContainerRef = this.adHost.viewContainerRef;
-    viewContainerRef.clear();
-
-    const componentRef = viewContainerRef.createComponent<AdComponent>(adItem.component);
-    componentRef.instance.data = adItem.data;
-  }
-
-  getAds() {
-    this.interval = setInterval(() => {
-      this.loadComponent();
-    }, 3000);
-  }
-  */
-
-  //---------------------------------------------------------------------------------------------------
-
-  
+    
 }
