@@ -7,8 +7,6 @@
         @apply h-full;
         @apply w-full;
 
-        @apply p-2;
-
         /*@apply border-dashed;
         @apply border-2;
         @apply border-gray-700;*/
@@ -17,6 +15,19 @@
         @apply shadow-md;
 
         @apply bg-white;
+    }
+
+    .dash-card-header {
+        @apply w-full;
+        @apply p-2;
+        @apply bg-red-700;
+        @apply rounded-t-md;
+    }
+
+    .dash-card-body {
+        @apply w-full;
+        @apply p-2;
+
     }
 
     .cdk-drag-preview {

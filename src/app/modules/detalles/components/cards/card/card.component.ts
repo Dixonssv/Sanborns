@@ -22,7 +22,7 @@ export class CardComponent implements AfterViewInit{
 
   @ViewChild(CardContentDirective, {static: true}) CardContent!: CardContentDirective;
 
-  card: any;
+  card!: CardModel;
   x: number;
   y: number;
   content: any;
