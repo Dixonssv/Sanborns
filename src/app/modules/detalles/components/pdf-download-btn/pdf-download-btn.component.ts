@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, HostListener, ViewChild } from '@angular/core';
 import { PrintService } from '../../services/print/print.service';
 import { NgxPrintDirective } from 'ngx-print';
+import { ExpedienteService } from 'src/app/modules/shared/services/expediente/expediente.service';
 
 @Component({
   selector: 'app-pdf-download-btn',
@@ -13,12 +14,21 @@ export class PdfDownloadBtnComponent implements AfterViewInit{
 
   @ViewChild(NgxPrintDirective, {static: true}) printDirective!: NgxPrintDirective;
 
-  constructor(public printService: PrintService) {
+  constructor(
+    public expedienteService: ExpedienteService,
+    public printService: PrintService) {
     
   }
 
   ngAfterViewInit(): void {
+    console.log("View Init");
+    this.setPrintTitle();
     this.setPrintStyle();
+  }
+
+  setPrintTitle() {
+    this.printDirective.printTitle = "Expediente digital de " + this.expedienteService.getEmpleado().nombre;
+    console.log(this.printDirective.printTitle);
   }
 
   @HostListener('window:resize', ['$event']) 
