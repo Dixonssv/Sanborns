@@ -24,7 +24,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
 
   @ViewChild(CdkDropListGroup, {static: false}) dashboard!: CdkDropListGroup<CdkDropList>;
 
-  //@ViewChild("dashboard") dashboardElement!: ElementRef;
+  @ViewChild("dashboard") dashboardElement!: ElementRef;
 
   @ViewChild(PrintableDirective, {static: true}) printableArea!: PrintableDirective;
 
@@ -62,16 +62,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
       }),
       // Items Moved
       this.dragAndDropService.itemsMoved.pipe().subscribe((positions) => {
-        console.log("Items moved");
-  
         this.dashboarService.moveCard(positions.from_index, positions.to_index).subscribe();
-  
-        
-        console.log("Cards:");
-        this.dashboarService.getCards().subscribe((card) => {
-          console.log(card);
-        });
-        
       })
     );
   }
@@ -102,7 +93,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
   }
 
   getDropListAt(index: number) {
-    let i = -1;
+    /*
+    let i = 0;
     let dropList:any;
 
     this.dashboard._items.forEach((card:any) => {
@@ -112,15 +104,18 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
 
       i++;
     });
+    */
+
+    let dropList = this.dashboardElement.nativeElement.children.item(index); //HTMLElement
 
     return dropList;
   }
 
   shake(element: any) {
       // SHAKE ANIMATION
-      element.element.nativeElement.classList.add("shake");
+      element.classList.add("shake");
       setTimeout(() => {
-        element.element.nativeElement.classList.remove("shake");
+        element.classList.remove("shake");
       },200);
   }
     
