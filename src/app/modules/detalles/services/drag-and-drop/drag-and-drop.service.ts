@@ -31,14 +31,15 @@ export class DragAndDropService {
         }
       });
 
-      this.currentDropIndex = this.indexOf(this.dragItem);
+      let drag = (this.dragItem as any).element.nativeElement;
+      let parent = drag.parentElement;
+      this.currentDropIndex = this.indexOf(parent, drag);
     });
   }
 
   dragMoved(event: CdkDragMove<any>): Observable<void> {
     return new Observable<void>(observable => {
-
-      /*
+      
       let point = this.getPointerPositionOnPage(event.event);
 
       this.dropListGroup._items.forEach((dropList: any) => {
@@ -47,55 +48,47 @@ export class DragAndDropService {
           return;
         }
       });
-      */
-     console.log(event.source.getFreeDragPosition());
-      let intersections = this.getIntersections(event.source);
-      console.log("Intersecciones: " + intersections.length);
 
-      // Obtiene la interseccion con el indice mas pequeño
-      let index = Number.MAX_SAFE_INTEGER;
-      this.dropItem = null;
-      intersections.forEach((dropList) => {
-        if (this.indexOf(dropList) < index) {
-          index = this.indexOf(dropList);
-          this.dropItem = dropList;
-        }
-      });
-
-      if (this.dropItem != this.lastDropItem) {
+      if(this.dropItem != this.lastDropItem) {
         this.lastDropItem = null;
       }
 
       if (this.dropItem != this.dragItem && this.dropItem != this.lastDropItem) {
         try {
-          //this.moveItem(this.dragItem, this.dropItem);
-          //this.lastDropItem = this.dropItem;
-        } catch { }
+          this.moveItem(this.dragItem, this.dropItem);
+          this.lastDropItem = this.dropItem;
+        } catch {}
       }
     });
   }
 
-  moveItem(dragItem: CdkDropList, dropItem: CdkDropList) {
+  moveItem<CdkDropList>(dragItem: CdkDropList, dropItem: CdkDropList) {
     let drag = (dragItem as any).element.nativeElement;
     let drop = (dropItem as any).element.nativeElement;
-    let parent = drag.parentElement;
+    let parent = drop.parentElement;
 
-    let dragIndex = this.indexOf(dragItem);
-    let dropIndex = this.indexOf(dropItem);
+    //let dragIndex = this.indexOf(parent, drag) - 1;
+    //let dropIndex = this.indexOf(parent, drop) - 1;
+
+    let dragIndex = this.indexOf(parent, drag);
+    let dropIndex = this.indexOf(parent, drop);
+
+    //dragIndex < 0 ? 0 : dragIndex;
+    //dropIndex < 0 ? 0 : dropIndex;
 
     //parent.insertBefore(drag, dropIndex == 0 ? drop.nextSibling : drop);
-    if (this.currentDropIndex != dropIndex) {
+    if(this.currentDropIndex != dropIndex) {
       parent.insertBefore(drag, dragIndex < dropIndex ? drop.nextSibling : drop);
 
-      this.itemsMoved.next({ from_index: dragIndex, to_index: dropIndex });
+      this.itemsMoved.next({from_index: dragIndex, to_index: dropIndex});
 
       this.currentDropIndex = dropIndex;
     } else {
       throw Error();
     }
 
-
-
+    
+    
     //parent.insertBefore(drag, drop);
     //parent.insertBefore(drag, drop.nextSibling);
 
@@ -137,48 +130,20 @@ export class DragAndDropService {
     };
   }
 
-  indexOf(dropList: CdkDropList) {
-    let node = dropList.element.nativeElement;
-    let collection = dropList.element.nativeElement.parentElement;
-
-    let index = Array.from(collection!.children).indexOf(node);
+  indexOf(collection: any, node: any) {
+    let index = Array.from(collection.children).indexOf(node);
 
     // verifica si el nodo esta fuera de la coleccion (indice -1)
     // si es asi, regresa el indice sobrecargado de la collecion
-    return index == -1 ? collection!.children.length : index;
+    return index == -1 ? collection.children.length : index;
   }
 
   isTouchEvent(event: MouseEvent | TouchEvent): event is TouchEvent {
     return event.type.startsWith('touch');
   }
 
-  isInsideDropList(dropList: CdkDropList, point: { x: number, y: number }) {
+  isInsideDropList(dropList: CdkDropList, point: {x: number, y: number}) {
     const { top, bottom, left, right } = dropList.element.nativeElement.getBoundingClientRect();
     return point.y >= top && point.y <= bottom && point.x >= left && point.x <= right;
-  }
-
-  getIntersections(dragItemPreview: any) {
-
-    let intersections: CdkDropList[] = [];
-
-    this.dropListGroup._items.forEach((dropList: any) => {
-      if (this.intersects(dragItemPreview, dropList)) {
-        intersections.push(dropList);
-      }
-    });
-
-    return intersections;
-  }
-
-  intersects(item1: any, item2: any): boolean {
-    let rect1 = item1.element.nativeElement.getBoundingClientRect();
-    let rect2 = item2.element.nativeElement.getBoundingClientRect();
-
-    console.log(rect1);
-    //return ((rect1.bottom > rect2.top || rect1.top < rect2.bottom) && (rect1.right > rect2.left || rect1.left < rect2.right));
-    return !(rect1.right < rect2.left || 
-      rect1.left > rect2.right || 
-      rect1.bottom < rect2.top || 
-      rect1.top > rect2.bottom);
   }
 }
