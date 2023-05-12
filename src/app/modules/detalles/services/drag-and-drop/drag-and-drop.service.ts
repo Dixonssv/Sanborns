@@ -15,25 +15,24 @@ export class DragAndDropService {
   private dragItem: any;
   private dropItem: any;
 
-  private currentDropIndex: any;
-  private lastDropItem!: CdkDropList | null;
+  // Evita el parpadeo
+  private canMove = false;
 
   constructor(private viewportRuler: ViewportRuler) { }
 
   dragStarted(event: CdkDragStart<any>): Observable<void> {
     return new Observable<void>(observable => {
+      this.canMove = false;
+
       let point = this.getPointerPositionOnPage(event.event);
 
+      // Obtiene el DragItem
       this.dropListGroup._items.forEach((dropList: any) => {
         if (this.isInsideDropList(dropList, point)) {
           this.dragItem = dropList;
           return;
         }
       });
-
-      let drag = (this.dragItem as any).element.nativeElement;
-      let parent = drag.parentElement;
-      this.currentDropIndex = this.indexOf(parent, drag);
     });
   }
 
@@ -42,6 +41,8 @@ export class DragAndDropService {
       
       let point = this.getPointerPositionOnPage(event.event);
 
+      // Obtiene el DropItem
+      this.dropItem = null;
       this.dropListGroup._items.forEach((dropList: any) => {
         if (this.isInsideDropList(dropList, point)) {
           this.dropItem = dropList;
@@ -49,15 +50,16 @@ export class DragAndDropService {
         }
       });
 
-      if(this.dropItem != this.lastDropItem) {
-        this.lastDropItem = null;
-      }
-
-      if (this.dropItem != this.dragItem && this.dropItem != this.lastDropItem) {
-        try {
+      // Se prepara para desplazar
+      if(this.dropItem == null || this.dropItem == this.dragItem) {
+        this.canMove = true;
+      } else {
+        if (this.canMovePredicate()) {
           this.moveItem(this.dragItem, this.dropItem);
-          this.lastDropItem = this.dropItem;
-        } catch {}
+        }
+
+        // Evita el parpadeo
+        this.canMove = false;
       }
     });
   }
@@ -67,36 +69,25 @@ export class DragAndDropService {
     let drop = (dropItem as any).element.nativeElement;
     let parent = drop.parentElement;
 
-    //let dragIndex = this.indexOf(parent, drag) - 1;
-    //let dropIndex = this.indexOf(parent, drop) - 1;
-
-    let dragIndex = this.indexOf(parent, drag);
-    let dropIndex = this.indexOf(parent, drop);
-
-    //dragIndex < 0 ? 0 : dragIndex;
-    //dropIndex < 0 ? 0 : dropIndex;
-
-    //parent.insertBefore(drag, dropIndex == 0 ? drop.nextSibling : drop);
-    if(this.currentDropIndex != dropIndex) {
-      parent.insertBefore(drag, dragIndex < dropIndex ? drop.nextSibling : drop);
-
-      this.itemsMoved.next({from_index: dragIndex, to_index: dropIndex});
-
-      this.currentDropIndex = dropIndex;
-    } else {
-      throw Error();
-    }
-
-    
-    
-    //parent.insertBefore(drag, drop);
-    //parent.insertBefore(drag, drop.nextSibling);
+    let dragIndex = this.indexOf(this.dragItem);
+    let dropIndex = this.indexOf(this.dropItem);
 
     /*
-    dragIndex < dropIndex ? 
-    this.itemsMoved.next({from_index: dragIndex, to_index: dropIndex}) :
-    this.itemsMoved.next({from_index: dragIndex, to_index: dropIndex - 1 < 0 ? 0 : dropIndex - 1});
+    // Despazar
+    if(dragIndex < dropIndex) {
+      // Desplazar a la derecha
+      parent.insertBefore(drag, drag.nextSibling.nextSibling);
+    } else {
+      // Desplazar a la izquierda
+      parent.insertBefore(drag, drag.previousElementSibling);
+    }
     */
+
+    //parent.insertBefore(drag, drop);
+    //parent.insertBefore(drag, drop.nextSibling);
+    parent.insertBefore(drag, dragIndex < dropIndex ? drop.nextSibling : drop);
+
+    this.itemsMoved.next({from_index: dragIndex, to_index: dropIndex});
   }
 
   onDropped(event: CdkDragEnd<any>): Observable<void> {
@@ -114,6 +105,15 @@ export class DragAndDropService {
   }
   */
 
+  canMovePredicate(): boolean {
+    return (
+      this.dropItem != this.dragItem  && 
+      this.dropItem != null           && 
+      //Math.abs(this.indexOf(this.dropItem) - this.indexOf(this.dragItem)) <= 1 &&
+      this.canMove == true
+      );
+  }
+
   getPointerPositionOnPage(event: MouseEvent | TouchEvent) {
     // `touches` will be empty for start/end events so we have to fall back to `changedTouches`.
     const point = this.isTouchEvent(event)
@@ -130,12 +130,15 @@ export class DragAndDropService {
     };
   }
 
-  indexOf(collection: any, node: any) {
-    let index = Array.from(collection.children).indexOf(node);
+  indexOf(item: CdkDropList) {
+    let child = item.element.nativeElement;
+    let parent = child.parentElement;
+
+    let index = Array.from(parent!.children).indexOf(child);
 
     // verifica si el nodo esta fuera de la coleccion (indice -1)
     // si es asi, regresa el indice sobrecargado de la collecion
-    return index == -1 ? collection.children.length : index;
+    return index == -1 ? parent!.children.length : index;
   }
 
   isTouchEvent(event: MouseEvent | TouchEvent): event is TouchEvent {
