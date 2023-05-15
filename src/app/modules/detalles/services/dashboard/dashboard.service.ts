@@ -43,6 +43,8 @@ export class DashboardService {
         if (index == -1) {
           this.cards.push(card);
 
+          //this.cards.at(this.cards.length - 1)!.index = this.cards.length - 1;
+
           this.cardsChanged.next(true);
         } else {
           this.cardInDashboard.next(index);
@@ -121,6 +123,15 @@ export class DashboardService {
   destroy(): Observable<void> {
     return new Observable<void>(observable => {
       this.cards = [];
+    });
+  }
+
+  updateCardIndexes() {
+    console.log("Update indexes");
+    let i = 0;
+    this.cards.forEach((card) => {
+      card.index = i;
+      i++;
     });
   }
 }

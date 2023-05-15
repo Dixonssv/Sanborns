@@ -14,14 +14,17 @@ import { DragAndDropService } from '../../../services/drag-and-drop/drag-and-dro
   encapsulation: ViewEncapsulation.None,
   hostDirectives: [
     CdkDropList,
-  ]
+  ],
 })
-export class CardComponent implements AfterViewInit{
+export class CardComponent implements OnInit, AfterViewInit{
 
   @HostBinding('class') classAttribute: string;
 
   @ViewChild(CardContentDirective, {static: true}) CardContent!: CardContentDirective;
 
+  @ViewChild(CdkDropList, {static: true}) dropList!: CdkDropList;
+
+  index: number = 0;
   card!: CardModel;
   x: number;
   y: number;
@@ -36,14 +39,12 @@ export class CardComponent implements AfterViewInit{
     this.y = 0;  
     this.classAttribute = "";
   }
+  ngOnInit(): void {
+    this.index = this.card.index!;
+  }
 
   ngAfterViewInit(): void {
-    //const styles = getComputedStyle(this.hostElement.nativeElement);
-    //console.log("Height: ", +styles.height.replace("px", ""));
-
     this.adjustHeight();
-
-    //console.log("Height: ", +styles.height.replace("px", ""));
   }
 
   cardDragStart(event: CdkDragStart<any>) {
@@ -55,7 +56,9 @@ export class CardComponent implements AfterViewInit{
   }
 
   cardDropped(event: CdkDragEnd) {
-    this.dragAndDropService.onDropped(event).subscribe();
+    this.dragAndDropService.onDropped(event).subscribe(() => {
+      this.dashboardService.cardsChanged.next(true);
+    });
   }
 
   setCard(card: CardModel) {
@@ -134,4 +137,7 @@ export class CardComponent implements AfterViewInit{
     this.classAttribute = this.classAttribute.replace(re, "");
   }
 
+  getIndex() {
+    return this.index;
+  }
 }

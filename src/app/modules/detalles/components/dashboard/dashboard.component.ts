@@ -50,6 +50,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
       
         viewContainerRef.clear();
   
+        this.dashboarService.updateCardIndexes();
+
         this.dashboarService.getCards().subscribe((card) => {
           this.loadCard(card, viewContainerRef);
         });
@@ -63,6 +65,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
       // Items Moved
       this.dragAndDropService.itemsMoved.pipe().subscribe((positions) => {
         this.dashboarService.moveCard(positions.from_index, positions.to_index).subscribe();
+
+        this.dashboarService.updateCardIndexes();
       })
     );
   }
