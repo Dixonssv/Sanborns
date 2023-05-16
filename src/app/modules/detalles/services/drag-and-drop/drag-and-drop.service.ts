@@ -60,7 +60,6 @@ export class DragAndDropService {
         });
       }
 
-
       // Se prepara para desplazar
       if(this.dropItem == null) {
         this.canMove = true;
@@ -85,31 +84,12 @@ export class DragAndDropService {
     let parent = drop.parentElement;
 
     let dragIndex = this.indexOf(this.dragItem);
-    //let dropIndex = this.indexOf(this.dropItem);
     let dropIndex = this.indexOf(this.dropItem);
-
-    /*
-    // Despazar
-    if(dragIndex < dropIndex) {
-      // Desplazar a la derecha
-      parent.insertBefore(drag, drag.nextSibling.nextSibling);
-    } else {
-      // Desplazar a la izquierda
-      parent.insertBefore(drag, drag.previousElementSibling);
-    }
-    */
 
     //parent.insertBefore(drag, drop);
     //parent.insertBefore(drag, drop.nextSibling);
-    if(after === true) {
-      parent.insertBefore(drag, drop.nextSibling);
-      this.itemsMoved.next({from_index: dragIndex, to_index: dropIndex + 1});
-    } else {
-      parent.insertBefore(drag, dragIndex < dropIndex ? drop.nextSibling : drop);
-      this.itemsMoved.next({from_index: dragIndex, to_index: dropIndex});
-    }
-
-    
+    parent.insertBefore(drag, dragIndex < dropIndex || after == true ? drop.nextSibling : drop);
+    this.itemsMoved.next({from_index: dragIndex, to_index: dropIndex});
   }
 
   onDropped(event: CdkDragEnd<any>): Observable<void> {
@@ -211,22 +191,33 @@ export class DragAndDropService {
 
   getClosestToEmptySpace(point: {x: number, y: number}) {
     let closestDropList = null;
+    console.log("Closest to empty space: ");
 
+    // Revisa a la izquierda
     let newPoint = {x: point.x, y: point.y};
-
     while(this.isInsideDropListGroup(newPoint) && closestDropList == null) {
       newPoint.x--;
 
       this.dropListGroup._items.forEach((dropList) => {
         if(this.isInsideDropList(dropList, newPoint)) {
           closestDropList = dropList;
+          console.log("Left: " + this.indexOf(closestDropList));
         }
       });
     };
 
-    if(closestDropList == null) {
-      closestDropList = this.getLastDropList();
-    }
+    // Revisa a la derecha
+    newPoint = {x: point.x, y: point.y};
+    while(this.isInsideDropListGroup(newPoint) && closestDropList == null) {
+      newPoint.x++;
+
+      this.dropListGroup._items.forEach((dropList) => {
+        if(this.isInsideDropList(dropList, newPoint)) {
+          closestDropList = dropList;
+          console.log("Right: " + this.indexOf(closestDropList));
+        }
+      });
+    };
 
     return closestDropList;
   }

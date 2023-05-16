@@ -64,6 +64,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
       }),
       // Items Moved
       this.dragAndDropService.itemsMoved.pipe().subscribe((positions) => {
+        console.log("Move " + positions.from_index + " to " + positions.to_index);
         this.dashboarService.moveCard(positions.from_index, positions.to_index).subscribe();
 
         this.dashboarService.updateCardIndexes();
