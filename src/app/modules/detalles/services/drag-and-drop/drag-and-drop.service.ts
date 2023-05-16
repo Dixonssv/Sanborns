@@ -51,7 +51,6 @@ export class DragAndDropService {
 
       if(this.isInsideEmptySpace(point)) {
         this.dropItem = this.getClosestToEmptySpace(point);
-        console.log("Empty");
       } else {
         this.dropListGroup._items.forEach((dropList: any) => {
           if (this.isInsideDropList(dropList, point)) {
@@ -60,6 +59,7 @@ export class DragAndDropService {
           }
         });
       }
+
 
       // Se prepara para desplazar
       if(this.dropItem == null) {
@@ -70,7 +70,7 @@ export class DragAndDropService {
       } else {
         if (this.canMovePredicate()) {
           this.moveItem(this.dragItem, this.dropItem, this.isInsideEmptySpace(point));
-          this.lastDropItem = this.dropItem;
+          //this.lastDropItem = this.dropItem;
         }
 
         // Evita el parpadeo
@@ -102,13 +102,14 @@ export class DragAndDropService {
     //parent.insertBefore(drag, drop);
     //parent.insertBefore(drag, drop.nextSibling);
     if(after === true) {
-      console.log("Insert After");
       parent.insertBefore(drag, drop.nextSibling);
+      this.itemsMoved.next({from_index: dragIndex, to_index: dropIndex + 1});
     } else {
       parent.insertBefore(drag, dragIndex < dropIndex ? drop.nextSibling : drop);
+      this.itemsMoved.next({from_index: dragIndex, to_index: dropIndex});
     }
 
-    this.itemsMoved.next({from_index: dragIndex, to_index: dropIndex});
+    
   }
 
   onDropped(event: CdkDragEnd<any>): Observable<void> {
@@ -127,6 +128,12 @@ export class DragAndDropService {
   */
 
   canMovePredicate(): boolean {
+    /*
+      En computacion, un predicado es una pregunta que puede responderse como verdadera o falsa.
+      En este caso, se evaluan un conjunto de reglas que determinan si el dragItem puede
+      o no cambiar su posicion.
+    */
+
     return (
       this.dropItem != this.dragItem     && 
       this.dropItem != null              && 
@@ -184,7 +191,6 @@ export class DragAndDropService {
   isInsideEmptySpace(point: {x: number, y: number}) {
 
     if(!this.isInsideDropListGroup(point, this.emptyThreshold)) {
-      console.log("Fuera de List Group");
       return false;
     }
 
@@ -196,8 +202,7 @@ export class DragAndDropService {
         !this.isInsideDropList(dropList, {x: point.x, y: point.y - this.emptyThreshold}) && // No hay cartas arriba
         !this.isInsideDropList(dropList, {x: point.x, y: point.y + this.emptyThreshold})    // No hay cartas abajo
       )) {
-        // La carta esta cerca
-        console.log("Carta cerca");
+        // Hay una carta cerca
         result = false;
       }
     });
@@ -207,16 +212,33 @@ export class DragAndDropService {
   getClosestToEmptySpace(point: {x: number, y: number}) {
     let closestDropList = null;
 
-    while(this.isInsideDropListGroup(point) && closestDropList == null) {
-      point.x--;
+    let newPoint = {x: point.x, y: point.y};
+
+    while(this.isInsideDropListGroup(newPoint) && closestDropList == null) {
+      newPoint.x--;
 
       this.dropListGroup._items.forEach((dropList) => {
-        if(this.isInsideDropList(dropList, point)) {
+        if(this.isInsideDropList(dropList, newPoint)) {
           closestDropList = dropList;
         }
       });
     };
 
+    if(closestDropList == null) {
+      closestDropList = this.getLastDropList();
+    }
+
     return closestDropList;
+  }
+
+  getLastDropList() {
+
+    let lastDropList = null;
+
+    this.dropListGroup._items.forEach((dropList) => {
+      lastDropList = dropList;
+    });
+    
+    return lastDropList;
   }
 }

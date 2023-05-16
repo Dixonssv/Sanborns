@@ -127,7 +127,6 @@ export class DashboardService {
   }
 
   updateCardIndexes() {
-    console.log("Update indexes");
     let i = 0;
     this.cards.forEach((card) => {
       card.index = i;
