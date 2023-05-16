@@ -88,8 +88,9 @@ export class DragAndDropService {
 
     //parent.insertBefore(drag, drop);
     //parent.insertBefore(drag, drop.nextSibling);
-    parent.insertBefore(drag, dragIndex < dropIndex || after == true ? drop.nextSibling : drop);
-    this.itemsMoved.next({from_index: dragIndex, to_index: dropIndex});
+    console.log("after = " + after);
+    parent.insertBefore(drag, dragIndex < dropIndex || after ? drop.nextSibling : drop);
+    this.itemsMoved.next({from_index: dragIndex, to_index: after ? dropIndex + 1 : dropIndex});
   }
 
   onDropped(event: CdkDragEnd<any>): Observable<void> {
