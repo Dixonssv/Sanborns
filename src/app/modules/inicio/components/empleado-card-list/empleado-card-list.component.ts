@@ -41,7 +41,6 @@ export class EmpleadoCardListComponent implements AfterViewInit, OnInit{
       console.log("Busqueda terminada!...");
       this.searching = false;
       this.empleados = this.searchService.empleados;
-      console.log(this.empleados);
     });
   }
 

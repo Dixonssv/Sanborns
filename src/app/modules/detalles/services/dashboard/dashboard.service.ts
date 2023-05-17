@@ -8,8 +8,8 @@ import { Observable, Subject, from } from 'rxjs';
 })
 export class DashboardService {
   /* 1rem = 16px */
-  public gridCellHeight: number = 80; //px = 5rem
-  public gridGap: number        = 16; //px = 1rem
+  readonly gridCellHeight: number = 48; //px = 3rem
+  readonly gridGap: number        = 16; //px = 1rem
 
   private cards: CardModel[];
 
@@ -43,6 +43,8 @@ export class DashboardService {
         if (index == -1) {
           this.cards.push(card);
 
+          //this.cards.at(this.cards.length - 1)!.index = this.cards.length - 1;
+
           this.cardsChanged.next(true);
         } else {
           this.cardInDashboard.next(index);
@@ -57,8 +59,11 @@ export class DashboardService {
 
   moveCard(from_index: number, to_index: number): Observable<void> {
     return new Observable<void>(observable => {
+
+      //console.log("Move card from: " + from_index + " to: " + to_index);
+
       // CASO: insertar carta al final
-      if (to_index == this.cards.length) {
+      if (to_index == this.cards.length - 1) {
         let card = this.cards.splice(from_index, 1);
         this.cards.push(card[0]);
         return;
@@ -66,16 +71,21 @@ export class DashboardService {
 
       // CASO: insertar carta en medio
       // remueve la carta del arreglo
-      let card = this.cards.splice(from_index, 1);
+      let card = this.cards.splice(from_index, 1)[0];
 
+      /*
       // inserta la carta en la nueva posicion
       // Se suma 1 debido a que en la linea anterior, el tamanio del arreglo se disminuyo en uno. Esto solo afecta
       // cuando la carta se inserta en una posicion anterior.
       if (from_index < to_index) {
-        this.cards.splice(to_index - 1, 0, card[0]);
+        this.cards.splice(to_index, 0, card);
+        console.log(this.cards);
       } else {
-        this.cards.splice(to_index, 0, card[0]);
+        this.cards.splice(to_index, 0, card);
       }
+      */
+
+      this.cards.splice(to_index, 0, card);
     });
   }
 
@@ -113,6 +123,14 @@ export class DashboardService {
   destroy(): Observable<void> {
     return new Observable<void>(observable => {
       this.cards = [];
+    });
+  }
+
+  updateCardIndexes() {
+    let i = 0;
+    this.cards.forEach((card) => {
+      card.index = i;
+      i++;
     });
   }
 }

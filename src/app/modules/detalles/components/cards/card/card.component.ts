@@ -1,4 +1,4 @@
-import { Component, HostBinding, Type, ViewChild, ViewEncapsulation, ViewContainerRef, HostListener, ElementRef, OnInit, Renderer2} from '@angular/core';
+import { Component, HostBinding, Type, ViewChild, ViewEncapsulation, ViewContainerRef, HostListener, ElementRef, OnInit, Renderer2, AfterViewInit} from '@angular/core';
 
 import { CdkDragEnd, CdkDragMove, CdkDragStart, CdkDropList } from "@angular/cdk/drag-drop";
 
@@ -14,19 +14,18 @@ import { DragAndDropService } from '../../../services/drag-and-drop/drag-and-dro
   encapsulation: ViewEncapsulation.None,
   hostDirectives: [
     CdkDropList,
-  ]
+  ],
 })
-export class CardComponent implements OnInit{
+export class CardComponent implements OnInit, AfterViewInit{
 
   @HostBinding('class') classAttribute: string;
 
   @ViewChild(CardContentDirective, {static: true}) CardContent!: CardContentDirective;
 
-  // Style
-  defaultHeigh: number = 10; //rem
-  defaultGap:   number = 1;  //rem
+  @ViewChild(CdkDropList, {static: true}) dropList!: CdkDropList;
 
-  card: any;
+  index: number = 0;
+  card!: CardModel;
   x: number;
   y: number;
   content: any;
@@ -40,8 +39,11 @@ export class CardComponent implements OnInit{
     this.y = 0;  
     this.classAttribute = "";
   }
-
   ngOnInit(): void {
+    this.index = this.card.index!;
+  }
+
+  ngAfterViewInit(): void {
     this.adjustHeight();
   }
 
@@ -54,7 +56,9 @@ export class CardComponent implements OnInit{
   }
 
   cardDropped(event: CdkDragEnd) {
-    this.dragAndDropService.onDropped(event).subscribe();
+    this.dragAndDropService.onDropped(event).subscribe(() => {
+      this.dashboardService.cardsChanged.next(true);
+    });
   }
 
   setCard(card: CardModel) {
@@ -63,7 +67,7 @@ export class CardComponent implements OnInit{
     this.setContent(this.card.component);
   }
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener('window:resize', ['$event']) 
   adjustHeight() {
     
     const gridCellHeight  = this.dashboardService.gridCellHeight;
@@ -106,7 +110,7 @@ export class CardComponent implements OnInit{
   setSize(x:number, y:number) {
     this.x = x;
     this.y = y;
-    this.classAttribute = "dash-card-x" + this.x + " box h-adjust";
+    this.classAttribute = "dash-card-x" + this.x + " z-0";
     //this.classAttribute = 'dash-card-x' + this.x + ' dash-card-y' + this.y + ' ';
   }
 
@@ -133,4 +137,7 @@ export class CardComponent implements OnInit{
     this.classAttribute = this.classAttribute.replace(re, "");
   }
 
+  getIndex() {
+    return this.index;
+  }
 }

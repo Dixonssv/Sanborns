@@ -37,9 +37,12 @@ module.exports = {
     'dash-card-y2',
     'dash-card-y3',
     'dash-card-y4',
+    'cdk-drag-preview',
   ],
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/container-queries'),
+  ],
 }
