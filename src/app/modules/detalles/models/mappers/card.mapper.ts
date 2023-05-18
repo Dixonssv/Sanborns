@@ -85,7 +85,7 @@ export class CardMapper extends Mapper<string, CardModel> {
                 return {
                     title: param.toUpperCase(),
                     component: TrayectoriaComponent,
-                    x: 4,
+                    x: 1,
                     y: 2
                 }
             }
