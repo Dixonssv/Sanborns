@@ -48,22 +48,30 @@ export class DragAndDropService {
       this.dropItem = null;
 
       if(this.isInsideEmptySpace(point)) {
+        this.canMove = true;
+
         let closeDropLists = this.getClosestDropListsToPoint(point);
 
-        if(closeDropLists.left != null && this.dropItem == null) {
-          let lastPeer = this.getLastPeer(closeDropLists.left);
-          
-          if(lastPeer == closeDropLists.left) {
-            // No tiene listas al lado
-            console.log("Close: left");
-            this.dropItem = closeDropLists.left;
+        if(closeDropLists.left == null && closeDropLists.right == null) {
+          this.canMove = false;
+        } else {
+          if(closeDropLists.left != null && this.dropItem == null) {
+            let lastPeer = this.getLastPeer(closeDropLists.left);
+            
+            if(lastPeer == closeDropLists.left) {
+              // No tiene listas al lado
+              //console.log("Close: left");
+              this.dropItem = closeDropLists.left;
+            }
+          }
+  
+          if(closeDropLists.top != null && this.dropItem == null) {
+            //console.log("Close: top");
+            this.dropItem = this.getLastPeer(closeDropLists.top);
           }
         }
 
-        if(closeDropLists.top != null && this.dropItem == null) {
-          console.log("Close: top");
-          this.dropItem = this.getLastPeer(closeDropLists.top);
-        }
+        //console.log("Drop List: " + this.indexOf(this.dropItem));
       } else {
         this.dropItem = this.getDropListAtPoint(point);
       }
@@ -210,14 +218,6 @@ export class DragAndDropService {
     return result;
   }
 
-  getDropListAtRight(item: CdkDropList) {
-    let rect = item.element.nativeElement.getBoundingClientRect();
-
-    let point = {x: rect.right + this.emptyThreshold, y: rect.top};
-
-    return this.getDropListAtPoint(point);
-  }
-
   getClosestDropListsToPoint(point: {x: number, y: number}) {
     let newPoint: {x: number, y: number};
     let top:    CdkDropList | null = null;
@@ -276,66 +276,12 @@ export class DragAndDropService {
     return {top, right, bottom, left};
   }
 
-  getClosestToEmptySpace(point: {x: number, y: number}) {
-
-    let closestDropList: CdkDropList | null = null;
-
-    let newPoint = {x: point.x, y: point.y};
-
-    // Revisa a la izquierda
-    newPoint = {x: point.x, y: point.y};
-    while(this.isInsideDropListGroup(newPoint) && closestDropList == null) {
-      newPoint.x--;
-
-      closestDropList = this.getDropListAtPoint(newPoint);
-
-      if(closestDropList == this.dragItem) {
-        closestDropList = null;
-      }
-    };
-
-    if(closestDropList != null) {
-      // hay un droplist a la izquierda
-      if(closestDropList == this.dragItem || this.getDropListAtRight(closestDropList)) {
-        // No candidatos
-        closestDropList = null;
-      } 
-    }
-    
-
-    // Revisa arriba
-    newPoint = {x: point.x, y: point.y};
-    while(this.isInsideDropListGroup(newPoint) && closestDropList == null) {
-      newPoint.y--;
-
-      closestDropList = this.getDropListAtPoint(newPoint);
-    };
-
-    if(closestDropList == this.dragItem) {
-      closestDropList = null;
-    }
-
-    if(closestDropList != null) {
-      // Obtiene vecino mas a la derecha con recursividad
-      let dropListAtRight = this.getDropListAtRight(closestDropList);
-
-      while(dropListAtRight != null) {
-        closestDropList = dropListAtRight;
-        dropListAtRight = this.getDropListAtRight(closestDropList);
-      }
-    }
-
-    console.log("ClosestDropList = " + (closestDropList == null ? " (null)" : (this.indexOf(closestDropList))));
-
-    return closestDropList;
-  }
-
   getLastPeer(dropList: CdkDropList) {
     // Obtiene vecino mas a la derecha e izquierda con recursividad
     if(dropList != null) {
       let dropListAtRight = this.getDropListAtRight(dropList);
 
-      while(dropListAtRight != null) {
+      while(dropListAtRight != null && dropListAtRight != this.dragItem) {
         dropList = dropListAtRight;
         dropListAtRight = this.getDropListAtRight(dropList);
       }
@@ -344,6 +290,14 @@ export class DragAndDropService {
     } else {
       return null;
     }
+  }
+
+  getDropListAtRight(item: CdkDropList) {
+    let rect = item.element.nativeElement.getBoundingClientRect();
+
+    let point = {x: rect.right + this.emptyThreshold, y: rect.top};
+
+    return this.getDropListAtPoint(point);
   }
 
 
