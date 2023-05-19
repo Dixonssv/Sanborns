@@ -17,16 +17,15 @@ export class DragAndDropService {
   private dragItem: any;
   private dropItem: any;
 
-  //private lastDropItem: any;
+  private insideEmptySpace: boolean = false;
 
   // Evita el parpadeo
   private canMove = false;
 
   constructor(private viewportRuler: ViewportRuler) { }
 
-
-
   dragStarted(event: CdkDragStart<any>): Observable<void> {
+
     return new Observable<void>(observable => {
       this.canMove = false;
       //this.lastDropItem = null;
@@ -41,18 +40,28 @@ export class DragAndDropService {
 
   dragMoved(event: CdkDragMove<any>): Observable<void> {
     return new Observable<void>(observable => {
-      
-      let point = this.getPointerPositionOnPage(event.event);
+      if(this.dragItem != null) {
+        this.getDropItem(event);
+
+        this.movePlaceholder();
+      }
+    });
+  }
+
+  getDropItem(event: CdkDragMove<any>) {
+    let point = this.getPointerPositionOnPage(event.event);
 
       // Obtiene el DropItem
       this.dropItem = null;
 
       if(this.isInsideEmptySpace(point)) {
-        this.canMove = true;
+        this.insideEmptySpace = true;
+        
 
         let closeDropLists = this.getClosestDropListsToPoint(point);
 
         if(closeDropLists.left == null && closeDropLists.right == null) {
+          // Evita parpadeo
           this.canMove = false;
         } else {
           if(closeDropLists.left != null && this.dropItem == null) {
@@ -73,22 +82,10 @@ export class DragAndDropService {
 
         //console.log("Drop List: " + this.indexOf(this.dropItem));
       } else {
+        this.insideEmptySpace = false;
+
         this.dropItem = this.getDropListAtPoint(point);
       }
-
-      // Se prepara para desplazar
-      if(this.dropItem == null || this.dropItem == this.dragItem) {
-        this.canMove = true;
-      } else {
-        if (this.canMovePredicate()) {
-          // Mueve el elemento
-          this.moveItem(this.dragItem, this.dropItem, this.isInsideEmptySpace(point));
-        } 
-
-        // Evita el parpadeo
-        this.canMove = false;
-      }
-    });
   }
 
   canMovePredicate(): boolean {
@@ -103,6 +100,21 @@ export class DragAndDropService {
       this.dropItem != null              && 
       this.canMove == true
       );
+  }
+
+  movePlaceholder() {
+    // Se prepara para desplazar
+    if(this.dropItem == null || this.dropItem == this.dragItem) {
+      this.canMove = true;
+    } else {
+      if (this.canMovePredicate()) {
+        // Mueve el elemento
+        this.moveItem(this.dragItem, this.dropItem, this.insideEmptySpace);
+      } 
+
+      // Evita el parpadeo
+      this.canMove = false;
+    }
   }
 
   moveItem<CdkDropList>(dragItem: CdkDropList, dropItem: CdkDropList, after?: boolean) {
