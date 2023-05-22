@@ -8,7 +8,8 @@ import { Observable, Subject } from 'rxjs';
 })
 export class DragAndDropService {
 
-  itemsMoved = new Subject<{ from_index: number; to_index: number; }>();
+  itemsMoved    = new Subject<{ from_index: number; to_index: number; }>();
+  itemsSwapped  = new Subject<{ from_index: number; to_index: number; }>();
 
   dropListGroup!: CdkDropListGroup<CdkDropList>;
 
@@ -19,10 +20,22 @@ export class DragAndDropService {
 
   private insideEmptySpace: boolean = false;
 
+  private dropListsPositions: any[] = [];
+
   // Evita el parpadeo
   private canMove = false;
 
-  constructor(private viewportRuler: ViewportRuler) { }
+  private animating = false;
+
+  constructor(private viewportRuler: ViewportRuler) { 
+
+    this.itemsMoved.pipe().subscribe(() => {
+      this.dropListsPositions = this.getDropListsRects();
+    });
+    this.itemsSwapped.pipe().subscribe(() => {
+      this.dropListsPositions = this.getDropListsRects();
+    })
+  }
 
   dragStarted(event: CdkDragStart<any>): Observable<void> {
 
@@ -55,31 +68,32 @@ export class DragAndDropService {
       this.dropItem = null;
 
       if(this.isInsideEmptySpace(point)) {
-        this.insideEmptySpace = true;
-        
 
-        let closeDropLists = this.getClosestDropListsToPoint(point);
+        //if(this.insideEmptySpace == false) { // Evita lag
+          let closeDropLists = this.getClosestDropListsToPoint(point);
 
-        if(closeDropLists.left == null && closeDropLists.right == null) {
-          // Evita parpadeo
-          this.canMove = false;
-        } else {
-          if(closeDropLists.left != null && this.dropItem == null) {
-            let lastPeer = this.getLastPeer(closeDropLists.left);
-            
-            if(lastPeer == closeDropLists.left) {
-              // No tiene listas al lado
-              //console.log("Close: left");
-              this.dropItem = closeDropLists.left;
+          if(closeDropLists.left == null && closeDropLists.right == null) {
+            // Evita parpadeo
+            this.canMove = false;
+          } else {
+            if(closeDropLists.left != null && this.dropItem == null) {
+              let lastPeer = this.getLastPeer(closeDropLists.left);
+              
+              if(lastPeer == closeDropLists.left) {
+                // No tiene listas al lado
+                //console.log("Close: left");
+                this.dropItem = closeDropLists.left;
+              }
+            }
+    
+            if(closeDropLists.top != null && this.dropItem == null) {
+              //console.log("Close: top");
+              this.dropItem = this.getLastPeer(closeDropLists.top);
             }
           }
-  
-          if(closeDropLists.top != null && this.dropItem == null) {
-            //console.log("Close: top");
-            this.dropItem = this.getLastPeer(closeDropLists.top);
-          }
-        }
+        //}
 
+        this.insideEmptySpace = true;
         //console.log("Drop List: " + this.indexOf(this.dropItem));
       } else {
         this.insideEmptySpace = false;
@@ -96,8 +110,9 @@ export class DragAndDropService {
     */
 
     return (
-      this.dropItem != this.dragItem     && 
-      this.dropItem != null              && 
+      this.dropItem != this.dragItem    && 
+      this.dropItem != null             && 
+      this.animating == false           &&
       this.canMove == true
       );
   }
@@ -108,8 +123,11 @@ export class DragAndDropService {
       this.canMove = true;
     } else {
       if (this.canMovePredicate()) {
-        // Mueve el elemento
-        this.moveItem(this.dragItem, this.dropItem, this.insideEmptySpace);
+        if(this.insideEmptySpace) {
+          this.moveItem(this.dragItem, this.dropItem);
+        } else {
+          this.swapItems(this.dragItem, this.dropItem);
+        }
       } 
 
       // Evita el parpadeo
@@ -117,30 +135,84 @@ export class DragAndDropService {
     }
   }
 
-  moveItem<CdkDropList>(dragItem: CdkDropList, dropItem: CdkDropList, after?: boolean) {
-    let drag = (dragItem as any).element.nativeElement;
-    let drop = (dropItem as any).element.nativeElement;
-    let parent = drop.parentElement;
-
+  swapItems(dragItem: CdkDropList, dropItem: CdkDropList) {
     let dragIndex = this.indexOf(this.dragItem);
     let dropIndex = this.indexOf(this.dropItem);
+    this.itemsSwapped.next({from_index: dragIndex, to_index: dropIndex});
 
+    let drag = dragItem.element.nativeElement;
+    let drop = dropItem.element.nativeElement;
+    let parent = drop.parentElement;
+
+    let dragClone = drag.cloneNode();
+
+    parent?.insertBefore(dragClone, drag);
+
+    parent?.insertBefore(drag, drop.nextSibling);
+    parent?.insertBefore(drop, dragClone);
+
+    parent?.removeChild(dragClone);
+
+    let i = 0;
+    this.dropListGroup._items.forEach((dropList) => {
+      let from_position = {
+        x: this.dropListsPositions[i].x, 
+        y: this.dropListsPositions[i].y
+      };
+
+      let to_position = {
+        x: dropList.element.nativeElement.getBoundingClientRect().x, 
+        y: dropList.element.nativeElement.getBoundingClientRect().y
+      };
+
+      this.slideAnimate(dropList, from_position, to_position);
+
+      i++;
+    })
+  }
+
+  moveItem(dragItem: CdkDropList, dropItem: CdkDropList, after?: boolean) {
+    let dragIndex = this.indexOf(this.dragItem);
+    let dropIndex = this.indexOf(this.dropItem);
+    this.itemsMoved.next({from_index: dragIndex, to_index: dropIndex});
+    
+    let drag = dragItem.element.nativeElement;
+    let drop = dropItem.element.nativeElement;
+    let parent = drop.parentElement;
+
+    /*
     //parent.insertBefore(drag, drop);
     //parent.insertBefore(drag, drop.nextSibling);
     if(dragIndex < dropIndex || after) {
       // insert after
-      parent.insertBefore(drag, drop.nextSibling);
+      parent!.insertBefore(drag, drop.nextSibling);
     } else {
       // insert before
-      parent.insertBefore(drag, drop);
+      parent!.insertBefore(drag, drop);
     }
 
     if(dragIndex > dropIndex && after) {
       dropIndex += 1;
     }
+    */
 
-    //parent.insertBefore(drag, dragIndex < dropIndex || after ? drop.nextSibling : drop);
-    this.itemsMoved.next({from_index: dragIndex, to_index: dropIndex});
+    parent!.insertBefore(drag, drop.nextSibling);
+
+    let i = 0;
+    this.dropListGroup._items.forEach((dropList) => {
+      let from_position = {
+        x: this.dropListsPositions[i].x, 
+        y: this.dropListsPositions[i].y
+      };
+
+      let to_position = {
+        x: dropList.element.nativeElement.getBoundingClientRect().x, 
+        y: dropList.element.nativeElement.getBoundingClientRect().y
+      };
+
+      this.slideAnimate(dropList, from_position, to_position);
+    })
+    
   }
 
   canDrop(): boolean {
@@ -312,5 +384,52 @@ export class DragAndDropService {
     return this.getDropListAtPoint(point);
   }
 
+  slideAnimate(item: CdkDropList, from_position: {x: number, y: number}, to_position: {x: number, y: number}) {
+    this.animating = true;
+    let xDist = from_position.x - to_position.x;
+    let yDist = from_position.y - to_position.y;
+
+    item.element.nativeElement.animate(
+      [
+        // keyframes
+        { 
+          /*
+          position: "absolute",
+          left: from_position.x + "px",
+          top: from_position.y + "px",
+          */
+          
+          transform: "translateX(" + xDist + "px) translateY(" + yDist + "px)"
+        },
+        { 
+          /*
+          position: "absolute",
+          left: to_position.x + "px",
+          top: to_position.y + "px",
+          */
+
+          transform: "translateX(0px) translateY(0px)" 
+        },
+      ],
+      {
+        // timing options
+        duration: 200,
+        iterations: 1,
+        easing: "cubic-bezier(0.42, 0, 0.58, 1)",
+      }
+    )
+
+    this.animating = false;
+  };
+
+  getDropListsRects() {
+    let rects: any[] = [];
+
+    this.dropListGroup._items.forEach((dropList) => {
+      rects.push(dropList.element.nativeElement.getBoundingClientRect());
+    });
+
+    return rects;
+  }
 
 }

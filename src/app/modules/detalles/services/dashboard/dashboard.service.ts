@@ -57,35 +57,52 @@ export class DashboardService {
     });
   }
 
+  swapCards(from_index: number, to_index: number): Observable<void> {
+    return new Observable<void>(observable => {
+      if(to_index < from_index) {
+        let tmp_index = from_index;
+
+        from_index = to_index;
+        to_index = tmp_index;
+      }
+
+      console.log("From: " + from_index + " to: " + to_index);
+
+      // Se extraen las dos cartas
+      let toCard    = this.cards.splice(to_index, 1)[0];
+      let fromCard  = this.cards.splice(from_index, 1)[0];
+
+      // Se insertan en sus correspondientes indices
+      this.cards.splice(from_index, 0, toCard);
+      this.cards.splice(to_index, 0, fromCard);
+    })
+  }
+
   moveCard(from_index: number, to_index: number): Observable<void> {
     return new Observable<void>(observable => {
 
-      //console.log("Move card from: " + from_index + " to: " + to_index);
-
-      // CASO: insertar carta al final
-      if (to_index == this.cards.length - 1) {
-        let card = this.cards.splice(from_index, 1);
-        this.cards.push(card[0]);
-        return;
-      }
-
-      // CASO: insertar carta en medio
-      // remueve la carta del arreglo
       let card = this.cards.splice(from_index, 1)[0];
 
       /*
+      // CASO: insertar carta al final
+      if (to_index == this.cards.length) {
+        this.cards.push(card);
+        return;
+      }
+      */
+
+      // CASO: insertar carta en medio     
       // inserta la carta en la nueva posicion
       // Se suma 1 debido a que en la linea anterior, el tamanio del arreglo se disminuyo en uno. Esto solo afecta
       // cuando la carta se inserta en una posicion anterior.
       if (from_index < to_index) {
         this.cards.splice(to_index, 0, card);
-        console.log(this.cards);
       } else {
-        this.cards.splice(to_index, 0, card);
+        this.cards.splice(to_index + 1, 0, card);
       }
-      */
-
-      this.cards.splice(to_index, 0, card);
+      
+      
+      //this.cards.splice(to_index, 0, card);
     });
   }
 
