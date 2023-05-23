@@ -66,8 +66,6 @@ export class DashboardService {
         to_index = tmp_index;
       }
 
-      console.log("From: " + from_index + " to: " + to_index);
-
       // Se extraen las dos cartas
       let toCard    = this.cards.splice(to_index, 1)[0];
       let fromCard  = this.cards.splice(from_index, 1)[0];
