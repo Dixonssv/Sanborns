@@ -179,22 +179,6 @@ export class DragAndDropService {
     let drop = dropItem.element.nativeElement;
     let parent = drop.parentElement;
 
-    /*
-    //parent.insertBefore(drag, drop);
-    //parent.insertBefore(drag, drop.nextSibling);
-    if(dragIndex < dropIndex || after) {
-      // insert after
-      parent!.insertBefore(drag, drop.nextSibling);
-    } else {
-      // insert before
-      parent!.insertBefore(drag, drop);
-    }
-
-    if(dragIndex > dropIndex && after) {
-      dropIndex += 1;
-    }
-    */
-
     parent!.insertBefore(drag, drop.nextSibling);
 
     let i = 0;
@@ -388,7 +372,10 @@ export class DragAndDropService {
 
       let dropListAtPoint = this.getDropListAtPoint(point);
 
-      dropListAtRight = dropListAtPoint == null ? dropListAtRight : dropListAtPoint;
+      if(dropListAtPoint != this.dragItem && dropListAtPoint != null) {
+        dropListAtRight = dropListAtPoint;
+      }
+      //dropListAtRight = dropListAtPoint == null ? dropListAtRight : dropListAtPoint;
 
       y++;
     }
