@@ -52,12 +52,12 @@ export class DragAndDropService {
   dragMoved(event: CdkDragMove<any>): Observable<void> {
     return new Observable<void>(observable => {
       if (this.dragItem != null) {
-        let newDropItem = this.getDropItem(event);
+        let newDropItem:any = this.getDropItem(event);
 
         if(newDropItem != this.dropItem) {
           this.dropItem = newDropItem;
-          //console.log("New Drop Item: ");
-          //console.log(newDropItem?.element);
+          console.log("New Drop Item: ");
+          console.log(newDropItem!.element);
 
           if (this.canMovePredicate()) {
             this.movePlaceholder();
@@ -96,7 +96,8 @@ export class DragAndDropService {
         // Revisa arriba
         if (closeDropLists.top != null && newDropItem == null) {
           //console.log("Close: top");
-          newDropItem = this.getLastPeer(closeDropLists.top);
+          //newDropItem = this.getLastPeer(closeDropLists.top);
+          newDropItem = closeDropLists.top;
         }
       }
     } else {
@@ -124,19 +125,49 @@ export class DragAndDropService {
   }
 
   movePlaceholder() {
-    if (this.insideEmptySpace /*|| this.getLastPeer(this.dropItem) == this.dropItem*/) {
-      this.moveItem(this.dragItem, this.dropItem);
+    if(this.indexDistance(this.dragItem, this.dropItem) == 1) {
+      this.swapItems(this.dragItem, this.dropItem);
     } else {
+      let lastPeer = this.getLastPeer(this.dropItem);
+      this.moveItem(this.dragItem, this.dropItem);
+      this.moveItem(this.dropItem, lastPeer!);
+    }
+    
+    //=== ANIMACION ===
+    let i = 0;
+    this.dropListGroup._items.forEach((dropList) => {
+      let from_position = {
+        x: this.dropListsPositions[i].x,
+        y: this.dropListsPositions[i].y
+      };
+
+      let to_position = {
+        x: dropList.element.nativeElement.getBoundingClientRect().x,
+        y: dropList.element.nativeElement.getBoundingClientRect().y
+      };
+
+      this.slideAnimate(dropList, from_position, to_position);
+
+      i++;
+    })
+    //================
+
+    /*
+    if (this.insideEmptySpace) {
+      this.moveItem(this.dragItem, this.dropItem);
+    } 
+    else {
       this.swapItems(this.dragItem, this.dropItem);
     }
+    */
 
     this.dropItem = null;
     this.canMove = true;
   }
 
   swapItems(dragItem: CdkDropList, dropItem: CdkDropList) {
-    let dragIndex = this.indexOf(this.dragItem);
-    let dropIndex = this.indexOf(this.dropItem);
+    let dragIndex = this.indexOf(dragItem);
+    let dropIndex = this.indexOf(dropItem);
     this.itemsSwapped.next({ from_index: dragIndex, to_index: dropIndex });
 
     let drag = dragItem.element.nativeElement;
@@ -151,28 +182,11 @@ export class DragAndDropService {
     parent?.insertBefore(drop, dragClone);
 
     parent?.removeChild(dragClone);
-
-    let i = 0;
-    this.dropListGroup._items.forEach((dropList) => {
-      let from_position = {
-        x: this.dropListsPositions[i].x,
-        y: this.dropListsPositions[i].y
-      };
-
-      let to_position = {
-        x: dropList.element.nativeElement.getBoundingClientRect().x,
-        y: dropList.element.nativeElement.getBoundingClientRect().y
-      };
-
-      this.slideAnimate(dropList, from_position, to_position);
-
-      i++;
-    })
   }
 
   moveItem(dragItem: CdkDropList, dropItem: CdkDropList, after?: boolean) {
-    let dragIndex = this.indexOf(this.dragItem);
-    let dropIndex = this.indexOf(this.dropItem);
+    let dragIndex = this.indexOf(dragItem);
+    let dropIndex = this.indexOf(dropItem);
     this.itemsMoved.next({ from_index: dragIndex, to_index: dropIndex });
 
     let drag = dragItem.element.nativeElement;
@@ -180,23 +194,6 @@ export class DragAndDropService {
     let parent = drop.parentElement;
 
     parent!.insertBefore(drag, drop.nextSibling);
-
-    let i = 0;
-    this.dropListGroup._items.forEach((dropList) => {
-      let from_position = {
-        x: this.dropListsPositions[i].x,
-        y: this.dropListsPositions[i].y
-      };
-
-      let to_position = {
-        x: dropList.element.nativeElement.getBoundingClientRect().x,
-        y: dropList.element.nativeElement.getBoundingClientRect().y
-      };
-
-      this.slideAnimate(dropList, from_position, to_position);
-
-      i++;
-    })
 
   }
 
@@ -419,6 +416,10 @@ export class DragAndDropService {
     });
 
     return rects;
+  }
+
+  indexDistance(firstDropList: CdkDropList, lastDropList: CdkDropList) {
+    return Math.abs(this.indexOf(lastDropList) - this.indexOf(firstDropList));
   }
 
 }
