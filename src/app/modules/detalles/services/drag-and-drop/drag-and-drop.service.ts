@@ -21,7 +21,7 @@ export class DragAndDropService {
   private insideEmptySpace: boolean = false;
 
   // Evita el parpadeo
-  private canMove = false;
+  //private canMove = false;
 
   private animating = false;
 
@@ -34,7 +34,7 @@ export class DragAndDropService {
       let point = this.getPointerPositionOnPage(event.event);
       this.dragItem = this.getDropListAtPoint(point);
 
-      this.canMove = true;
+      //this.canMove = true;
       this.dropItem = null;
     });
   }
@@ -46,10 +46,9 @@ export class DragAndDropService {
 
         if(newDropItem != this.dropItem) {
           this.dropItem = newDropItem;
-          console.log("New Drop Item: ");
-          console.log(newDropItem == null ? newDropItem : newDropItem.element);
+          //console.log("New Drop Item: ");
+          //console.log(newDropItem == null ? newDropItem : newDropItem.element);
 
-          console.log("CanDropPredicate = " + this.canMovePredicate());
           if (this.canMovePredicate()) {
             this.movePlaceholder();
           }
@@ -65,13 +64,13 @@ export class DragAndDropService {
     let newDropItem  = null;
 
     if (this.isInsideEmptySpace(point)) {
-      this.canMove = true;
+      //this.canMove = true;
       this.insideEmptySpace = true;
 
       let closeDropLists = this.getClosestDropListsToPoint(point);
 
       if (closeDropLists.left == null && closeDropLists.right == null) {
-        this.canMove = false;
+        //this.canMove = false;
       } else {
         // Revisa a la izquierda
         if (closeDropLists.left != null && newDropItem == null) {
@@ -110,8 +109,7 @@ export class DragAndDropService {
     return (
       this.dropItem != this.dragItem &&
       this.dropItem != null &&
-      this.animating == false &&
-      this.canMove == true
+      this.animating == false 
     );
   }
 
@@ -119,6 +117,35 @@ export class DragAndDropService {
     // Obtiene las posiciones actuales
     let dropListsPositions: any[] = this.getDropListsRects();
 
+    let lastPeer = this.getLastPeer(this.dropItem);
+
+    if(lastPeer == this.dragItem || (this.indexDistance(this.dragItem, this.dropItem) >= 1 && !this.insideEmptySpace)) {
+      this.swapItems(this.dragItem, this.dropItem);
+    } else if(this.insideEmptySpace || lastPeer != this.dragItem) {
+
+      if(this.indexDistance(this.dragItem, lastPeer!) == 1) {
+        this.swapItems(this.dragItem, lastPeer!);
+      } else {
+        this.moveItem(this.dragItem, lastPeer!)
+      }
+      
+    
+      
+
+      /*
+      if(this.indexDistance(this.dragItem, this.dropItem) == 1) {
+        console.log("Cond 1");
+        this.swapItems(this.dragItem, this.dropItem);
+      } else {
+        console.log("Cond 2");
+        this.moveItem(this.dragItem, this.dropItem);
+        this.moveItem(this.dropItem, lastPeer!);
+      }
+      */
+    }
+
+
+    /*
     if(this.indexDistance(this.dragItem, this.dropItem) == 1) {
       this.swapItems(this.dragItem, this.dropItem);
     } else {
@@ -137,9 +164,10 @@ export class DragAndDropService {
         console.log(lastPeer);
       }
     }
+    */
     
-    this.dropItem = null;
-    this.canMove = true;
+    //this.dropItem = null;
+    //this.canMove = true;
     
     //=== ANIMACION ===
     let i = 0;
@@ -182,6 +210,7 @@ export class DragAndDropService {
   }
 
   moveItem(dragItem: CdkDropList, dropItem: CdkDropList, after?: boolean) {
+    console.log("Move Item");
     let dragIndex = this.indexOf(dragItem);
     let dropIndex = this.indexOf(dropItem);
     this.itemsMoved.next({ from_index: dragIndex, to_index: dropIndex });
@@ -341,18 +370,19 @@ export class DragAndDropService {
 
   getLastPeer(dropList: CdkDropList) {
     // Obtiene vecino mas a la derecha con recursividad
-    if (dropList != null) {
+    // No regresa a dragItem como vecino
+    //if (dropList != null) {
       let dropListAtRight = this.getDropListAtRight(dropList);
 
-      while (dropListAtRight != null && dropListAtRight != this.dragItem) {
+      while (dropListAtRight != null) {
         dropList = dropListAtRight;
         dropListAtRight = this.getDropListAtRight(dropList);
       }
 
       return dropList;
-    } else {
-      return null;
-    }
+    //} else {
+    //  return null;
+    //}
   }
 
   getDropListAtRight(item: CdkDropList) {
