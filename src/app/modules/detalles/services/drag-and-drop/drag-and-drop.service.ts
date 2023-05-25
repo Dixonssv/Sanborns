@@ -42,9 +42,9 @@ export class DragAndDropService {
   dragMoved(event: CdkDragMove<any>): Observable<void> {
     return new Observable<void>(observable => {
       if (this.dragItem != null) {
-        let newDropItem:any = this.getDropItem(event);
+        let newDropItem: any = this.getDropItem(event);
 
-        if(newDropItem != this.dropItem) {
+        if (newDropItem != this.dropItem) {
           this.dropItem = newDropItem;
           //console.log("New Drop Item: ");
           //console.log(newDropItem == null ? newDropItem : newDropItem.element);
@@ -61,7 +61,7 @@ export class DragAndDropService {
     let point = this.getPointerPositionOnPage(event.event);
 
     // Obtiene el DropItem
-    let newDropItem  = null;
+    let newDropItem = null;
 
     if (this.isInsideEmptySpace(point)) {
       //this.canMove = true;
@@ -109,7 +109,7 @@ export class DragAndDropService {
     return (
       this.dropItem != this.dragItem &&
       this.dropItem != null &&
-      this.animating == false 
+      this.animating == false
     );
   }
 
@@ -119,56 +119,33 @@ export class DragAndDropService {
 
     let lastPeer = this.getLastPeer(this.dropItem);
 
-    if(lastPeer == this.dragItem || (this.indexDistance(this.dragItem, this.dropItem) >= 1 && !this.insideEmptySpace)) {
+    /*
+    if(this.insideEmptySpace) {
+      this.moveItem(this.dragItem, lastPeer);
+    } else if (this.indexDistance(this.dragItem, this.dropItem) > 1) {
+      this.moveItem(this.dragItem, this.dropItem);
+    } else {
       this.swapItems(this.dragItem, this.dropItem);
-    } else if(this.insideEmptySpace || lastPeer != this.dragItem) {
-
-      if(this.indexDistance(this.dragItem, lastPeer!) == 1) {
-        this.swapItems(this.dragItem, lastPeer!);
-      } else {
-        this.moveItem(this.dragItem, lastPeer!)
-      }
-      
-    
-      
-
-      /*
-      if(this.indexDistance(this.dragItem, this.dropItem) == 1) {
-        console.log("Cond 1");
-        this.swapItems(this.dragItem, this.dropItem);
-      } else {
-        console.log("Cond 2");
-        this.moveItem(this.dragItem, this.dropItem);
-        this.moveItem(this.dropItem, lastPeer!);
-      }
-      */
     }
+    */
+
+    this.swapItems(this.dragItem, this.dropItem);
+
+
 
 
     /*
-    if(this.indexDistance(this.dragItem, this.dropItem) == 1) {
-      this.swapItems(this.dragItem, this.dropItem);
-    } else {
-      let lastPeer = this.getLastPeer(this.dropItem);
+        if((lastPeer == this.dragItem || this.indexDistance(this.dragItem, this.dropItem) >= 1) && !this.insideEmptySpace) {
+          this.swapItems(this.dragItem, this.dropItem);
+        } else if(this.insideEmptySpace || lastPeer != this.dragItem) {
+          if(this.indexDistance(this.dragItem, lastPeer!) == 1) {
+            this.swapItems(this.dragItem, lastPeer!);
+          } else {
+            this.moveItem(this.dragItem, lastPeer!)
+          }
+        }
+        */
 
-      if(this.insideEmptySpace) {
-        console.log("Insert after: ");
-        console.log(lastPeer);
-        this.moveItem(this.dragItem, lastPeer!);
-      } else {
-        this.moveItem(this.dragItem, this.dropItem);
-        console.log("-> Insert dragItem after: ");
-        console.log(this.dropItem);
-        this.moveItem(this.dropItem, lastPeer!);
-        console.log("-> Insert dropItem after: ");
-        console.log(lastPeer);
-      }
-    }
-    */
-    
-    //this.dropItem = null;
-    //this.canMove = true;
-    
     //=== ANIMACION ===
     let i = 0;
     this.dropListGroup._items.forEach((dropList) => {
@@ -187,7 +164,6 @@ export class DragAndDropService {
       i++;
     })
     //================
-
   }
 
   swapItems(dragItem: CdkDropList, dropItem: CdkDropList) {
@@ -307,7 +283,9 @@ export class DragAndDropService {
         result = false;
       }
     });
-    return result;
+    
+    //return result;
+    return false;
   }
 
   getClosestDropListsToPoint(point: { x: number, y: number }) {
@@ -372,20 +350,22 @@ export class DragAndDropService {
     // Obtiene vecino mas a la derecha con recursividad
     // No regresa a dragItem como vecino
     //if (dropList != null) {
-      let dropListAtRight = this.getDropListAtRight(dropList);
+    let dropListAtRight = this.getDropListAtRight(dropList);
 
-      while (dropListAtRight != null) {
-        dropList = dropListAtRight;
-        dropListAtRight = this.getDropListAtRight(dropList);
-      }
+    while (dropListAtRight != null) {
+      dropList = dropListAtRight;
+      dropListAtRight = this.getDropListAtRight(dropList);
+    }
 
-      return dropList;
+    return dropList;
     //} else {
     //  return null;
     //}
   }
 
   getDropListAtRight(item: CdkDropList) {
+    // Puede regresar dragItem
+
     let dropListAtRight = null;
 
     let rect = item.element.nativeElement.getBoundingClientRect();
@@ -396,7 +376,8 @@ export class DragAndDropService {
 
       let dropListAtPoint = this.getDropListAtPoint(point);
 
-      if(dropListAtPoint != this.dragItem && dropListAtPoint != null) {
+      //if(dropListAtPoint != this.dragItem && dropListAtPoint != null)
+      if(dropListAtPoint != null) {
         dropListAtRight = dropListAtPoint;
       }
       //dropListAtRight = dropListAtPoint == null ? dropListAtRight : dropListAtPoint;
@@ -425,7 +406,7 @@ export class DragAndDropService {
       ],
       {
         // timing options
-        duration: 100,
+        duration: 150,
         iterations: 1,
         easing: "cubic-bezier(0.42, 0, 0.58, 1)",
       }
