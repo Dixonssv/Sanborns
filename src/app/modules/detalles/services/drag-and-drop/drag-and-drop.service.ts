@@ -117,8 +117,6 @@ export class DragAndDropService {
     // Obtiene las posiciones actuales
     let dropListsPositions: any[] = this.getDropListsRects();
 
-    let lastPeer = this.getLastPeer(this.dropItem);
-
     /*
     if(this.insideEmptySpace) {
       this.moveItem(this.dragItem, lastPeer);
@@ -129,52 +127,38 @@ export class DragAndDropService {
     }
     */
 
-    this.swapItems(this.dragItem, this.dropItem);
+    if (this.swapItems(this.dragItem, this.dropItem)) {
+      //=== ANIMACION ===
+      let i = 0;
+      this.dropListGroup._items.forEach((dropList) => {
+        let from_position = {
+          x: dropListsPositions[i].x,
+          y: dropListsPositions[i].y
+        };
 
+        let to_position = {
+          x: dropList.element.nativeElement.getBoundingClientRect().x,
+          y: dropList.element.nativeElement.getBoundingClientRect().y
+        };
 
+        this.slideAnimate(dropList, from_position, to_position);
 
+        i++;
+      })
+      //================
+    }
 
-    /*
-        if((lastPeer == this.dragItem || this.indexDistance(this.dragItem, this.dropItem) >= 1) && !this.insideEmptySpace) {
-          this.swapItems(this.dragItem, this.dropItem);
-        } else if(this.insideEmptySpace || lastPeer != this.dragItem) {
-          if(this.indexDistance(this.dragItem, lastPeer!) == 1) {
-            this.swapItems(this.dragItem, lastPeer!);
-          } else {
-            this.moveItem(this.dragItem, lastPeer!)
-          }
-        }
-        */
-
-    //=== ANIMACION ===
-    let i = 0;
-    this.dropListGroup._items.forEach((dropList) => {
-      let from_position = {
-        x: dropListsPositions[i].x,
-        y: dropListsPositions[i].y
-      };
-
-      let to_position = {
-        x: dropList.element.nativeElement.getBoundingClientRect().x,
-        y: dropList.element.nativeElement.getBoundingClientRect().y
-      };
-
-      this.slideAnimate(dropList, from_position, to_position);
-
-      i++;
-    })
-    //================
   }
 
-  swapItems(dragItem: CdkDropList, dropItem: CdkDropList) {
+  swapItems(dragItem: CdkDropList, dropItem: CdkDropList): boolean {
     let dragIndex = this.indexOf(dragItem);
     let dropIndex = this.indexOf(dropItem);
-    this.itemsSwapped.next({ from_index: dragIndex, to_index: dropIndex });
 
     let drag = dragItem.element.nativeElement;
     let drop = dropItem.element.nativeElement;
     let parent = drop.parentElement;
 
+    let initialPosition = drag.getBoundingClientRect();
     let dragClone = drag.cloneNode();
 
     parent?.insertBefore(dragClone, drag);
@@ -183,6 +167,25 @@ export class DragAndDropService {
     parent?.insertBefore(drop, dragClone);
 
     parent?.removeChild(dragClone);
+
+    // verifica si se realizo un swap
+    /*
+    let finalPosition = drag.getBoundingClientRect();
+    if (
+      initialPosition.x != finalPosition.x ||
+      initialPosition.y != finalPosition.y
+    ) {
+      // Cambio su posicion
+      this.itemsSwapped.next({ from_index: dragIndex, to_index: dropIndex });
+      return true;
+    }
+
+    return false;
+    */
+
+    this.itemsSwapped.next({ from_index: dragIndex, to_index: dropIndex });
+    return true;
+
   }
 
   moveItem(dragItem: CdkDropList, dropItem: CdkDropList, after?: boolean) {
@@ -283,7 +286,7 @@ export class DragAndDropService {
         result = false;
       }
     });
-    
+
     //return result;
     return false;
   }
@@ -371,13 +374,13 @@ export class DragAndDropService {
     let rect = item.element.nativeElement.getBoundingClientRect();
 
     let y = rect.top;
-    while(y <= rect.bottom) {
+    while (y <= rect.bottom) {
       let point = { x: rect.right + this.emptyThreshold + 1, y: y };
 
       let dropListAtPoint = this.getDropListAtPoint(point);
 
       //if(dropListAtPoint != this.dragItem && dropListAtPoint != null)
-      if(dropListAtPoint != null) {
+      if (dropListAtPoint != null) {
         dropListAtRight = dropListAtPoint;
       }
       //dropListAtRight = dropListAtPoint == null ? dropListAtRight : dropListAtPoint;
