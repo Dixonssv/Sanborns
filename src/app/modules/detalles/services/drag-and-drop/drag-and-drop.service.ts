@@ -50,6 +50,7 @@ export class DragAndDropService {
           //console.log(newDropItem == null ? newDropItem : newDropItem.element);
 
           if (this.canMovePredicate()) {
+            /* Mueve el placeholder */
             this.movePlaceholder();
           }
         }
@@ -64,13 +65,11 @@ export class DragAndDropService {
     let newDropItem = null;
 
     if (this.isInsideEmptySpace(point)) {
-      //this.canMove = true;
       this.insideEmptySpace = true;
 
       let closeDropLists = this.getClosestDropListsToPoint(point);
 
       if (closeDropLists.left == null && closeDropLists.right == null) {
-        //this.canMove = false;
       } else {
         // Revisa a la izquierda
         if (closeDropLists.left != null && newDropItem == null) {
@@ -86,7 +85,6 @@ export class DragAndDropService {
         // Revisa arriba
         if (closeDropLists.top != null && newDropItem == null) {
           //console.log("Close: top");
-          //newDropItem = this.getLastPeer(closeDropLists.top);
           newDropItem = closeDropLists.top;
         }
       }
@@ -117,16 +115,6 @@ export class DragAndDropService {
     // Obtiene las posiciones actuales
     let dropListsPositions: any[] = this.getDropListsRects();
 
-    /*
-    if(this.insideEmptySpace) {
-      this.moveItem(this.dragItem, lastPeer);
-    } else if (this.indexDistance(this.dragItem, this.dropItem) > 1) {
-      this.moveItem(this.dragItem, this.dropItem);
-    } else {
-      this.swapItems(this.dragItem, this.dropItem);
-    }
-    */
-
     if (this.swapItems(this.dragItem, this.dropItem)) {
       //=== ANIMACION ===
       let i = 0;
@@ -146,6 +134,9 @@ export class DragAndDropService {
         i++;
       })
       //================
+    } else {
+      // Lo regresa a su posicion anterior
+      this.swapItems(this.dragItem, this.dropItem);
     }
 
   }
@@ -169,7 +160,6 @@ export class DragAndDropService {
     parent?.removeChild(dragClone);
 
     // verifica si se realizo un swap
-    /*
     let finalPosition = drag.getBoundingClientRect();
     if (
       initialPosition.x != finalPosition.x ||
@@ -181,11 +171,6 @@ export class DragAndDropService {
     }
 
     return false;
-    */
-
-    this.itemsSwapped.next({ from_index: dragIndex, to_index: dropIndex });
-    return true;
-
   }
 
   moveItem(dragItem: CdkDropList, dropItem: CdkDropList, after?: boolean) {
@@ -262,13 +247,15 @@ export class DragAndDropService {
     let rect = this.dragItem.element.nativeElement.parentElement.getBoundingClientRect();
 
     return (
-      point.x >= rect.left + (border ? border : 0) &&
-      point.x <= rect.right - (border ? border : 0) &&
-      point.y >= rect.top + (border ? border : 0) &&
+      point.x >= rect.left   + (border ? border : 0) &&
+      point.x <= rect.right  - (border ? border : 0) &&
+      point.y >= rect.top    + (border ? border : 0) &&
       point.y <= rect.bottom - (border ? border : 0));
   }
 
   isInsideEmptySpace(point: { x: number, y: number }) {
+
+    return false;
 
     if (!this.isInsideDropListGroup(point, this.emptyThreshold)) {
       return false;
@@ -287,8 +274,7 @@ export class DragAndDropService {
       }
     });
 
-    //return result;
-    return false;
+    return result;
   }
 
   getClosestDropListsToPoint(point: { x: number, y: number }) {
@@ -352,7 +338,7 @@ export class DragAndDropService {
   getLastPeer(dropList: CdkDropList) {
     // Obtiene vecino mas a la derecha con recursividad
     // No regresa a dragItem como vecino
-    //if (dropList != null) {
+
     let dropListAtRight = this.getDropListAtRight(dropList);
 
     while (dropListAtRight != null) {
@@ -361,9 +347,6 @@ export class DragAndDropService {
     }
 
     return dropList;
-    //} else {
-    //  return null;
-    //}
   }
 
   getDropListAtRight(item: CdkDropList) {
@@ -409,7 +392,7 @@ export class DragAndDropService {
       ],
       {
         // timing options
-        duration: 150,
+        duration: 200,
         iterations: 1,
         easing: "cubic-bezier(0.42, 0, 0.58, 1)",
       }

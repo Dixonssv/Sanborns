@@ -11,6 +11,7 @@ import { DragAndDropService } from '../../services/drag-and-drop/drag-and-drop.s
 import { PrintableDirective } from 'src/app/modules/shared/directives/printable/printable.directive';
 import { PrintService } from '../../services/print/print.service';
 import { Subscription } from 'rxjs';
+import { ScrollService } from '../../services/scroll/scroll.service';
 
 
 @Component({
@@ -30,13 +31,16 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
 
   loadedCards:any;
 
+  scrollY:number = 0;
+
   // Suscripciones
   private subscriptions:Subscription[];
 
   constructor(
     public dashboarService: DashboardService,
     public dragAndDropService: DragAndDropService,
-    public printService: PrintService) {  
+    public printService: PrintService,
+    public scrollService: ScrollService) {  
       this.subscriptions = [];
   }
 
@@ -47,14 +51,20 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
     this.subscriptions.push(
       // Cards Changed
       this.dashboarService.cardsChanged.pipe().subscribe(() => {
-      
+        this.scrollService.setCurrentScroll();
+
         viewContainerRef.clear();
   
         this.dashboarService.updateCardIndexes();
 
         this.dashboarService.getCards().subscribe((card) => {
           this.loadCard(card, viewContainerRef);
+          console.log("Card loaded");
+          this.scrollService.scroll();
         });
+
+        // Scrol to pivot
+        
       }),
       // Card in Dashboard 
       this.dashboarService.cardInDashboard.pipe().subscribe((index: number) =>  {
@@ -67,14 +77,14 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
         console.log("Move " + positions.from_index + " to " + positions.to_index);
         this.dashboarService.moveCard(positions.from_index, positions.to_index).subscribe();
 
-        this.dashboarService.updateCardIndexes();
+        //this.dashboarService.updateCardIndexes();
       }),
       // Items Swapped
       this.dragAndDropService.itemsSwapped.pipe().subscribe((positions) => {
         console.log("Swap " + positions.from_index + " and " + positions.to_index);
         this.dashboarService.swapCards(positions.from_index, positions.to_index).subscribe();
 
-        this.dashboarService.updateCardIndexes();
+        //this.dashboarService.updateCardIndexes();
       })
     );
   }
