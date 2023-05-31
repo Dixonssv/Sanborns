@@ -57,7 +57,7 @@ export class CardComponent implements OnInit, AfterViewInit{
 
   cardDropped(event: CdkDragEnd) {
     this.dragAndDropService.onDropped(event).subscribe(() => {
-      //this.dashboardService.cardsChanged.next(true);
+      this.dashboardService.cardsChanged.next(true);
     });
   }
 

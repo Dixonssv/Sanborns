@@ -41,6 +41,7 @@ export class DragAndDropService {
 
   dragMoved(event: CdkDragMove<any>): Observable<void> {
     return new Observable<void>(observable => {
+      this.getDragPreview(event);
       if (this.dragItem != null) {
         let newDropItem: any = this.getDropItem(event);
 
@@ -392,9 +393,9 @@ export class DragAndDropService {
       ],
       {
         // timing options
-        duration: 200,
+        duration: 250,
         iterations: 1,
-        easing: "cubic-bezier(0.42, 0, 0.58, 1)",
+        easing: "cubic-bezier(0.28, 0.43, 0.13, 1)",
       }
     ).finished.then(() => {
       this.animating = false;
@@ -416,4 +417,16 @@ export class DragAndDropService {
     return Math.abs(this.indexOf(lastDropList) - this.indexOf(firstDropList));
   }
 
+  getDragPreview(event: CdkDragMove<any>) {
+    return event.source.element.nativeElement.nextElementSibling!;
+  }
+
+  getDropListCenter(dropList: CdkDropList) {
+    let rect = dropList.element.nativeElement.getBoundingClientRect();
+
+    return {
+      x: rect.left + ((rect.right - rect.left) / 2),
+      y: rect.top + ((rect.bottom - rect.top) / 2)
+    }
+  }
 }
