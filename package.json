@@ -23,6 +23,7 @@
     "@tailwindcss/container-queries": "^0.1.1",
     "angular-org-chart": "^1.0.3",
     "angular13-organization-chart": "^2.0.0",
+    "gridstack": "^8.2.1",
     "ngx-print": "^1.3.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

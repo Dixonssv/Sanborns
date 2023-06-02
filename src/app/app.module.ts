@@ -12,7 +12,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './modules/shared/shared.module';
 import { OrganigramaComponent } from './components/organigrama/organigrama.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,

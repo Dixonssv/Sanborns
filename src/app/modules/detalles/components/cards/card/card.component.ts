@@ -1,4 +1,4 @@
-import { Component, HostBinding, Type, ViewChild, ViewEncapsulation, ViewContainerRef, HostListener, ElementRef, OnInit, Renderer2, AfterViewInit} from '@angular/core';
+import { Component, HostBinding, Type, ViewChild, ViewEncapsulation, ViewContainerRef, HostListener, ElementRef, OnInit, Renderer2, AfterViewInit, Input} from '@angular/core';
 
 import { CdkDragEnd, CdkDragMove, CdkDragStart, CdkDropList } from "@angular/cdk/drag-drop";
 
@@ -6,6 +6,7 @@ import { CardModel } from '../../../models/card.model';
 import { CardContentDirective } from 'src/app/modules/shared/directives/card-content/card-content.directive';
 import { DashboardService } from '../../../services/dashboard/dashboard.service';
 import { DragAndDropService } from '../../../services/drag-and-drop/drag-and-drop.service';
+import { BaseWidget } from 'gridstack/dist/angular';
 
 @Component({
   selector: 'app-card',
@@ -16,13 +17,15 @@ import { DragAndDropService } from '../../../services/drag-and-drop/drag-and-dro
     CdkDropList,
   ],
 })
-export class CardComponent implements OnInit, AfterViewInit{
+export class CardComponent extends BaseWidget implements OnInit, AfterViewInit{
 
   @HostBinding('class') classAttribute: string;
 
   @ViewChild(CardContentDirective, {static: true}) CardContent!: CardContentDirective;
 
   @ViewChild(CdkDropList, {static: true}) dropList!: CdkDropList;
+
+  @Input() title: string = "Hey, ";
 
   index: number = 0;
   card!: CardModel;
@@ -35,9 +38,10 @@ export class CardComponent implements OnInit, AfterViewInit{
     private hostElement: ElementRef,
     public dashboardService: DashboardService,
     public dragAndDropService: DragAndDropService) {
-    this.x = 0;
-    this.y = 0;  
-    this.classAttribute = "";
+      super();
+      this.x = 0;
+      this.y = 0;  
+      this.classAttribute = "";
   }
   ngOnInit(): void {
     this.index = this.card.index!;
