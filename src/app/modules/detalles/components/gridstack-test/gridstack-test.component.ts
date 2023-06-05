@@ -1,43 +1,83 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { GridStack } from 'gridstack';
 import { GridstackComponent, gsCreateNgComponents, NgGridStackWidget, nodesCB, BaseWidget, NgGridStackOptions } from 'gridstack/dist/angular';
 import { CardComponent } from '../cards/card/card.component';
+import { CardMapper } from '../../models/mappers/card.mapper';
+import { DashboardService } from '../../services/dashboard/dashboard.service';
+import { CardModel } from '../../models/card.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-gridstack-test',
   templateUrl: './gridstack-test.component.html',
   styleUrls: ['./gridstack-test.component.css']
 })
-export class GridstackTestComponent implements AfterViewInit{
+export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
 
   grid!: GridStack;
 
-  constructor() {
-    this.grid = GridStack.init();
+  gridOptions: NgGridStackOptions = {
+    margin: 5,
+    minRow: 1,
+  }
+
+  items: NgGridStackWidget[] = [];
+
+  cardMapper: CardMapper = new CardMapper();
+
+  // Suscripciones
+  private subscriptions:Subscription[];
+
+  constructor(private vcRef: ViewContainerRef, public dashboardService: DashboardService) {
+
+    this.subscriptions = [];
 
     GridstackComponent.addComponentToSelectorType([CardComponent]);
   }
 
+  ngOnInit(): void {
+    this.subscriptions.push(
+      // Cards Changed
+      this.dashboardService.cardsChanged.pipe().subscribe(() => {
+        this.grid.removeAll();
+
+        this.dashboardService.getCards().subscribe((card) => {
+          this.loadCard(card);
+        });
+      }
+      ),
+    )
+  }
+
+  ngOnDestroy(): void {
+    this.dashboardService.destroy().subscribe();
+
+    this.subscriptions.forEach((subscription) => {
+      subscription.unsubscribe();
+    })
+  }
+
   ngAfterViewInit(): void {
-    console.log(this.gridOptions);
+    this.grid = GridStack.init();
+    //console.log(this.gridOptions);
   }
 
-  public gridOptions: NgGridStackOptions = {
-    margin: 5,
-    minRow: 1, // make space for empty message
-    children: [ // or call load()/addWidget() with same data
-      {x:0, y:0, minW:2, selector:'app-card', input: {title: "hola"}},
-      {x:1, y:0, selector:'app-card'},
-      {x:0, y:1, content:'plain html content'},
-    ]
+  loadCard(card: CardModel) {
+    let w: NgGridStackWidget = {
+      x: 0,
+      y: 0,
+      minW: card.x,
+      minH: card.y,
+      selector: 'app-card',
+      input: {card: card}
+    }
+
+    this.grid.addWidget(w);
   }
 
-  public addWidget() {
-    //this.grid.makeWidget()
-
+  public identify(index: number, w: NgGridStackWidget) {
+    return w.id; // or use index if no id is set and you only modify at the end...
   }
-  
-
 
 }
 

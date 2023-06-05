@@ -21,7 +21,7 @@ export class CardMapper extends Mapper<string, CardModel> {
                 return {
                     title: param.toUpperCase(),
                     component: DatosPersonalesComponent,
-                    x: 2,
+                    x: 4,
                     y: 1
                 }
             }
@@ -29,7 +29,7 @@ export class CardMapper extends Mapper<string, CardModel> {
                 return {
                     title: param.toUpperCase(),
                     component: CurriculumComponent,
-                    x: 1,
+                    x: 2,
                     y: 3
                 }
             }
@@ -37,7 +37,7 @@ export class CardMapper extends Mapper<string, CardModel> {
                 return {
                     title: param.toUpperCase(),
                     component: EstudiosComponent,
-                    x: 2,
+                    x: 4,
                     y: 3
                 }
             }
@@ -45,7 +45,7 @@ export class CardMapper extends Mapper<string, CardModel> {
                 return {
                     title: param.toUpperCase(),
                     component: ContratoComponent,
-                    x: 1,
+                    x: 2,
                     y: 2
                 }
             }
@@ -53,7 +53,7 @@ export class CardMapper extends Mapper<string, CardModel> {
                 return {
                     title: param.toUpperCase(),
                     component: HorarioComponent,
-                    x: 4,
+                    x: 8,
                     y: 1
                 }
             }
@@ -61,7 +61,7 @@ export class CardMapper extends Mapper<string, CardModel> {
                 return {
                     title: param.toUpperCase(),
                     component: DocumentosComponent,
-                    x: 2,
+                    x: 4,
                     y: 4
                 }
             }
@@ -69,7 +69,7 @@ export class CardMapper extends Mapper<string, CardModel> {
                 return {
                     title: param.toUpperCase(),
                     component: NominaComponent,
-                    x: 1,
+                    x: 2,
                     y: 1
                 }
             }
@@ -77,7 +77,7 @@ export class CardMapper extends Mapper<string, CardModel> {
                 return {
                     title: param.toUpperCase(),
                     component: ActasComponent,
-                    x: 2,
+                    x: 4,
                     y: 1
                 }
             }
@@ -85,7 +85,7 @@ export class CardMapper extends Mapper<string, CardModel> {
                 return {
                     title: param.toUpperCase(),
                     component: TrayectoriaComponent,
-                    x: 1,
+                    x: 2,
                     y: 2
                 }
             }
@@ -93,7 +93,7 @@ export class CardMapper extends Mapper<string, CardModel> {
                 return {
                     title: param.toUpperCase(),
                     component: CursosComponent,
-                    x: 3,
+                    x: 6,
                     y: 1
                 }
             }

@@ -5,7 +5,7 @@ import { GridstackTestComponent } from './components/gridstack-test/gridstack-te
 
 const routes: Routes = [
   {path: '', component: DetallesComponent},
-  {path: 'grid', component: GridstackTestComponent}
+  //{path: 'grid', component: GridstackTestComponent}
 ];
 
 @NgModule({

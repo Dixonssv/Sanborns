@@ -1,3 +1,5 @@
-<button (click)="addWidget">Agregar Widget</button>
-<gridstack [options]="gridOptions"></gridstack>
-<div>GridStack Works!</div>
+<gridstack [options]="gridOptions">
+    <gridstack-item *ngFor="let item of items" [options]="item">
+        
+    </gridstack-item>
+</gridstack>

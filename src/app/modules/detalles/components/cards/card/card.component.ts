@@ -25,17 +25,17 @@ export class CardComponent extends BaseWidget implements OnInit, AfterViewInit{
 
   @ViewChild(CdkDropList, {static: true}) dropList!: CdkDropList;
 
-  @Input() title: string = "Hey, ";
+  @Input() card!: CardModel;
 
   index: number = 0;
-  card!: CardModel;
+  //card!: CardModel;
   x: number;
   y: number;
   content: any;
 
   constructor(
     private renderer: Renderer2,
-    private hostElement: ElementRef,
+    public hostElement: ElementRef,
     public dashboardService: DashboardService,
     public dragAndDropService: DragAndDropService) {
       super();
@@ -43,12 +43,15 @@ export class CardComponent extends BaseWidget implements OnInit, AfterViewInit{
       this.y = 0;  
       this.classAttribute = "";
   }
+
   ngOnInit(): void {
-    this.index = this.card.index!;
+    this.setContent(this.card.component);
   }
 
   ngAfterViewInit(): void {
     this.adjustHeight();
+
+    console.log(this.card);
   }
 
   cardDragStart(event: CdkDragStart<any>) {
