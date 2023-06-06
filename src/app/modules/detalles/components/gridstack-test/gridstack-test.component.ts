@@ -44,8 +44,15 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
         this.dashboardService.getCards().subscribe((card) => {
           this.loadCard(card);
         });
-      }
-      ),
+      }),
+      // Card Added
+      this.dashboardService.cardAdded.pipe().subscribe((card) => {
+        this.loadCard(card);
+      }),
+      // Card Deleted
+      this.dashboardService.cardDeleted.pipe().subscribe((card) => {
+        this.unloadCard(card);
+      })
     )
   }
 
@@ -64,6 +71,7 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
 
   loadCard(card: CardModel) {
     let w: NgGridStackWidget = {
+      id: card.title,
       x: 0,
       y: 0,
       autoPosition: true,
@@ -74,10 +82,28 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
     }
 
     this.grid.addWidget(w);
+    this.items.push(w);
+
+    console.log(this.grid.getGridItems());
   }
 
-  public identify(index: number, w: NgGridStackWidget) {
-    return w.id; // or use index if no id is set and you only modify at the end...
+  unloadCard(card: CardModel) {
+    let widget = this.getCardWidget(card);
+    console.log(widget);
+
+    this.grid.removeWidget(widget);
+  }
+
+  getCardWidget(card: CardModel) {
+    let widget: any;
+
+    this.grid.getGridItems().forEach((el) => {
+      if(el.gridstackNode?.id === card.title) {
+        widget = el;
+      }
+    })
+
+    return widget;
   }
 
 }

@@ -18,6 +18,9 @@ export class DashboardService {
   cardsChanged = new Subject<boolean>();
   cardInDashboard = new Subject<number>();
 
+  cardAdded = new Subject<CardModel>();
+  cardDeleted = new Subject<CardModel>();
+
   constructor() {
     this.cards = [];
 
@@ -45,7 +48,8 @@ export class DashboardService {
 
           //this.cards.at(this.cards.length - 1)!.index = this.cards.length - 1;
 
-          this.cardsChanged.next(true);
+          //this.cardsChanged.next(true);
+          this.cardAdded.next(card);
         } else {
           this.cardInDashboard.next(index);
         }
@@ -110,9 +114,10 @@ export class DashboardService {
         if (index >= 0) {
           // Se encuentra en el array
 
-          this.cards.splice(index, 1);
+          let card = this.cards.splice(index, 1)[0];
 
-          this.cardsChanged.next(true);
+          //this.cardsChanged.next(true);
+          this.cardDeleted.next(card);
         }
       });
     });
