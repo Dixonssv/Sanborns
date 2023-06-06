@@ -15,10 +15,22 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 @import "gridstack/dist/gridstack.min.css";
 
 .grid-stack {
+  /*
   background: #FAFAD2;
+  */
 }
+
 .grid-stack-item-content {
-  /*text-align: center;
-  background-color: #18bc9c;*/
+  background-color: white;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  border-radius: 0.375rem;
 }
+
+/*
+.grid-stack-item-content {
+  text-align: center;
+  background-color: #18bc9c;
+}
+*/
+
 

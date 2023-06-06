@@ -66,6 +66,7 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
     let w: NgGridStackWidget = {
       x: 0,
       y: 0,
+      autoPosition: true,
       minW: card.x,
       minH: card.y,
       selector: 'app-card',

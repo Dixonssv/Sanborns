@@ -23,11 +23,12 @@ module.exports = {
     "./src/app/modules/detalles/components/cards/nomina/nomina.component.html",
     "./src/app/modules/detalles/components/cards/actas/actas.component.html",
     "./src/app/modules/detalles/components/cards/trayectoria/trayectoria.component.html",
-    "./src/app/modules/detalles/components/cards/cursos/cursos.component.html"
+    "./src/app/modules/detalles/components/cards/cursos/cursos.component.html",
+
+    "./src/app/modules/detalles/components/gridstack-test/gridstack-test.component.html"
 
   ],
   safelist: [
-
     'dash-card',
     'dash-card-x1',
     'dash-card-x2',
@@ -38,6 +39,7 @@ module.exports = {
     'dash-card-y3',
     'dash-card-y4',
     'cdk-drag-preview',
+    'grid-stack-item-content'
   ],
   theme: {
     extend: {},
