@@ -13,9 +13,7 @@ import { BaseWidget } from 'gridstack/dist/angular';
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.css', '../cards.css'],
   encapsulation: ViewEncapsulation.None,
-  hostDirectives: [
-    CdkDropList,
-  ],
+  hostDirectives: [ ],
 })
 export class CardComponent extends BaseWidget implements OnInit, AfterViewInit{
 
@@ -49,7 +47,7 @@ export class CardComponent extends BaseWidget implements OnInit, AfterViewInit{
   }
 
   ngAfterViewInit(): void {
-    this.adjustHeight();
+    //this.adjustHeight();
 
     //console.log(this.card);
   }
@@ -70,7 +68,7 @@ export class CardComponent extends BaseWidget implements OnInit, AfterViewInit{
 
   setCard(card: CardModel) {
     this.card = card;
-    this.setSize(this.card.x, this.card.y);
+    //this.setSize(this.card.x, this.card.y);
     this.setContent(this.card.component);
   }
 

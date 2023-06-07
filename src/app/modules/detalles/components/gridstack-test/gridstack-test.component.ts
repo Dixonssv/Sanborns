@@ -6,6 +6,8 @@ import { CardMapper } from '../../models/mappers/card.mapper';
 import { DashboardService } from '../../services/dashboard/dashboard.service';
 import { CardModel } from '../../models/card.model';
 import { Subscription } from 'rxjs';
+import { PrintableDirective } from 'src/app/modules/shared/directives/printable/printable.directive';
+import { PrintService } from '../../services/print/print.service';
 
 @Component({
   selector: 'app-gridstack-test',
@@ -14,6 +16,9 @@ import { Subscription } from 'rxjs';
 })
 export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
 
+  @ViewChild(PrintableDirective, {static: true}) 
+  printableArea!: PrintableDirective;
+
   grid!: GridStack;
 
   gridOptions: NgGridStackOptions = {
@@ -21,15 +26,16 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
     minRow: 1,
   }
 
-  items: NgGridStackWidget[] = [];
-
   cardMapper: CardMapper = new CardMapper();
 
   // Suscripciones
   private subscriptions:Subscription[];
 
-  constructor(private vcRef: ViewContainerRef, public dashboardService: DashboardService) {
-
+  constructor(
+    private vcRef: ViewContainerRef, 
+    public dashboardService: DashboardService, 
+    public printService: PrintService
+  ) {
     this.subscriptions = [];
 
     GridstackComponent.addComponentToSelectorType([CardComponent]);
@@ -37,14 +43,6 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
 
   ngOnInit(): void {
     this.subscriptions.push(
-      // Cards Changed
-      this.dashboardService.cardsChanged.pipe().subscribe(() => {
-        this.grid.removeAll();
-
-        this.dashboardService.getCards().subscribe((card) => {
-          this.loadCard(card);
-        });
-      }),
       // Card Added
       this.dashboardService.cardAdded.pipe().subscribe((card) => {
         this.loadCard(card);
@@ -66,7 +64,9 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
 
   ngAfterViewInit(): void {
     this.grid = GridStack.init();
-    //console.log(this.gridOptions);
+    
+    this.printService.printableObject = this.printableArea;
+    console.log(this.printableArea);
   }
 
   loadCard(card: CardModel) {
@@ -82,14 +82,10 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
     }
 
     this.grid.addWidget(w);
-    this.items.push(w);
-
-    console.log(this.grid.getGridItems());
   }
 
   unloadCard(card: CardModel) {
     let widget = this.getCardWidget(card);
-    console.log(widget);
 
     this.grid.removeWidget(widget);
   }
