@@ -5,7 +5,6 @@ const routes: Routes = [
   {path: 'inicio',          loadChildren: () =>import('./modules/inicio/inicio.module').then((m) => m.InicioModule)},
   {path: 'detalles',        loadChildren: () =>import('./modules/detalles/detalles.module').then((m) => m.DetallesModule)},
   {path: 'detalles/:index', loadChildren: () =>import('./modules/detalles/detalles.module').then((m) => m.DetallesModule)},
-  {path: 'gridstack',       loadChildren: () =>import('./modules/gridstack-test/gridstack-test.module').then((m) => m.GridstackTestModule)},
   //{path: 'detalles',        loadChildren: () =>import(`./modules/detalles/detalles.module`).then((m) => m.DetallesModule)},
   //{path: 'orgchart', component: OrganigramaComponent},
   //{path: 'testDashboard', component: TestDashboardComponent},

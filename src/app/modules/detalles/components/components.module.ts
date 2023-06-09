@@ -12,6 +12,8 @@ import { GridstackTestComponent } from './gridstack-test/gridstack-test.componen
 
 import { CardComponent } from './cards/card/card.component';
 import { SharedModule } from '../../shared/shared.module';
+import { GridsterTestComponent } from './gridster-test/gridster-test.component';
+import { GridsterModule } from 'angular-gridster2';
 
 
 @NgModule({
@@ -21,14 +23,16 @@ import { SharedModule } from '../../shared/shared.module';
     SidebarComponent,
     PdfDownloadBtnComponent,
     CardComponent,
-    GridstackTestComponent
+    GridstackTestComponent,
+    GridsterTestComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
     DragDropModule,
     NgxPrintModule,
-    GridstackModule
+    GridstackModule,
+    GridsterModule
   ],
   exports: [
     DetallesComponent,

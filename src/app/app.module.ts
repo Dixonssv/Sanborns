@@ -22,7 +22,7 @@ import { OrganigramaComponent } from './components/organigrama/organigrama.compo
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    OrgChartModule,
+    //OrgChartModule,
     BrowserAnimationsModule,
 
     SharedModule,
