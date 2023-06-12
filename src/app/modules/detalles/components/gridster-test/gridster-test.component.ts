@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { CompactType, DisplayGrid, GridType, GridsterConfig, GridsterItem, GridsterItemComponent, GridsterItemComponentInterface } from 'angular-gridster2';
 import { CardModel } from '../../models/card.model';
 import { CardComponent } from '../cards/card/card.component';
@@ -25,7 +25,8 @@ export class GridsterTestComponent implements OnInit, AfterViewInit, OnDestroy{
   constructor(
     public vcf: ViewContainerRef,
     public dashboardService: DashboardService,
-    public printService: PrintService) { }
+    public printService: PrintService,
+    public elementRef: ElementRef) { }
 
   ngOnInit() {
     this.options = {
@@ -43,11 +44,17 @@ export class GridsterTestComponent implements OnInit, AfterViewInit, OnDestroy{
       pushItems: true,
       draggable: { enabled: true },
       resizable: { enabled: true },
-      disableScrollHorizontal: true
+      disableScrollHorizontal: true,
     };
 
     this.dashboardService.cardAdded.subscribe((card) => {
       this.loadCard(card, this.vcf)
+    })
+
+    this.dashboardService.cardDeleted.pipe().subscribe((card) => {
+      setTimeout(() => {
+        this.unloadCard(card);
+    }, 0);
     })
 
     this.dashboard = [
@@ -77,6 +84,7 @@ export class GridsterTestComponent implements OnInit, AfterViewInit, OnDestroy{
   }
   
   loadCard(card:CardModel, viewContainerRef:ViewContainerRef) {
+    card.index = this.dashboard.length;
 
     this.dashboard.push(
       { 
@@ -94,6 +102,13 @@ export class GridsterTestComponent implements OnInit, AfterViewInit, OnDestroy{
       });
     
     //return cardComponent;
+  }
+
+  unloadCard(card: CardModel) {
+    let index = card.index;
+    this.dashboard.splice(index!, 1);
+
+    this.elementRef.nativeElement
   }
   
 }
