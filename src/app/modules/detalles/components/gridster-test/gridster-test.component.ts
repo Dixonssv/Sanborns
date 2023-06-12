@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { CompactType, GridType, GridsterConfig, GridsterItem, GridsterItemComponent, GridsterItemComponentInterface } from 'angular-gridster2';
+import { CompactType, DisplayGrid, GridType, GridsterConfig, GridsterItem, GridsterItemComponent, GridsterItemComponentInterface } from 'angular-gridster2';
 import { CardModel } from '../../models/card.model';
 import { CardComponent } from '../cards/card/card.component';
 import { CardMapper } from '../../models/mappers/card.mapper';
@@ -31,6 +31,13 @@ export class GridsterTestComponent implements OnInit, AfterViewInit, OnDestroy{
     this.options = {
       gridType: GridType.ScrollVertical,
       compactType: CompactType.CompactUp,
+      displayGrid: DisplayGrid.None,
+      pushDirections: {
+        north: false,
+        east: false,
+        south: true,
+        west: false
+      },
       minCols: 12,
       maxCols: 12,
       pushItems: true,
@@ -68,39 +75,6 @@ export class GridsterTestComponent implements OnInit, AfterViewInit, OnDestroy{
   ngOnDestroy(): void {
     this.dashboardService.destroy();
   }
-
-  /*
-  
-  initItem(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
-    let cardElement = this.loadCard(this.cardMapper.mapFrom("Datos personales"), this.vcf).instance.hostElement.nativeElement;
-    itemComponent.el.appendChild(cardElement);
-    //this.itemToPush.el = this.loadCard(this.cardMapper.mapFrom("Datos personales"), this.vcf).instance.hostElement.nativeElement;
-
-    //itemComponent.el = this.loadCard(this.cardMapper.mapFrom("Datos personales"), this.vcf).instance.hostElement.nativeElement;
-  }
-  
-
-  addItem() {
-    this.dashboard.push(
-      { 
-        x: 0, 
-        y: 0, 
-        cols: 1, 
-        rows: 1,
-      });
-  }
-
-  loadCard(card:CardModel, viewContainerRef:ViewContainerRef) {
-    const cardComponent = viewContainerRef.createComponent(CardComponent);
-    //cardComponent.instance.setSize(card.x, card.y);
-    //cardComponent.instance.setContent(card.component);
-    cardComponent.instance.card = card;
-    
-    return cardComponent;
-  }
-  */
-  
-
   
   loadCard(card:CardModel, viewContainerRef:ViewContainerRef) {
 

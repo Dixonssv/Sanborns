@@ -40,7 +40,7 @@ export class PdfDownloadBtnComponent implements AfterViewInit{
     this.printDirective.printStyle = { 
       'gridster': {
         'transform': 'scale(' + scale + ')', 
-        'transform-origin': 'left top',
+        'transform-origin': 'left top'
       }
     };
   }
