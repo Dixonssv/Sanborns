@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { CompactType, DisplayGrid, GridType, GridsterConfig, GridsterItem, GridsterItemComponent, GridsterItemComponentInterface } from 'angular-gridster2';
+import { CompactType, DisplayGrid, GridType, GridsterConfig, GridsterItem, GridsterItemComponentInterface } from 'angular-gridster2';
 import { CardModel } from '../../models/card.model';
 import { CardComponent } from '../cards/card/card.component';
 import { CardMapper } from '../../models/mappers/card.mapper';
@@ -16,8 +16,8 @@ export class GridsterTestComponent implements OnInit, AfterViewInit, OnDestroy{
   @ViewChild(PrintableDirective, {static: true}) 
   printableArea!: PrintableDirective;
 
-  options!: GridsterConfig;
   dashboard!: Array<GridsterItem>;
+  options!: GridsterConfig;
   itemToPush!: GridsterItemComponentInterface;
 
   cardMapper: CardMapper = new CardMapper();
@@ -33,18 +33,25 @@ export class GridsterTestComponent implements OnInit, AfterViewInit, OnDestroy{
       gridType: GridType.ScrollVertical,
       compactType: CompactType.CompactUp,
       displayGrid: DisplayGrid.None,
+      pushItems: true,
       pushDirections: {
-        north: false,
+        north: true,
         east: false,
         south: true,
         west: false
       },
       minCols: 12,
       maxCols: 12,
-      pushItems: true,
-      draggable: { enabled: true },
+      draggable: { 
+        enabled: true,
+        start: () => {console.log("Drag started!")}
+       },
       resizable: { enabled: true },
       disableScrollHorizontal: true,
+      swap: false,
+      swapWhileDragging: false,
+      //itemChangeCallback: this.onItemChanged,
+      itemValidateCallback: this.onItemValidate,
     };
 
     this.dashboardService.cardAdded.subscribe((card) => {
@@ -108,7 +115,17 @@ export class GridsterTestComponent implements OnInit, AfterViewInit, OnDestroy{
     let index = card.index;
     this.dashboard.splice(index!, 1);
 
-    this.elementRef.nativeElement
+    
+  }
+
+  onItemChanged(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
+    console.log("Items changed");
+  }
+
+  onItemValidate(item: GridsterItem) {
+    //console.log("Item validate");
+    
+    return true;
   }
   
 }

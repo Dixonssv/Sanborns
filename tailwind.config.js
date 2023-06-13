@@ -25,7 +25,8 @@ module.exports = {
     "./src/app/modules/detalles/components/cards/trayectoria/trayectoria.component.html",
     "./src/app/modules/detalles/components/cards/cursos/cursos.component.html",
 
-    "./src/app/modules/detalles/components/gridstack-test/gridstack-test.component.html"
+    "./src/app/modules/detalles/components/gridstack-test/gridstack-test.component.html",
+    "./src/app/modules/detalles/components/gridster-test/gridster-test.component.html"
 
   ],
   safelist: [
