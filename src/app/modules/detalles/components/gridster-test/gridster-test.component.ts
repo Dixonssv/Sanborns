@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { CompactType, DisplayGrid, GridType, GridsterConfig, GridsterItem, GridsterItemComponentInterface } from 'angular-gridster2';
+import { CompactType, DisplayGrid, GridType, GridsterComponent, GridsterConfig, GridsterItem, GridsterItemComponentInterface, GridsterPush } from 'angular-gridster2';
 import { CardModel } from '../../models/card.model';
 import { CardComponent } from '../cards/card/card.component';
 import { CardMapper } from '../../models/mappers/card.mapper';
@@ -7,6 +7,7 @@ import { DashboardService } from '../../services/dashboard/dashboard.service';
 import { PrintableDirective } from 'src/app/modules/shared/directives/printable/printable.directive';
 import { PrintService } from '../../services/print/print.service';
 import { Subscription } from 'rxjs';
+import { GridsterCompact } from 'angular-gridster2/lib/gridsterCompact.service';
 
 @Component({
   selector: 'app-gridster-test',
@@ -18,6 +19,9 @@ export class GridsterTestComponent implements OnInit, AfterViewInit, OnDestroy{
 
   @ViewChild(PrintableDirective, {static: true}) 
   printableArea!: PrintableDirective;
+
+  @ViewChild(GridsterComponent, {static: true})
+  gridster!: GridsterComponent;
 
   dashboard!: Array<GridsterItem>;
   options!: GridsterConfig;
@@ -73,8 +77,8 @@ export class GridsterTestComponent implements OnInit, AfterViewInit, OnDestroy{
       disableScrollHorizontal: true,
       swap: false,
       swapWhileDragging: false,
-      itemChangeCallback: this.onItemChanged,
-      itemValidateCallback: this.onItemValidate,
+      itemChangeCallback: this.onItemChanged.bind(this),
+      itemValidateCallback: this.onItemValidate.bind(this),
     };
 
     this.subscriptions.push(
@@ -116,7 +120,6 @@ export class GridsterTestComponent implements OnInit, AfterViewInit, OnDestroy{
           cardComponent.card = card;
 
           itemComponent.el.appendChild(cardComponent.hostElement.nativeElement);
-          console.log(itemComponent.el);
         })
       });
     
@@ -124,43 +127,46 @@ export class GridsterTestComponent implements OnInit, AfterViewInit, OnDestroy{
   }
 
   unloadCard(card: CardModel) {
-    console.log("Unload card");
-
-    /*
-    this.dashboardService.searchCard(card).subscribe((index: number) => {
-      console.log("index: " + index);
-      this.dashboard.splice(index, 1);
-    });
-    */
-
-    //console.log("index = " + this.dashboardService.indexOf(card));
-
-    //this.dashboard.splice(this.dashboardService.indexOf(card), 1);
-
-    //this.dashboardService.deleteCard(card).subscribe();
-
     this.dashboard.splice(card.index!, 1);
   }
 
   onItemChanged(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
-    //console.log("Items changed");
+    console.log("Items changed");
     //console.log("x: " + item.x + ", y: " + item.y);
+
   }
 
   onItemValidate(item: GridsterItem) {
-    //console.log("Item validate");
+    console.log("Item validate");
+
+    //console.log(this.gridster.grid);
+
+    //console.log("x: " + item.x + ", y: " + item.y);
     
+    //this.gridster.checkCollision(item);
+
     return true;
   }
 
   onDragStarted(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
-    //console.log("Drag started");
-    //console.log("x: " + item.x + ", y: " + item.y);
+    console.log("Drag started");
+    console.log("x: " + item.x + ", y: " + item.y);
+
+    itemComponent.el.style.zIndex = "10";
+
+    item.compactEnabled = false;
+
+    console.log("Compact: " + item.compactEnabled);
+    itemComponent.$item.compactEnabled;
+
+    console.log(this.gridster.compact.checkCompact());
   }
 
   onDragEnded(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
-    //console.log("Drag ended");
-    //console.log("x: " + item.x + ", y: " + item.y);
+    console.log("Drag ended");
+    console.log("x: " + item.x + ", y: " + item.y);
+
+    itemComponent.el.style.zIndex = "1";
   }
   
 }
