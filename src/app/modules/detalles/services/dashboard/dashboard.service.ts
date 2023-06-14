@@ -42,6 +42,8 @@ export class DashboardService {
 
       let card = this.cardMapper.mapFrom(type);
 
+      card.index = this.cards.length;
+
       this.searchCard(card).subscribe((index) => {
         if (index == -1) {
           this.cards.push(card);
@@ -116,6 +118,8 @@ export class DashboardService {
 
           let card = this.cards.splice(index, 1)[0];
 
+          this.updateCardIndexes();
+
           this.cardsChanged.next(true);
           this.cardDeleted.next(card);
         }
@@ -152,5 +156,9 @@ export class DashboardService {
       card.index = i;
       i++;
     });
+  }
+
+  indexOf(card: CardModel) {
+    return this.cards.indexOf(card);
   }
 }

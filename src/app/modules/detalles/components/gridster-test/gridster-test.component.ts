@@ -6,6 +6,7 @@ import { CardMapper } from '../../models/mappers/card.mapper';
 import { DashboardService } from '../../services/dashboard/dashboard.service';
 import { PrintableDirective } from 'src/app/modules/shared/directives/printable/printable.directive';
 import { PrintService } from '../../services/print/print.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-gridster-test',
@@ -13,6 +14,8 @@ import { PrintService } from '../../services/print/print.service';
   styleUrls: ['./gridster-test.component.css', '../cards/cards.css']
 })
 export class GridsterTestComponent implements OnInit, AfterViewInit, OnDestroy{
+  private subscriptions:Subscription[];
+
   @ViewChild(PrintableDirective, {static: true}) 
   printableArea!: PrintableDirective;
 
@@ -26,44 +29,11 @@ export class GridsterTestComponent implements OnInit, AfterViewInit, OnDestroy{
     public vcf: ViewContainerRef,
     public dashboardService: DashboardService,
     public printService: PrintService,
-    public elementRef: ElementRef) { }
+    public elementRef: ElementRef) { 
+      this.subscriptions = []
+    }
 
   ngOnInit() {
-    this.options = {
-      gridType: GridType.ScrollVertical,
-      compactType: CompactType.CompactUp,
-      displayGrid: DisplayGrid.None,
-      pushItems: true,
-      pushDirections: {
-        north: true,
-        east: false,
-        south: true,
-        west: false
-      },
-      minCols: 12,
-      maxCols: 12,
-      draggable: { 
-        enabled: true,
-        start: () => {console.log("Drag started!")}
-       },
-      resizable: { enabled: true },
-      disableScrollHorizontal: true,
-      swap: false,
-      swapWhileDragging: false,
-      //itemChangeCallback: this.onItemChanged,
-      itemValidateCallback: this.onItemValidate,
-    };
-
-    this.dashboardService.cardAdded.subscribe((card) => {
-      this.loadCard(card, this.vcf)
-    })
-
-    this.dashboardService.cardDeleted.pipe().subscribe((card) => {
-      setTimeout(() => {
-        this.unloadCard(card);
-    }, 0);
-    })
-
     this.dashboard = [
       //{cols: 4, rows: 2, y: 0, x: 0, initCallback: this.initItem.bind(this)},
       //{cols: 4, rows: 2, y: 0, x: 0, initCallback: (item, itemComponent) => {
@@ -80,6 +50,44 @@ export class GridsterTestComponent implements OnInit, AfterViewInit, OnDestroy{
       {cols: 1, rows: 1, y: 3, x: 4},
       {cols: 1, rows: 1, y: 0, x: 6}*/
     ];
+
+    this.options = {
+      gridType: GridType.ScrollVertical,
+      compactType: CompactType.CompactUp,
+      displayGrid: DisplayGrid.None,
+      pushItems: true,
+      pushDirections: {
+        north: true,
+        east: false,
+        south: true,
+        west: false
+      },
+      minCols: 12,
+      maxCols: 12,
+      draggable: { 
+        enabled: true,
+        start: this.onDragStarted.bind(this),
+        stop: this.onDragEnded.bind(this),
+       },
+      resizable: { enabled: true },
+      disableScrollHorizontal: true,
+      swap: false,
+      swapWhileDragging: false,
+      itemChangeCallback: this.onItemChanged,
+      itemValidateCallback: this.onItemValidate,
+    };
+
+    this.subscriptions.push(
+      this.dashboardService.cardAdded.subscribe((card) => {
+        this.loadCard(card, this.vcf)
+      }),
+      this.dashboardService.cardDeleted.pipe().subscribe((card) => {
+        setTimeout(() => {
+          this.unloadCard(card);
+        }, 0);
+      })
+    )
+    
   }
 
   ngAfterViewInit(): void {
@@ -87,11 +95,15 @@ export class GridsterTestComponent implements OnInit, AfterViewInit, OnDestroy{
   }
 
   ngOnDestroy(): void {
+
+    this.subscriptions.forEach((subscription) => {
+      subscription.unsubscribe();
+    })
+
     this.dashboardService.destroy();
   }
   
   loadCard(card:CardModel, viewContainerRef:ViewContainerRef) {
-    card.index = this.dashboard.length;
 
     this.dashboard.push(
       { 
@@ -112,20 +124,43 @@ export class GridsterTestComponent implements OnInit, AfterViewInit, OnDestroy{
   }
 
   unloadCard(card: CardModel) {
-    let index = card.index;
-    this.dashboard.splice(index!, 1);
+    console.log("Unload card");
 
-    
+    /*
+    this.dashboardService.searchCard(card).subscribe((index: number) => {
+      console.log("index: " + index);
+      this.dashboard.splice(index, 1);
+    });
+    */
+
+    //console.log("index = " + this.dashboardService.indexOf(card));
+
+    //this.dashboard.splice(this.dashboardService.indexOf(card), 1);
+
+    //this.dashboardService.deleteCard(card).subscribe();
+
+    this.dashboard.splice(card.index!, 1);
   }
 
   onItemChanged(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
-    console.log("Items changed");
+    //console.log("Items changed");
+    //console.log("x: " + item.x + ", y: " + item.y);
   }
 
   onItemValidate(item: GridsterItem) {
     //console.log("Item validate");
     
     return true;
+  }
+
+  onDragStarted(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
+    //console.log("Drag started");
+    //console.log("x: " + item.x + ", y: " + item.y);
+  }
+
+  onDragEnded(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
+    //console.log("Drag ended");
+    //console.log("x: " + item.x + ", y: " + item.y);
   }
   
 }
