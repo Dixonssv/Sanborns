@@ -29,6 +29,8 @@ export class GridsterTestComponent implements OnInit, AfterViewInit, OnDestroy{
 
   cardMapper: CardMapper = new CardMapper();
 
+  dragItem!: GridsterItem;
+
   constructor(
     public vcf: ViewContainerRef,
     public dashboardService: DashboardService,
@@ -89,6 +91,31 @@ export class GridsterTestComponent implements OnInit, AfterViewInit, OnDestroy{
         setTimeout(() => {
           this.unloadCard(card);
         }, 0);
+      }),
+      this.gridster.previewStyle$.subscribe((item) => {
+        /*
+        this.dashboard.forEach((item) => {
+          const pusher = new GridsterPush(this.gridster.getItemComponent(item)!);
+          console.log(pusher.pushItems(pusher.fromNorth));
+        })
+        */
+       //this.gridster.compact.checkCompact();
+       
+       /*
+       this.dashboard.forEach((item) => {
+        this.gridster.autoPositionItem(this.gridster.getItemComponent(item)!);
+        });
+        */
+
+        console.log("Moving item:");
+        console.log(item);
+
+        /*
+        console.log("Items:");
+        this.gridster.grid.forEach((itemComponent) => {
+          console.log(itemComponent.item);
+        })
+        */
       })
     )
     
@@ -131,42 +158,94 @@ export class GridsterTestComponent implements OnInit, AfterViewInit, OnDestroy{
   }
 
   onItemChanged(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
-    console.log("Items changed");
-    //console.log("x: " + item.x + ", y: " + item.y);
-
+    
   }
 
-  onItemValidate(item: GridsterItem) {
-    console.log("Item validate");
+  onItemValidate(k: GridsterItem) {
+    //console.log("Item validate");
 
-    //console.log(this.gridster.grid);
+    //this.compactUp(item);
 
-    //console.log("x: " + item.x + ", y: " + item.y);
-    
-    //this.gridster.checkCollision(item);
+    //console.log(item);
+
+    this.dashboard.forEach((item) => {
+      if(item !== this.dragItem) {
+        //this.compactUp(item);
+      } 
+    })
 
     return true;
   }
 
   onDragStarted(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
     console.log("Drag started");
-    console.log("x: " + item.x + ", y: " + item.y);
+    //console.log("x: " + item.x + ", y: " + item.y);
 
     itemComponent.el.style.zIndex = "10";
 
-    item.compactEnabled = false;
-
-    console.log("Compact: " + item.compactEnabled);
-    itemComponent.$item.compactEnabled;
-
-    console.log(this.gridster.compact.checkCompact());
+    this.dragItem = item;
+    //console.log(this.dragItem);
   }
 
   onDragEnded(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
     console.log("Drag ended");
-    console.log("x: " + item.x + ", y: " + item.y);
+    //console.log("x: " + item.x + ", y: " + item.y);
 
     itemComponent.el.style.zIndex = "1";
+
+    //this.options.api?.optionsChanged?.();
+  }
+
+  /*
+  compactUp() {
+    this.dashboard.forEach((item) => {
+      while(!this.gridster.checkCollision(item)) {
+        item.y -= 1;
+      }
+      item.y += item.y < 0 ? 1 : 0;
+      console.log("x: " + item.x + ", y: " + item.y);
+
+      this.gridster.updateGrid();
+      this.options.api?.optionsChanged?.();
+    })
+  }
+  */
+
+  compactUp(item: GridsterItem) {
+    //console.log(item);
+
+    while(!this.gridster.checkCollision(item) && item.y > 0) {
+      console.log(item);
+      item.y -= 1;
+    }
+  }
+
+  checkCollision(item: GridsterItem) {
+    // Omite el dragItem
+    let collition = false;
+
+    if(item == this.dragItem) {
+      return;
+    }
+
+    this.dashboard.forEach((dashboardItem) => {
+      if(dashboardItem !== this.dragItem && dashboardItem !== item) {
+        if(this.collides(item, dashboardItem)) {
+          collition = true;
+        }
+      }
+    })
+
+    return collition;
+  }
+
+  collides(itemA: GridsterItem, itemB: GridsterItem): boolean {
+    return (
+      !(itemA.x + itemA.cols < itemB.x) && // no esta a la izquierda
+      !(itemA.x > itemB.x + itemB.cols) && // no esta a la derecha
+      !(itemA.y + itemA.rows < itemB.y) && // no esta arriba
+      !(itemA.y > itemB.y + itemB.rows)    // no esta abajo
+    );
   }
   
 }
