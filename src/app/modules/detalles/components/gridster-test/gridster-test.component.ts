@@ -116,6 +116,9 @@ export class GridsterTestComponent implements OnInit, AfterViewInit, OnDestroy{
           console.log(itemComponent.item);
         })
         */
+      }),
+      this.gridster.calculateLayout$.subscribe(() => {
+        console.log("Calculate layout");
       })
     )
     
