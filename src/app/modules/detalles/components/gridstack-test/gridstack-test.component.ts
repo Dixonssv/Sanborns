@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { GridStack } from 'gridstack';
+import { GridItemHTMLElement, GridStack } from 'gridstack';
 import { GridstackComponent, gsCreateNgComponents, NgGridStackWidget, nodesCB, BaseWidget, NgGridStackOptions } from 'gridstack/dist/angular';
 import { CardComponent } from '../cards/card/card.component';
 import { CardMapper } from '../../models/mappers/card.mapper';
@@ -52,6 +52,8 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
         this.unloadCard(card);
       })
     )
+
+    
   }
 
   ngOnDestroy(): void {
@@ -64,6 +66,19 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
 
   ngAfterViewInit(): void {
     this.grid = GridStack.init();
+
+    this.grid.on("resizestart", (e: Event, item: GridItemHTMLElement) => {
+      console.log(item);
+      item.style.height = "";
+    })
+
+    this.grid.on('resizestop', (e: Event, item: GridItemHTMLElement) => {
+      let height = getComputedStyle(item).height;
+      console.log(height);
+      setTimeout(() => {
+        item.style.height = height;
+      }, 1);
+    })
     
     this.printService.printableObject = this.printableArea;
     console.log(this.printableArea);
@@ -81,7 +96,11 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
       input: {card: card}
     }
 
-    this.grid.addWidget(w);
+    let el= this.grid.addWidget(w);
+
+    let computedStyles = getComputedStyle(el);
+    el.style.height = computedStyles.height;
+    el.style.overflow = "auto";
   }
 
   unloadCard(card: CardModel) {
