@@ -52,8 +52,6 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
         this.unloadCard(card);
       })
     )
-
-    
   }
 
   ngOnDestroy(): void {
@@ -67,18 +65,50 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
   ngAfterViewInit(): void {
     this.grid = GridStack.init();
 
+    /*
     this.grid.on("resizestart", (e: Event, item: GridItemHTMLElement) => {
       console.log(item);
       item.style.height = "";
     })
+    */
 
     this.grid.on('resizestop', (e: Event, item: GridItemHTMLElement) => {
-      let height = getComputedStyle(item).height;
+      /*let height = getComputedStyle(item).height;
       console.log(height);
       setTimeout(() => {
         item.style.height = height;
       }, 1);
+      */
+     /*
+     this.setComputedStyles(item);
+     */
+    //e.preventDefault();
+    //console.log(getComputedStyle(item).height);
+
+    /*
+      setTimeout(() => {
+        this.setComputedStyles(item);
+      },500)
+      */
+     console.log("Rezise stop");
     })
+    
+
+    
+    this.grid.on('change', (e: Event, items: any) => {
+      console.log("Change");
+
+      e.preventDefault();
+      items.forEach((item: any) => {
+        //console.log(getComputedStyle(item.el).height);
+        this.setComputedStyles(item.el);
+        //console.log(getComputedStyle(item.el).height);
+      }) 
+
+      //console.log(items);
+      
+    })
+    
     
     this.printService.printableObject = this.printableArea;
     console.log(this.printableArea);
@@ -98,9 +128,7 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
 
     let el= this.grid.addWidget(w);
 
-    let computedStyles = getComputedStyle(el);
-    el.style.height = computedStyles.height;
-    el.style.overflow = "auto";
+    this.setComputedStyles(el);
   }
 
   unloadCard(card: CardModel) {
@@ -120,6 +148,25 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
 
     return widget;
   }
+
+  setComputedStyles(el: GridItemHTMLElement) {
+    let computedStyles = getComputedStyle(el);
+
+    console.log(computedStyles.height);
+
+    setTimeout(() => {
+      el.style.height   = computedStyles.height;
+      el.style.overflow = computedStyles.overflow;
+      el.style.top      = computedStyles.top;
+      el.style.left     = computedStyles.left;
+  
+      /* Grid item content */
+      let content = el.firstChild as any;
+      content.style.inset = "5px";
+    }, 0)
+  }
+
+
 
 }
 
