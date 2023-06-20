@@ -38,7 +38,7 @@ export class PdfDownloadBtnComponent implements AfterViewInit{
     console.log("scale: " + scale);
 
     this.printDirective.printStyle = { 
-      'gridster': {
+      'gridstack': {
         'transform': 'scale(' + scale + ')', 
         'transform-origin': 'left top'
       }

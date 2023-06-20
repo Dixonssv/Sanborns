@@ -42,6 +42,7 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
   }
 
   ngOnInit(): void {
+    /* SUSCRIPCTIONES */
     this.subscriptions.push(
       // Card Added
       this.dashboardService.cardAdded.pipe().subscribe((card) => {
@@ -64,52 +65,28 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
 
   ngAfterViewInit(): void {
     this.grid = GridStack.init();
-
-    /*
-    this.grid.on("resizestart", (e: Event, item: GridItemHTMLElement) => {
-      console.log(item);
-      item.style.height = "";
-    })
-    */
-
-    this.grid.on('resizestop', (e: Event, item: GridItemHTMLElement) => {
-      /*let height = getComputedStyle(item).height;
-      console.log(height);
-      setTimeout(() => {
-        item.style.height = height;
-      }, 1);
-      */
-     /*
-     this.setComputedStyles(item);
-     */
-    //e.preventDefault();
-    //console.log(getComputedStyle(item).height);
-
-    /*
-      setTimeout(() => {
-        this.setComputedStyles(item);
-      },500)
-      */
-     console.log("Rezise stop");
-    })
     
+    /* EVENTOS */
+    // On dragstart, On resize
+    this.grid.on('dragstart resizestart', (e: Event, item: GridItemHTMLElement) => {
+      this.grid.getGridItems().forEach((gridItem) => {
+        if(gridItem != item) {
+          this.removeStyles(gridItem);
+        }
+      })
+    });
 
-    
-    this.grid.on('change', (e: Event, items: any) => {
-      console.log("Change");
-
+    // On change
+    this.grid.on('change', (e: Event, items: any) => {;
       e.preventDefault();
-      items.forEach((item: any) => {
-        //console.log(getComputedStyle(item.el).height);
-        this.setComputedStyles(item.el);
-        //console.log(getComputedStyle(item.el).height);
-      }) 
+      e.stopPropagation();
 
-      //console.log(items);
-      
-    })
+      this.grid.getGridItems().forEach((item: any) => {
+        this.setComputedStyles(item);
+      }) 
+    });
     
-    
+    /* PRINTABLE */
     this.printService.printableObject = this.printableArea;
     console.log(this.printableArea);
   }
@@ -166,7 +143,9 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
     }, 0)
   }
 
-
+  removeStyles(el: GridItemHTMLElement) {
+    el.removeAttribute("style");
+  }
 
 }
 
