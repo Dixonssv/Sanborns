@@ -77,14 +77,18 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
     });
 
     // On change
-    this.grid.on('change', (e: Event, items: any) => {;
+    /*
+    this.grid.on('change', (e: Event, items: any) => {
       e.preventDefault();
       e.stopPropagation();
 
       this.grid.getGridItems().forEach((item: any) => {
+        console.log(item.getAttribute("style"));
         this.setComputedStyles(item);
-      }) 
+        console.log(item.getAttribute("style"));
+      });
     });
+    */
     
     /* PRINTABLE */
     this.printService.printableObject = this.printableArea;
@@ -105,7 +109,7 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
 
     let el= this.grid.addWidget(w);
 
-    this.setComputedStyles(el);
+    //this.setComputedStyles(el);
   }
 
   unloadCard(card: CardModel) {
@@ -126,6 +130,13 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
     return widget;
   }
 
+  setPrintingStyle() {
+    this.grid.getGridItems().forEach((item: GridItemHTMLElement) => {
+      this.setComputedStyles(item);
+    })
+    console.log("Printing...");
+  }
+
   setComputedStyles(el: GridItemHTMLElement) {
     let computedStyles = getComputedStyle(el);
 
@@ -140,13 +151,16 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
       /* Grid item content */
       let content = el.firstChild as any;
       content.style.inset = "5px";
-    }, 0)
+    }, 0);
+
+    //console.log(getComputedStyle(el).height);
+    //console.log(el.getAttribute("style"));
   }
 
   removeStyles(el: GridItemHTMLElement) {
     el.removeAttribute("style");
   }
-
+  
 }
 
 

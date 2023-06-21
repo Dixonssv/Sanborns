@@ -1,9 +1,16 @@
-import { AfterViewInit, Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, EventEmitter, HostListener, Output, Renderer2 } from '@angular/core';
 
 @Directive({
   selector: '[appPrintable]'
 })
 export class PrintableDirective implements AfterViewInit{
+
+  @Output()
+  onPrint: EventEmitter<any> = new EventEmitter();
+
+  public get element() : HTMLElement {
+    return this.hostElement.nativeElement as HTMLElement;
+  }
 
   constructor(
     private renderer: Renderer2,
@@ -11,16 +18,11 @@ export class PrintableDirective implements AfterViewInit{
   ) { }
 
   ngAfterViewInit(): void {
-    /*
-    this.renderer.setStyle(
-      this.hostElement.nativeElement,
-      "margin",
-      "auto"
-    );
-    */
-
     this.setWith();
-    //this.setHeight();
+  }
+
+  print() {
+    this.onPrint.emit(null);
   }
 
   @HostListener('window:resize', ['$event'])

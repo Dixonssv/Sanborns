@@ -1,4 +1,4 @@
-import { AfterViewInit, HostListener, Injectable, OnInit } from '@angular/core';
+import { AfterViewInit, EventEmitter, HostListener, Injectable, OnInit } from '@angular/core';
 import { NgxPrintDirective } from 'ngx-print';
 import { PrintableDirective } from 'src/app/modules/shared/directives/printable/printable.directive';
 
@@ -37,6 +37,14 @@ export class PrintService {
 
   constructor() { 
 
+  }
+
+  printingPreprocess() {
+    //let printElement = this.printableObject.element;
+    //printElement.style.transform = "scale(" + this.calculatePrintScale() + ")";
+    //printElement.style.transformOrigin = "left top";
+
+    this.printableObject.print();
   }
 
   calculatePrintScale() {
