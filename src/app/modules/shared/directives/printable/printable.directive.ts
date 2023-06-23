@@ -21,8 +21,10 @@ export class PrintableDirective implements AfterViewInit{
     this.setWith();
   }
 
-  print() {
-    this.onPrint.emit(null);
+  printing(state: boolean) {
+    if(state === true) {
+      this.onPrint.emit(null);
+    }
   }
 
   @HostListener('window:resize', ['$event'])

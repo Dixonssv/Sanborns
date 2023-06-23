@@ -10,44 +10,38 @@ import { ExpedienteService } from 'src/app/modules/shared/services/expediente/ex
 })
 export class PdfDownloadBtnComponent implements AfterViewInit{
 
+  public printScale: number = 1;
+
   @ViewChild(NgxPrintDirective, {static: true}) printDirective!: NgxPrintDirective;
 
   constructor(
     public expedienteService: ExpedienteService,
     public printService: PrintService) {
+    
   }
 
   ngAfterViewInit(): void {
-    this.printDirective.printTitle = "Expediente digital de " + this.expedienteService.getEmpleado().nombre;
+    console.log("View Init");
+    this.setPrintTitle();
+    this.setPrintStyle();
   }
 
-  startPrinting() {
-    let scale = this.printService.calculatePrintScale();
-    this.printDirective.printStyle = { 
-      'gridster': {
-        'transform': 'scale(' + scale + ')', 
-        'transform-origin': 'left top'
-      }
-    };
-
-    this.printService.printingPreprocess();
-
+  setPrintTitle() {
+    this.printDirective.printTitle = "Expediente digital de " + this.expedienteService.getEmpleado().nombre;
+    console.log(this.printDirective.printTitle);
   }
 
   @HostListener('window:resize', ['$event']) 
   setPrintStyle() {
-    //this.printService.printingPreprocess();
+    let scale = this.printService.calculatePrintScale();
 
-    //let scale = this.printService.calculatePrintScale();
-    //console.log("scale: " + scale);
+    console.log("scale: " + scale);
 
-    /*
     this.printDirective.printStyle = { 
       'gridstack': {
         'transform': 'scale(' + scale + ')', 
-        'transform-origin': 'left top'
+        'transform-origin': 'left top',
       }
     };
-    */
   }
 }

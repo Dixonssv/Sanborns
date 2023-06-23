@@ -11,28 +11,16 @@ export class PrintService {
   printBtn!: NgxPrintDirective;
 
   // 96 es el DPI clasico. Buscar otra manera de calcularlo para evitar Hard-coding
-  printResolution = 96;
+  printResolution = 120;
 
   // Tamanios de papel
-  readonly papers = {
-    LETTER: {
-      width: (dpi: number) => {
-        switch(dpi) {
-          case 72:
-            return 612;
-          case 96:
-            return 816;
-          case 150:
-            return 1276;
-          case 200:
-            return 1701;
-          case 300:
-            return 2551;
-          default:
-            return 816;
-        }
-      }, 
-      height: 791}
+  readonly paperType = {
+    LETTER: (dpi: number) => {
+      return {
+        width:  dpi * 8.5,
+        height: dpi * 11,
+      }
+    },
   }
 
   constructor() { 
@@ -40,15 +28,11 @@ export class PrintService {
   }
 
   printingPreprocess() {
-    //let printElement = this.printableObject.element;
-    //printElement.style.transform = "scale(" + this.calculatePrintScale() + ")";
-    //printElement.style.transformOrigin = "left top";
-
-    this.printableObject.print();
+    this.printableObject.printing(true);
   }
 
   calculatePrintScale() {
-    const paperWidth = this.papers.LETTER.width(this.printResolution);
+    const paperWidth = this.paperType.LETTER((this.printResolution)).width;
 
     let objectWidth = this.printableObject.getWidth();
 
