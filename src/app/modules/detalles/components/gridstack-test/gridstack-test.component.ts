@@ -42,7 +42,6 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
   }
 
   ngOnInit(): void {
-    /* SUSCRIPCTIONES */
     this.subscriptions.push(
       // Card Added
       this.dashboardService.cardAdded.pipe().subscribe((card) => {
@@ -77,20 +76,15 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
     });
 
     // On change
-    /*
-    this.grid.on('change', (e: Event, items: any) => {
+    this.grid.on('change', (e: Event, items: any) => {;
       e.preventDefault();
       e.stopPropagation();
 
       this.grid.getGridItems().forEach((item: any) => {
-        console.log(item.getAttribute("style"));
         this.setComputedStyles(item);
-        console.log(item.getAttribute("style"));
-      });
+      }) 
     });
-    */
     
-    /* PRINTABLE */
     this.printService.printableObject = this.printableArea;
     console.log(this.printableArea);
   }
@@ -160,7 +154,7 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
   removeStyles(el: GridItemHTMLElement) {
     el.removeAttribute("style");
   }
-  
+
 }
 
 

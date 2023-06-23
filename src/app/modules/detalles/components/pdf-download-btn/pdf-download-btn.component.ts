@@ -24,7 +24,7 @@ export class PdfDownloadBtnComponent implements AfterViewInit{
   startPrinting() {
     let scale = this.printService.calculatePrintScale();
     this.printDirective.printStyle = { 
-      'gridstack': {
+      'gridster': {
         'transform': 'scale(' + scale + ')', 
         'transform-origin': 'left top'
       }
