@@ -21,27 +21,13 @@ export class PdfDownloadBtnComponent implements AfterViewInit{
   }
 
   ngAfterViewInit(): void {
-    console.log("View Init");
-    this.setPrintTitle();
-    this.setPrintStyle();
+    this.printService.printBtn = this.printDirective;
+
+    let title = "Expediente digital de " + this.expedienteService.getEmpleado().nombre;
+    this.printService.setPrintTitle(title);
   }
 
-  setPrintTitle() {
-    this.printDirective.printTitle = "Expediente digital de " + this.expedienteService.getEmpleado().nombre;
-    console.log(this.printDirective.printTitle);
-  }
-
-  @HostListener('window:resize', ['$event']) 
-  setPrintStyle() {
-    let scale = this.printService.calculatePrintScale();
-
-    console.log("scale: " + scale);
-
-    this.printDirective.printStyle = { 
-      'gridstack': {
-        'transform': 'scale(' + scale + ')', 
-        'transform-origin': 'left top',
-      }
-    };
+  triggerPrint() {
+    this.printService.print();
   }
 }

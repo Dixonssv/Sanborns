@@ -14,7 +14,7 @@ export class PrintService {
   printResolution = 120;
 
   // Tamanios de papel
-  readonly paperType = {
+  private readonly paperType = {
     LETTER: (dpi: number) => {
       return {
         width:  dpi * 8.5,
@@ -27,11 +27,31 @@ export class PrintService {
 
   }
 
-  printingPreprocess() {
-    this.printableObject.printing(true);
+  print() {
+    this.setPrintStyle();
+    this.printableObject.onPrintStart.emit();
+    this.printBtn.print();
+    this.printableObject.afterPrintStart.emit();
   }
 
-  calculatePrintScale() {
+  setPrintTitle(title: string) {
+    this.printBtn.printTitle = title;
+  }
+
+  setPrintStyle() {
+    let scale = this.calculatePrintScale();
+
+    console.log("scale: " + scale);
+
+    this.printBtn.printStyle = { 
+      'body': {
+        'transform': 'scale(' + scale + ')', 
+        'transform-origin': 'left top',
+      }
+    };
+  }
+
+  private calculatePrintScale() {
     const paperWidth = this.paperType.LETTER((this.printResolution)).width;
 
     let objectWidth = this.printableObject.getWidth();

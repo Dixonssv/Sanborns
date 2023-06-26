@@ -6,7 +6,9 @@ import { AfterViewInit, Directive, ElementRef, EventEmitter, HostListener, Outpu
 export class PrintableDirective implements AfterViewInit{
 
   @Output()
-  onPrint: EventEmitter<any> = new EventEmitter();
+  public onPrintStart: EventEmitter<void> = new EventEmitter();
+  @Output()
+  public afterPrintStart: EventEmitter<void> = new EventEmitter();
 
   public get element() : HTMLElement {
     return this.hostElement.nativeElement as HTMLElement;
@@ -19,12 +21,6 @@ export class PrintableDirective implements AfterViewInit{
 
   ngAfterViewInit(): void {
     this.setWith();
-  }
-
-  printing(state: boolean) {
-    if(state === true) {
-      this.onPrint.emit(null);
-    }
   }
 
   @HostListener('window:resize', ['$event'])

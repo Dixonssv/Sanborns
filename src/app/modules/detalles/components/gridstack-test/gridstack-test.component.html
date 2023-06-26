@@ -1,7 +1,6 @@
 <gridstack 
     [options]="gridOptions" class="w-full h-auto" 
-    appPrintable>
-            <!--<gridstack-item *ngFor="let item of items" [options]="item">
-                OPTIONS NO FUNCIONA
-            </gridstack-item>-->
+    appPrintable
+    (onPrintStart)="setAllComputedStyles()"
+    (afterPrintStart)="removeAllStyes()">
 </gridstack>

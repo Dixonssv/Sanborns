@@ -66,12 +66,13 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
     this.grid = GridStack.init();
     
     /* EVENTOS */
+    /*
     // On dragstart, On resize
     this.grid.on('dragstart resizestart', (e: Event, item: GridItemHTMLElement) => {
       // Evitar overlap de tarjetas
       this.grid.getGridItems().forEach((gridItem) => {
         if(gridItem != item) {
-          this.removeStyles(gridItem);
+          //this.removeStyles(gridItem);
         }
       })
     });
@@ -80,7 +81,7 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
     this.grid.on("resizestop", (e: Event, item: GridItemHTMLElement) => {
       // Evita que las tarjetas regresen a su tamaño anterior
       setTimeout(() => {
-        this.removeStyles(item);
+        //this.removeStyles(item);
       })
     })
     
@@ -89,11 +90,12 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
       // Establece los estilos estaticos
       setTimeout(() => {
         this.grid.getGridItems().forEach((item:any) => {
-          this.setComputedStyles(item);
+          //this.setComputedStyles(item);
         });
       }, 300)
-      /* 300ms es el tiempo establecido por gridstack para hacer la transicion completa del resize. */
+      // 300ms es el tiempo establecido por gridstack para hacer la transicion completa del resize.
     });
+    */
     
     this.printService.printableObject = this.printableArea;
   }
@@ -112,7 +114,7 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
 
     let el= this.grid.addWidget(w);
 
-    this.setComputedStyles(el);
+    //this.setComputedStyles(el);
   }
 
   unloadCard(card: CardModel) {
@@ -138,17 +140,36 @@ export class GridstackTestComponent implements OnInit, OnDestroy, AfterViewInit{
     //console.log(computedStyles.height);
 
     el.style.height   = computedStyles.height;
-    el.style.overflow = computedStyles.overflow;
     el.style.top      = computedStyles.top;
     el.style.left     = computedStyles.left;
 
     /* Grid item content */
     let content = el.firstChild as any;
     content.style.inset = "5px";
+    content.style.overflow = "hidden";
+  }
+
+  setAllComputedStyles() {
+    console.log("Setting styles...");
+    this.grid.getGridItems().forEach((item: any) => {
+      this.setComputedStyles(item);
+    });
+    console.log("Styles set");
   }
 
   removeStyles(el: GridItemHTMLElement) {
     el.removeAttribute("style");
+  }
+
+  removeAllStyes() {
+    console.log("Removing styles...");
+    this.grid.getGridItems().forEach((item: any) => {
+      this.removeStyles(item);
+
+      let content = item.firstChild as any;
+      this.removeStyles(content);
+    });
+    console.log("Styles removed");
   }
 
 }
