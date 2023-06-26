@@ -40,8 +40,7 @@ export class PrintService {
 
   setPrintStyle() {
     let scale = this.calculatePrintScale();
-
-    console.log("scale: " + scale);
+    //console.log("scale: " + scale);
 
     this.printBtn.printStyle = { 
       'body': {
@@ -52,7 +51,7 @@ export class PrintService {
   }
 
   private calculatePrintScale() {
-    const paperWidth = this.paperType.LETTER((this.printResolution)).width;
+    const paperWidth = this.paperType.LETTER(this.printResolution).width;
 
     let objectWidth = this.printableObject.getWidth();
 

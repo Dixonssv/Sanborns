@@ -26,28 +26,26 @@ export class PrintableDirective implements AfterViewInit{
   @HostListener('window:resize', ['$event'])
   setWith() {
     
-    this.renderer.removeStyle(this.hostElement.nativeElement, "width");
-    this.renderer.removeStyle(this.hostElement.nativeElement, "min-width");
+    this.renderer.removeStyle(this.element, "width");
+    this.renderer.removeStyle(this.element, "min-width");
 
-    const styles = getComputedStyle(this.hostElement.nativeElement);
-
-    let currentWidth = +styles.width.replace("px", "");
+    let currentWidth = this.getWidth();
 
     this.renderer.setStyle(
-      this.hostElement.nativeElement,
+      this.element,
       "width",
       currentWidth + "px"
     );
 
     this.renderer.setStyle(
-      this.hostElement.nativeElement,
+      this.element,
       "min-width",
       currentWidth + "px"
     );
   }
 
   getWidth() {
-    const styles = getComputedStyle(this.hostElement.nativeElement);
+    const styles = getComputedStyle(this.element);
 
     return +styles.width.replace("px", "");
   }

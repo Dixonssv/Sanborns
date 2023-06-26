@@ -3,6 +3,9 @@ import { ViewportRuler } from '@angular/cdk/overlay';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
+/**
+ * @deprecated
+ */
 @Injectable({
   providedIn: 'root'
 })

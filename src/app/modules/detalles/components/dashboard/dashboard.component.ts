@@ -1,18 +1,13 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewContainerRef, AfterViewInit  } from '@angular/core';
-
-import { AddDirective } from 'src/app/modules/shared/directives/add/add.directive';
-
-import { CardModel } from '../../models/card.model';
-
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { GridItemHTMLElement, GridStack } from 'gridstack';
+import { GridstackComponent, NgGridStackWidget, NgGridStackOptions } from 'gridstack/dist/angular';
 import { CardComponent } from '../cards/card/card.component';
-import { CdkDropList, CdkDropListGroup } from '@angular/cdk/drag-drop';
+import { CardMapper } from '../../models/mappers/card.mapper';
 import { DashboardService } from '../../services/dashboard/dashboard.service';
-import { DragAndDropService } from '../../services/drag-and-drop/drag-and-drop.service';
+import { CardModel } from '../../models/card.model';
+import { Subscription } from 'rxjs';
 import { PrintableDirective } from 'src/app/modules/shared/directives/printable/printable.directive';
 import { PrintService } from '../../services/print/print.service';
-import { Subscription } from 'rxjs';
-import { ScrollService } from '../../services/scroll/scroll.service';
-
 
 @Component({
   selector: 'app-dashboard',
@@ -20,77 +15,45 @@ import { ScrollService } from '../../services/scroll/scroll.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
+  @ViewChild(PrintableDirective, {static: true}) 
+  printableArea!: PrintableDirective;
 
-  @ViewChild(AddDirective, {static: true}) adHost!: AddDirective;
+  grid!: GridStack;
 
-  @ViewChild(CdkDropListGroup, {static: false}) dashboard!: CdkDropListGroup<CdkDropList>;
+  gridOptions: NgGridStackOptions = {
+    margin: 5,
+    minRow: 1,
+  }
 
-  @ViewChild("dashboard") dashboardElement!: ElementRef;
-
-  @ViewChild(PrintableDirective, {static: true}) printableArea!: PrintableDirective;
-
-  loadedCards:any;
-
-  scrollY:number = 0;
-
+  cardMapper: CardMapper = new CardMapper();
+  
   // Suscripciones
   private subscriptions:Subscription[];
 
   constructor(
-    public dashboarService: DashboardService,
-    public dragAndDropService: DragAndDropService,
-    public printService: PrintService,
-    public scrollService: ScrollService) {  
-      this.subscriptions = [];
+    public dashboardService: DashboardService, 
+    public printService: PrintService
+  ) {
+    this.subscriptions = [];
+
+    GridstackComponent.addComponentToSelectorType([CardComponent]);
   }
 
   ngOnInit(): void {
-
-    const viewContainerRef = this.adHost.viewContainerRef;
-
     this.subscriptions.push(
-      // Cards Changed
-      this.dashboarService.cardsChanged.pipe().subscribe(() => {
-        this.scrollService.setCurrentScroll();
-
-        viewContainerRef.clear();
-  
-        this.dashboarService.updateCardIndexes();
-
-        this.dashboarService.getCards().subscribe((card) => {
-          this.loadCard(card, viewContainerRef);
-          console.log("Card loaded");
-          this.scrollService.scroll();
-        });
-
-        // Scrol to pivot
-        
+      // Card Added
+      this.dashboardService.cardAdded.pipe().subscribe((card) => {
+        this.loadCard(card);
       }),
-      // Card in Dashboard 
-      this.dashboarService.cardInDashboard.pipe().subscribe((index: number) =>  {
-        let card = this.getDropListAt(index);
-  
-        this.shake(card);
-      }),
-      // Items Moved
-      this.dragAndDropService.itemsMoved.pipe().subscribe((positions) => {
-        console.log("Move " + positions.from_index + " to " + positions.to_index);
-        this.dashboarService.moveCard(positions.from_index, positions.to_index).subscribe();
-
-        //this.dashboarService.updateCardIndexes();
-      }),
-      // Items Swapped
-      this.dragAndDropService.itemsSwapped.pipe().subscribe((positions) => {
-        console.log("Swap " + positions.from_index + " and " + positions.to_index);
-        this.dashboarService.swapCards(positions.from_index, positions.to_index).subscribe();
-
-        //this.dashboarService.updateCardIndexes();
+      // Card Deleted
+      this.dashboardService.cardDeleted.pipe().subscribe((card) => {
+        this.unloadCard(card);
       })
-    );
+    )
   }
 
-  ngOnDestroy():void {
-    this.dashboarService.destroy().subscribe();
+  ngOnDestroy(): void {
+    this.dashboardService.destroy().subscribe();
 
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
@@ -98,47 +61,80 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
   }
 
   ngAfterViewInit(): void {
-    this.dragAndDropService.dropListGroup = this.dashboard;
-
+    this.grid = GridStack.init();
+    
     this.printService.printableObject = this.printableArea;
   }
 
-  loadCard(card:CardModel, viewContainerRef:ViewContainerRef) {
-    const cardComponent = viewContainerRef.createComponent(CardComponent);
-    //cardComponent.instance.setSize(card.x, card.y);
-    //cardComponent.instance.setContent(card.component);
-    cardComponent.instance.setCard(card);
+  loadCard(card: CardModel) {
+    let w: NgGridStackWidget = {
+      id: card.title,
+      x: 0,
+      y: 0,
+      autoPosition: true,
+      minW: card.x,
+      minH: card.y,
+      selector: 'app-card',
+      input: {card: card}
+    }
+
+    let el= this.grid.addWidget(w);
   }
 
-  dropListEnterPredicate() {
-    return false;
+  unloadCard(card: CardModel) {
+    let widget = this.getCardWidget(card);
+
+    this.grid.removeWidget(widget);
   }
 
-  getDropListAt(index: number) {
-    /*
-    let i = 0;
-    let dropList:any;
+  getCardWidget(card: CardModel) {
+    let widget: any;
 
-    this.dashboard._items.forEach((card:any) => {
-      if(i == index) {
-        dropList = card;
+    this.grid.getGridItems().forEach((el) => {
+      if(el.gridstackNode?.id === card.title) {
+        widget = el;
       }
+    })
 
-      i++;
+    return widget;
+  }
+
+  setComputedStyles(el: GridItemHTMLElement) {
+    let computedStyles = getComputedStyle(el);
+
+    el.style.height   = computedStyles.height;
+    el.style.top      = computedStyles.top;
+    el.style.left     = computedStyles.left;
+
+    /* Grid item content */
+    let content = el.firstChild as any;
+    content.style.inset = "5px";
+    content.style.overflow = "hidden";
+  }
+
+  setAllComputedStyles() {
+    console.log("Setting styles...");
+    this.grid.getGridItems().forEach((item: any) => {
+      this.setComputedStyles(item);
     });
-    */
-
-    let dropList = this.dashboardElement.nativeElement.children.item(index); //HTMLElement
-
-    return dropList;
+    console.log("Styles set");
   }
 
-  shake(element: any) {
-      // SHAKE ANIMATION
-      element.classList.add("shake");
-      setTimeout(() => {
-        element.classList.remove("shake");
-      },200);
+  removeStyles(el: GridItemHTMLElement) {
+    el.removeAttribute("style");
   }
-    
+
+  removeAllStyes() {
+    console.log("Removing styles...");
+    this.grid.getGridItems().forEach((item: any) => {
+      this.removeStyles(item);
+
+      let content = item.firstChild as any;
+      this.removeStyles(content);
+    });
+    console.log("Styles removed");
+  }
+
+
+
 }

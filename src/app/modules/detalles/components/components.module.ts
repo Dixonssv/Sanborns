@@ -8,12 +8,9 @@ import { DetallesComponent } from './detalles/detalles.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { PdfDownloadBtnComponent } from './pdf-download-btn/pdf-download-btn.component';
-import { GridstackTestComponent } from './gridstack-test/gridstack-test.component';
 
 import { CardComponent } from './cards/card/card.component';
 import { SharedModule } from '../../shared/shared.module';
-import { GridsterTestComponent } from './gridster-test/gridster-test.component';
-import { GridsterModule } from 'angular-gridster2';
 
 
 @NgModule({
@@ -23,8 +20,6 @@ import { GridsterModule } from 'angular-gridster2';
     SidebarComponent,
     PdfDownloadBtnComponent,
     CardComponent,
-    GridstackTestComponent,
-    GridsterTestComponent
   ],
   imports: [
     CommonModule,
@@ -32,7 +27,6 @@ import { GridsterModule } from 'angular-gridster2';
     DragDropModule,
     NgxPrintModule,
     GridstackModule,
-    GridsterModule
   ],
   exports: [
     DetallesComponent,
@@ -40,7 +34,6 @@ import { GridsterModule } from 'angular-gridster2';
     SidebarComponent,
     PdfDownloadBtnComponent,
     CardComponent,
-    GridstackTestComponent
   ]
 })
 export class ComponentsModule { }
