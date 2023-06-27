@@ -15,7 +15,7 @@ export class WebStorageService {
 
   storeData(keyName: string, value: any) {
     localStorage.setItem(keyName, JSON.stringify(value));
-    //console.log(keyName + " stored as: " + localStorage.getItem(keyName));
+    console.log(keyName + " stored as: " + localStorage.getItem(keyName));
   }
 
   clearStorage() {
