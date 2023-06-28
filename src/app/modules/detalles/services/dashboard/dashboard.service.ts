@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CardModel } from '../../models/card.model';
-import { CardMapper } from '../../models/mappers/card.mapper';
+import { CardMapper, StringCardMapper } from '../../models/mappers/card.mapper';
 import { Observable, Subject, from } from 'rxjs';
 
 @Injectable({
@@ -13,7 +13,7 @@ export class DashboardService {
 
   private cards: CardModel[];
 
-  private cardMapper: CardMapper;
+  private stringCardMapper: StringCardMapper;
 
   cardsChanged = new Subject<boolean>();
   cardInDashboard = new Subject<number>();
@@ -24,7 +24,7 @@ export class DashboardService {
   constructor() {
     this.cards = [];
 
-    this.cardMapper = new CardMapper();
+    this.stringCardMapper = new StringCardMapper();
   }
 
   getCards(): Observable<CardModel> {
@@ -40,7 +40,7 @@ export class DashboardService {
   addCard(type: string): Observable<void> {
     return new Observable<void>(observable => {
 
-      let card = this.cardMapper.mapFrom(type);
+      let card = this.stringCardMapper.mapFrom(type);
 
       card.index = this.cards.length;
 

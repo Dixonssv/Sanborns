@@ -2,54 +2,93 @@ import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewContainerRe
 import { GridItemHTMLElement, GridStack } from 'gridstack';
 import { GridstackComponent, NgGridStackWidget, NgGridStackOptions } from 'gridstack/dist/angular';
 import { CardComponent } from '../cards/card/card.component';
-import { CardMapper } from '../../models/mappers/card.mapper';
+import { CardMapper, StringCardMapper, WidgetCardMapper } from '../../models/mappers/card.mapper';
 import { DashboardService } from '../../services/dashboard/dashboard.service';
 import { CardModel } from '../../models/card.model';
 import { Subscription } from 'rxjs';
 import { PrintableDirective } from 'src/app/modules/shared/directives/printable/printable.directive';
 import { PrintService } from '../../services/print/print.service';
+import { WebStorageMethods, WebStorageService } from 'src/app/modules/shared/services/webStorage/web-storage.service';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
+export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, WebStorageMethods{
   @ViewChild(PrintableDirective, {static: true}) 
   printableArea!: PrintableDirective;
 
   grid!: GridStack;
+
+  serializedData: any;
 
   gridOptions: NgGridStackOptions = {
     margin: 5,
     minRow: 1,
   }
 
-  cardMapper: CardMapper = new CardMapper();
+  stringCardMapper: StringCardMapper = new StringCardMapper();
+  widgetCardMapper: WidgetCardMapper = new WidgetCardMapper();
   
   // Suscripciones
   private subscriptions:Subscription[];
 
   constructor(
     public dashboardService: DashboardService, 
-    public printService: PrintService
+    public printService: PrintService,
+    private webStorageService: WebStorageService
   ) {
     this.subscriptions = [];
 
     GridstackComponent.addComponentToSelectorType([CardComponent]);
   }
 
+  webStorageOnInit(): void {
+    //let serializedData = this.grid.save();
+    //this.webStorageService.storeData("dashboardSerializedData", serializedData);
+  }
+
+  webStorageAfterInit(): void {
+    //let serializedData = this.webStorageService.getData("dashboardSerializedData");
+    //if(serializedData !== null) {
+    //  this.grid.load(serializedData);
+    //}
+  }
+
+  webStorageOnDestroy(): void {
+    //this.webStorageService.removeData("dashboardSerializedData");
+    //this.webStorageService.getData("dashboardSerializedData");
+  }
+
   ngOnInit(): void {
+    
+    /* SUSCRIPCIONES */
     this.subscriptions.push(
       // Card Added
       this.dashboardService.cardAdded.pipe().subscribe((card) => {
         this.loadCard(card);
+        this.webStorageOnInit()
       }),
       // Card Deleted
       this.dashboardService.cardDeleted.pipe().subscribe((card) => {
         this.unloadCard(card);
+        this.webStorageOnInit()
       })
     )
+  }
+
+  ngAfterViewInit(): void {
+    this.grid = GridStack.init();
+
+    this.grid.on("change", () => {
+      console.log("Changed");
+      //this.webStorageOnInit()
+    });
+    
+    this.printService.printableObject = this.printableArea;
+
+    this.webStorageAfterInit();
   }
 
   ngOnDestroy(): void {
@@ -57,28 +96,15 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
 
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
-    })
-  }
+    });
 
-  ngAfterViewInit(): void {
-    this.grid = GridStack.init();
-    
-    this.printService.printableObject = this.printableArea;
+    this.webStorageOnDestroy();
   }
 
   loadCard(card: CardModel) {
-    let w: NgGridStackWidget = {
-      id: card.title,
-      x: 0,
-      y: 0,
-      autoPosition: true,
-      minW: card.x,
-      minH: card.y,
-      selector: 'app-card',
-      input: {card: card}
-    }
+    let widget = this.widgetCardMapper.mapTo(card);
 
-    let el= this.grid.addWidget(w);
+    let el= this.grid.addWidget(widget);
   }
 
   unloadCard(card: CardModel) {
@@ -135,6 +161,15 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit{
     console.log("Styles removed");
   }
 
+  saveGrid() {
+    //this.serializedData = this.grid.save();
+
+    //console.log(this.serializedData);
+  }
+
+  loadGrid() {
+    //console.log(this.grid.load(this.serializedData));
+  }
 
 
 }

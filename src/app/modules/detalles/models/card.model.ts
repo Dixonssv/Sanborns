@@ -4,6 +4,8 @@ export interface CardModel {
   index?: number;
   title: string;
   component: Type<any>;
-  x: number;
-  y: number;
+  w?: number;
+  h?: number;
+  x?: number;
+  y?: number;
 }

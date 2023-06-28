@@ -11,106 +11,130 @@ import { ActasComponent } from "../../components/cards/actas/actas.component";
 import { TrayectoriaComponent } from "../../components/cards/trayectoria/trayectoria.component";
 import { CursosComponent } from "../../components/cards/cursos/cursos.component";
 import { TestComponent } from "../../components/cards/test/test.component";
+import { NgGridStackWidget } from "gridstack/dist/angular";
 
-export class CardMapper extends Mapper<string, CardModel> {
-    override mapFrom(param: string): CardModel {
+export abstract class CardMapper<I> extends Mapper<I, CardModel> { }
+
+export class StringCardMapper extends CardMapper<string> {
+    override mapFrom(card: string): CardModel {
         //console.log("Map from: " + param);
 
-        switch(param) {
+        switch(card) {
             case "Datos personales": {
                 return {
-                    title: param.toUpperCase(),
+                    title: card.toUpperCase(),
                     component: DatosPersonalesComponent,
-                    x: 4,
-                    y: 1
+                    w: 4,
+                    h: 1
                 }
             }
             case "Curriculum": {
                 return {
-                    title: param.toUpperCase(),
+                    title: card.toUpperCase(),
                     component: CurriculumComponent,
-                    x: 2,
-                    y: 3
+                    w: 2,
+                    h: 3
                 }
             }
             case "Estudios": {
                 return {
-                    title: param.toUpperCase(),
+                    title: card.toUpperCase(),
                     component: EstudiosComponent,
-                    x: 4,
-                    y: 3
+                    w: 4,
+                    h: 3
                 }
             }
             case "Contrato": {
                 return {
-                    title: param.toUpperCase(),
+                    title: card.toUpperCase(),
                     component: ContratoComponent,
-                    x: 2,
-                    y: 2
+                    w: 2,
+                    h: 2
                 }
             }
             case "Horario": {
                 return {
-                    title: param.toUpperCase(),
+                    title: card.toUpperCase(),
                     component: HorarioComponent,
-                    x: 8,
-                    y: 1
+                    w: 8,
+                    h: 1
                 }
             }
             case "Documentos": {
                 return {
-                    title: param.toUpperCase(),
+                    title: card.toUpperCase(),
                     component: DocumentosComponent,
-                    x: 4,
-                    y: 4
+                    w: 4,
+                    h: 4
                 }
             }
             case "Nomina": {
                 return {
-                    title: param.toUpperCase(),
+                    title: card.toUpperCase(),
                     component: NominaComponent,
-                    x: 2,
-                    y: 1
+                    w: 2,
+                    h: 1
                 }
             }
             case "Actas": {
                 return {
-                    title: param.toUpperCase(),
+                    title: card.toUpperCase(),
                     component: ActasComponent,
-                    x: 4,
-                    y: 1
+                    w: 4,
+                    h: 1
                 }
             }
             case "Trayectoria": {
                 return {
-                    title: param.toUpperCase(),
+                    title: card.toUpperCase(),
                     component: TrayectoriaComponent,
-                    x: 2,
-                    y: 2
+                    w: 2,
+                    h: 2
                 }
             }
             case "Cursos": {
                 return {
-                    title: param.toUpperCase(),
+                    title: card.toUpperCase(),
                     component: CursosComponent,
-                    x: 6,
-                    y: 1
+                    w: 6,
+                    h: 1
                 }
             }
             //Test
             default: {
                 return {
-                    title: param.toUpperCase(),
+                    title: card.toUpperCase(),
                     component: TestComponent,
-                    x: 1,
-                    y: 1
+                    w: 1,
+                    h: 1
                 }
             }
           }
     }
 
-    override mapTo(param: CardModel): string {
+    override mapTo(card: CardModel): string {
         throw new Error("Method not implemented.");
+    }
+    
+}
+
+export class WidgetCardMapper extends CardMapper<NgGridStackWidget> {
+    override mapFrom(card: NgGridStackWidget): CardModel {
+        throw new Error("Method not implemented.");
+    }
+    override mapTo(card: CardModel): NgGridStackWidget {
+        let widget: NgGridStackWidget = {
+            id: card.title,
+            x: 0,
+            y: 0,
+            autoPosition: true,
+            minW: card.w,
+            minH: card.h,
+            selector: 'app-card',
+            input: {card: card}
+        }
+
+        return widget;
     }
     
 }

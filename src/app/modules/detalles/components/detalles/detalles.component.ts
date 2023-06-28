@@ -30,8 +30,6 @@ export class DetallesComponent implements OnInit, OnDestroy{
 
     this.route.params.subscribe(
       (params) => {
-        this.expedienteService.webStorageOnInit();
-
         try {
           // Obtener la informacion del buscador
           let index = +params['index'];
@@ -40,18 +38,16 @@ export class DetallesComponent implements OnInit, OnDestroy{
           if(empleado === undefined) {
             throw new Error("Empleado no definido en la búsqueda");
           } else {
-            this.expedienteService.setEmpleado(empleado);
+            this.expedienteService.setExpediente(empleado);
             // ... */
   
             this.expedienteService.webStorageAfterInit();
           }
         } catch (error: any) {
-          console.log("Error: " + error.message);
+          this.expedienteService.webStorageOnInit();
 
           try {
             // Obtener la informacion del expediente
-            
-    
             if(this.expedienteService.getEmpleado() === null) {
               throw new Error("Empleado no definido en el expediente");
             }

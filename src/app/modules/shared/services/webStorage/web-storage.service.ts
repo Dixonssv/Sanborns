@@ -10,12 +10,20 @@ export class WebStorageService {
   getData(keyName: string): any {
     let value = localStorage.getItem(keyName);
 
-    return value === null ? value : JSON.parse(value);
+    value = value === null ? value : JSON.parse(value);
+
+    console.log(keyName + " got as: " + value);
+    return value;
   }
 
   storeData(keyName: string, value: any) {
     localStorage.setItem(keyName, JSON.stringify(value));
     console.log(keyName + " stored as: " + localStorage.getItem(keyName));
+  }
+
+  removeData(keyName: string) {
+    localStorage.removeItem(keyName);
+    console.log(keyName + ": removed");
   }
 
   clearStorage() {
@@ -24,7 +32,18 @@ export class WebStorageService {
 }
 
 export declare interface WebStorageMethods {
+  /**
+   * @description Lógica de recuperación de datos.
+   */
   webStorageOnInit(): void;
+
+  /**
+   * @description Lógica de almacenamiento de datos.
+   */
   webStorageAfterInit(): void;
+
+  /**
+   * @description Lógica de liberacion de espacio.
+   */
   webStorageOnDestroy(): void;
 }

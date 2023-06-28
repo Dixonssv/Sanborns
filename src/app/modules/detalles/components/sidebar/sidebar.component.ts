@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { DashboardService } from '../../services/dashboard/dashboard.service';
-import { CardMapper } from '../../models/mappers/card.mapper';
+import { CardMapper, StringCardMapper } from '../../models/mappers/card.mapper';
 
 @Component({
   selector: 'app-sidebar',
@@ -23,7 +23,7 @@ export class SidebarComponent {
     "Cursos",
   ]
 
-  cardMapper : CardMapper = new CardMapper();
+  stringCardMapper : StringCardMapper = new StringCardMapper();
 
   constructor(private dashboardService: DashboardService) { }
 
@@ -39,7 +39,7 @@ export class SidebarComponent {
 
   removeAllCardsFromDashboard() {
     this.cardTypes.forEach((type) => {
-      this.dashboardService.deleteCard(this.cardMapper.mapFrom(type)).subscribe();
+      this.dashboardService.deleteCard(this.stringCardMapper.mapFrom(type)).subscribe();
     })
   }
 
