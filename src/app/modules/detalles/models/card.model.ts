@@ -3,7 +3,7 @@ import { Type } from '@angular/core';
 export interface CardModel {
   index?: number;
   title: string;
-  component: Type<any>;
+  component: any;
   w?: number;
   h?: number;
   x?: number;

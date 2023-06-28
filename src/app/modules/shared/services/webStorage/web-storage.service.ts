@@ -12,13 +12,15 @@ export class WebStorageService {
 
     value = value === null ? value : JSON.parse(value);
 
-    console.log(keyName + " got as: " + value);
+    //console.log(keyName + " got as: ");
+    //console.log(value);
     return value;
   }
 
   storeData(keyName: string, value: any) {
     localStorage.setItem(keyName, JSON.stringify(value));
-    console.log(keyName + " stored as: " + localStorage.getItem(keyName));
+    console.log(keyName + " stored as: ");
+    console.log(this.getData(keyName));
   }
 
   removeData(keyName: string) {

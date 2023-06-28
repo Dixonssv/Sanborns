@@ -45,20 +45,24 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Web
   }
 
   webStorageOnInit(): void {
-    //let serializedData = this.grid.save();
-    //this.webStorageService.storeData("dashboardSerializedData", serializedData);
+    let serializedData = this.grid.save();
+
+    this.webStorageService.storeData("dashboardSerializedData", serializedData);
   }
 
   webStorageAfterInit(): void {
-    //let serializedData = this.webStorageService.getData("dashboardSerializedData");
-    //if(serializedData !== null) {
-    //  this.grid.load(serializedData);
-    //}
+    let serializedData = this.webStorageService.getData("dashboardSerializedData");
+
+    console.log(serializedData);
+
+    if(serializedData !== null) {
+      this.grid.load(serializedData);
+    }
   }
 
   webStorageOnDestroy(): void {
-    //this.webStorageService.removeData("dashboardSerializedData");
-    //this.webStorageService.getData("dashboardSerializedData");
+    this.webStorageService.removeData("dashboardSerializedData");
+    this.webStorageService.getData("dashboardSerializedData");
   }
 
   ngOnInit(): void {
@@ -68,12 +72,12 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Web
       // Card Added
       this.dashboardService.cardAdded.pipe().subscribe((card) => {
         this.loadCard(card);
-        this.webStorageOnInit()
+        //this.webStorageOnInit()
       }),
       // Card Deleted
       this.dashboardService.cardDeleted.pipe().subscribe((card) => {
         this.unloadCard(card);
-        this.webStorageOnInit()
+        //this.webStorageOnInit()
       })
     )
   }
@@ -162,13 +166,24 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Web
   }
 
   saveGrid() {
-    //this.serializedData = this.grid.save();
+    console.log("Saving...");
+    
+    this.serializedData = this.grid.save(false);
+    console.log(this.serializedData);
+    
 
-    //console.log(this.serializedData);
+    this.webStorageOnInit();
   }
 
   loadGrid() {
-    //console.log(this.grid.load(this.serializedData));
+    console.log("Loading...");
+    //console.log(this.serializedData);
+
+    //if(this.serializedData !== undefined) {
+      //this.grid.load(this.serializedData);
+
+      this.webStorageAfterInit();
+    //}
   }
 
 

@@ -43,13 +43,12 @@ export class CardComponent extends BaseWidget implements OnInit, AfterViewInit{
   }
 
   ngOnInit(): void {
+    //this.setContent(this.card.component);
     this.setContent(this.card.component);
   }
 
   ngAfterViewInit(): void {
-    //this.adjustHeight();
 
-    //console.log(this.card);
   }
 
   cardDragStart(event: CdkDragStart<any>) {
