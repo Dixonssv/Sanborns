@@ -1,164 +1,124 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Type } from '@angular/core';
 import { CardModel } from '../../models/card.model';
 import { CardMapper, StringCardMapper } from '../../models/mappers/card.mapper';
 import { Observable, Subject, from } from 'rxjs';
+import { DatosPersonalesComponent } from '../../components/cards/datos-personales/datos-personales.component';
+import { CurriculumComponent } from '../../components/cards/curriculum/curriculum.component';
+import { EstudiosComponent } from '../../components/cards/estudios/estudios.component';
+import { ContratoComponent } from '../../components/cards/contrato/contrato.component';
+import { HorarioComponent } from '../../components/cards/horario/horario.component';
+import { DocumentosComponent } from '../../components/cards/documentos/documentos.component';
+import { NominaComponent } from '../../components/cards/nomina/nomina.component';
+import { ActasComponent } from '../../components/cards/actas/actas.component';
+import { TrayectoriaComponent } from '../../components/cards/trayectoria/trayectoria.component';
+import { CursosComponent } from '../../components/cards/cursos/cursos.component';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DashboardService {
-  /* 1rem = 16px */
-  readonly gridCellHeight: number = 64; //px = 4rem
-  readonly gridGap: number        = 16; //px = 1rem
+export class DashboardService { 
 
-  private cards: CardModel[];
+  public readonly cards = {
+    DATOS_PERSONALES: {
+      title: "Datos personales",
+      selector: "app-datos-personales",
+      w: 4, h: 1,
+    } as CardModel,
+    CURRICULUM: {
+      title: "Curriculum",
+      selector: "app-curriculum",
+      w: 2, h: 3,
+    } as CardModel,
+    ESTUDIOS: {
+      title: "Estudios",
+      selector: "app-estudios",
+      w: 4, h: 3,
+    } as CardModel,
+    CONTRATO: {
+      title: "Contrato",
+      selector: "app-contrato",
+      w: 2, h: 2,
+    } as CardModel,
+    HORARIO: {
+      title: "Horario",
+      selector: "app-horario",
+      w: 8, h: 1,
+    } as CardModel,
+    DOCUMENTOS: {
+      title: "Documentos",
+      selector: "app-documentos",
+      w: 4, h: 4,
+    } as CardModel,
+    NOMINA: {
+      title: "Nomina",
+      selector: "app-nomina",
+      w: 2, h: 1,
+    } as CardModel,
+    ACTAS: {
+      title: "Actas",
+      selector: "app-actas",
+      w: 4, h: 1,
+    } as CardModel,
+    
+  }
 
-  private stringCardMapper: StringCardMapper;
+  private loadedCards: CardModel[];
 
+  /* EVENTOS */
   cardsChanged = new Subject<boolean>();
   cardInDashboard = new Subject<number>();
-
   cardAdded = new Subject<CardModel>();
   cardDeleted = new Subject<CardModel>();
 
+  public cardsCount = () => {
+    return this.loadedCards.length;
+  }
+
   constructor() {
-    this.cards = [];
-
-    this.stringCardMapper = new StringCardMapper();
+    this.loadedCards = [];
   }
 
-  getCards(): Observable<CardModel> {
-    return from(this.cards).pipe((cards) => cards);
+  getCards(): CardModel[] {
+    return this.loadedCards;
+  }
+  
+  addCard(card: CardModel): void {
+    if(this.isIndashboard(card)) {
+      this.cardInDashboard.next(1);
+    } else {
+      this.loadedCards.push(card);
+
+      this.cardsChanged.next(true);
+      this.cardAdded.next(card);
+    }
   }
 
-  getCardsCount(): Observable<number> {
-    return new Observable<number>(observable => {
-      observable.next(this.cards.length)
-    }).pipe((count) => count);
-  }
+  isIndashboard(card: CardModel) {
+    let result = false;
 
-  addCard(type: string): Observable<void> {
-    return new Observable<void>(observable => {
-
-      let card = this.stringCardMapper.mapFrom(type);
-
-      card.index = this.cards.length;
-
-      this.searchCard(card).subscribe((index) => {
-        if (index == -1) {
-          this.cards.push(card);
-
-          //this.cards.at(this.cards.length - 1)!.index = this.cards.length - 1;
-
-          this.cardsChanged.next(true);
-          this.cardAdded.next(card);
-        } else {
-          this.cardInDashboard.next(index);
-        }
-      });
-
-      //console.log(this.cards);
-      //this.getCardsCount().subscribe((count) => console.log("Card count: " + count));
-      //this.getCards().subscribe((card) => console.log(card));
-    });
-  }
-
-  swapCards(from_index: number, to_index: number): Observable<void> {
-    return new Observable<void>(observable => {
-      if(to_index < from_index) {
-        let tmp_index = from_index;
-
-        from_index = to_index;
-        to_index = tmp_index;
+    this.loadedCards.forEach((loadedCard: CardModel) => {
+      if(card === loadedCard) {
+        result = true;
       }
+    });
 
-      // Se extraen las dos cartas
-      let toCard    = this.cards.splice(to_index, 1)[0];
-      let fromCard  = this.cards.splice(from_index, 1)[0];
-
-      // Se insertan en sus correspondientes indices
-      this.cards.splice(from_index, 0, toCard);
-      this.cards.splice(to_index, 0, fromCard);
-    })
+    return result;
   }
 
-  moveCard(from_index: number, to_index: number): Observable<void> {
-    return new Observable<void>(observable => {
+  deleteCard(card: CardModel): void {
+    if(this.isIndashboard(card)) {
+      let index = this.loadedCards.indexOf(card);
 
-      let card = this.cards.splice(from_index, 1)[0];
+      let deletedCard = this.loadedCards.splice(index, 1)[0];
 
-      /*
-      // CASO: insertar carta al final
-      if (to_index == this.cards.length) {
-        this.cards.push(card);
-        return;
-      }
-      */
-
-      // CASO: insertar carta en medio     
-      // inserta la carta en la nueva posicion
-      // Se suma 1 debido a que en la linea anterior, el tamanio del arreglo se disminuyo en uno. Esto solo afecta
-      // cuando la carta se inserta en una posicion anterior.
-      if (from_index < to_index) {
-        this.cards.splice(to_index, 0, card);
-      } else {
-        this.cards.splice(to_index + 1, 0, card);
-      }
-      
-      
-      //this.cards.splice(to_index, 0, card);
-    });
-  }
-
-  deleteCard(card: CardModel): Observable<void> {
-    return new Observable<void>(observable => {
-      this.searchCard(card).subscribe((index) => {
-        if (index >= 0) {
-          // Se encuentra en el array
-
-          let card = this.cards.splice(index, 1)[0];
-
-          this.updateCardIndexes();
-
-          this.cardsChanged.next(true);
-          this.cardDeleted.next(card);
-        }
-      });
-    });
-  }
-
-  searchCard(searchCard: CardModel): Observable<number> {
-
-    return new Observable<number>(observable => {
-      let i = 0;
-      let index = -1;
-
-      this.cards.forEach(card => {
-        if (card.component == searchCard.component) {
-          index = i;
-        }
-        i++;
-      });
-
-      observable.next(index);
-    });
+      this.cardsChanged.next(true);
+      this.cardDeleted.next(deletedCard);
+    }
   }
 
   destroy(): Observable<void> {
     return new Observable<void>(observable => {
-      this.cards = [];
+      this.loadedCards = [];
     });
-  }
-
-  updateCardIndexes() {
-    let i = 0;
-    this.cards.forEach((card) => {
-      card.index = i;
-      i++;
-    });
-  }
-
-  indexOf(card: CardModel) {
-    return this.cards.indexOf(card);
   }
 }

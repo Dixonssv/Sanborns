@@ -92,7 +92,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Web
     
     this.printService.printableObject = this.printableArea;
 
-    this.webStorageAfterInit();
+    //this.webStorageAfterInit();
   }
 
   ngOnDestroy(): void {

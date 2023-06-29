@@ -61,9 +61,9 @@ export class DetallesComponent implements OnInit, OnDestroy{
 
     /* SUBSCRIPCIONES */
     this.dashboardService.cardsChanged.pipe().subscribe(() => {
-      this.dashboardService.getCardsCount().subscribe((count) => {
-        this.showDownloadBtn = count > 0;
-      });
+      let cardCount = this.dashboardService.cardsCount();
+
+      this.showDownloadBtn = cardCount > 0;
     });
   }
 

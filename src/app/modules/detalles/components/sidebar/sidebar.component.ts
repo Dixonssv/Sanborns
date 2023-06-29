@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { DashboardService } from '../../services/dashboard/dashboard.service';
 import { CardMapper, StringCardMapper } from '../../models/mappers/card.mapper';
+import { CardModel } from '../../models/card.model';
 
 @Component({
   selector: 'app-sidebar',
@@ -25,21 +26,23 @@ export class SidebarComponent {
 
   stringCardMapper : StringCardMapper = new StringCardMapper();
 
-  constructor(private dashboardService: DashboardService) { }
+  constructor(
+    public dashboardService: DashboardService
+  ) { }
 
-  addCardToDashboard(component:string) {
-    this.dashboardService.addCard(component).subscribe();
+  addCardToDashboard(card: CardModel | null) {
+    this.dashboardService.addCard(card!);
   }
 
   addAllCardsToDashboard() {
     this.cardTypes.forEach((type) => {
-      this.addCardToDashboard(type);
+      //this.addCardToDashboard(type);
     });
   }
 
   removeAllCardsFromDashboard() {
     this.cardTypes.forEach((type) => {
-      this.dashboardService.deleteCard(this.stringCardMapper.mapFrom(type)).subscribe();
+      //this.dashboardService.deleteCard(this.stringCardMapper.mapFrom(type)).subscribe();
     })
   }
 

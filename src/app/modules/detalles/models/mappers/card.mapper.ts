@@ -13,17 +13,17 @@ import { CursosComponent } from "../../components/cards/cursos/cursos.component"
 import { TestComponent } from "../../components/cards/test/test.component";
 import { NgGridStackWidget } from "gridstack/dist/angular";
 
-export abstract class CardMapper<I> extends Mapper<I, CardModel> { }
+export abstract class CardMapper<I> extends Mapper<I, CardModel | null> { }
 
 export class StringCardMapper extends CardMapper<string> {
-    override mapFrom(card: string): CardModel {
+    override mapFrom(card: string): CardModel | null {
         //console.log("Map from: " + param);
 
         switch(card) {
             case "Datos personales": {
                 return {
                     title: card.toUpperCase(),
-                    component: DatosPersonalesComponent,
+                    selector: "app-datos-personales",
                     w: 4,
                     h: 1
                 }
@@ -31,7 +31,7 @@ export class StringCardMapper extends CardMapper<string> {
             case "Curriculum": {
                 return {
                     title: card.toUpperCase(),
-                    component: CurriculumComponent,
+                    selector: "app-curriculum",
                     w: 2,
                     h: 3
                 }
@@ -39,7 +39,7 @@ export class StringCardMapper extends CardMapper<string> {
             case "Estudios": {
                 return {
                     title: card.toUpperCase(),
-                    component: EstudiosComponent,
+                    selector: "app-estudios",
                     w: 4,
                     h: 3
                 }
@@ -47,7 +47,7 @@ export class StringCardMapper extends CardMapper<string> {
             case "Contrato": {
                 return {
                     title: card.toUpperCase(),
-                    component: ContratoComponent,
+                    selector: "app-contrato",
                     w: 2,
                     h: 2
                 }
@@ -55,7 +55,7 @@ export class StringCardMapper extends CardMapper<string> {
             case "Horario": {
                 return {
                     title: card.toUpperCase(),
-                    component: HorarioComponent,
+                    selector: "app-horario",
                     w: 8,
                     h: 1
                 }
@@ -63,7 +63,7 @@ export class StringCardMapper extends CardMapper<string> {
             case "Documentos": {
                 return {
                     title: card.toUpperCase(),
-                    component: DocumentosComponent,
+                    selector: "app-documentos",
                     w: 4,
                     h: 4
                 }
@@ -71,7 +71,7 @@ export class StringCardMapper extends CardMapper<string> {
             case "Nomina": {
                 return {
                     title: card.toUpperCase(),
-                    component: NominaComponent,
+                    selector: "app-nomina",
                     w: 2,
                     h: 1
                 }
@@ -79,7 +79,7 @@ export class StringCardMapper extends CardMapper<string> {
             case "Actas": {
                 return {
                     title: card.toUpperCase(),
-                    component: ActasComponent,
+                    selector: "app-actas",
                     w: 4,
                     h: 1
                 }
@@ -87,7 +87,7 @@ export class StringCardMapper extends CardMapper<string> {
             case "Trayectoria": {
                 return {
                     title: card.toUpperCase(),
-                    component: TrayectoriaComponent,
+                    selector: "app-trayectoria",
                     w: 2,
                     h: 2
                 }
@@ -95,19 +95,14 @@ export class StringCardMapper extends CardMapper<string> {
             case "Cursos": {
                 return {
                     title: card.toUpperCase(),
-                    component: CursosComponent,
+                    selector: "app-cursos",
                     w: 6,
                     h: 1
                 }
             }
             //Test
             default: {
-                return {
-                    title: card.toUpperCase(),
-                    component: TestComponent,
-                    w: 1,
-                    h: 1
-                }
+                return null;
             }
           }
     }
