@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { GridItemHTMLElement, GridStack } from 'gridstack';
+import { GridItemHTMLElement, GridStack, GridStackWidget } from 'gridstack';
 import { GridstackComponent, NgGridStackWidget, NgGridStackOptions } from 'gridstack/dist/angular';
 import { CardComponent } from '../cards/card/card.component';
 import { CardMapper, StringCardMapper, WidgetCardMapper } from '../../models/mappers/card.mapper';
@@ -45,19 +45,26 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Web
   }
 
   webStorageOnInit(): void {
-    let serializedData = this.grid.save();
+    console.log("Loading...");
+    
+    let serializedData = this.webStorageService.getData("dashboardSerializedData");
 
-    this.webStorageService.storeData("dashboardSerializedData", serializedData);
+    
+    if(serializedData !== null) {
+      this.grid.load(serializedData);
+
+      serializedData.forEach((widget: any) => {
+        this.dashboardService.addCard(widget.input?.["card"], false);
+      });
+    }
   }
 
   webStorageAfterInit(): void {
-    let serializedData = this.webStorageService.getData("dashboardSerializedData");
+    console.log("Saving...");
 
-    console.log(serializedData);
+    let serializedData = this.grid.save();
 
-    if(serializedData !== null) {
-      this.grid.load(serializedData);
-    }
+    this.webStorageService.storeData("dashboardSerializedData", serializedData);
   }
 
   webStorageOnDestroy(): void {
@@ -72,12 +79,12 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Web
       // Card Added
       this.dashboardService.cardAdded.pipe().subscribe((card) => {
         this.loadCard(card);
-        //this.webStorageOnInit()
+        this.webStorageAfterInit();
       }),
       // Card Deleted
       this.dashboardService.cardDeleted.pipe().subscribe((card) => {
         this.unloadCard(card);
-        //this.webStorageOnInit()
+        this.webStorageAfterInit();
       })
     )
   }
@@ -86,23 +93,24 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Web
     this.grid = GridStack.init();
 
     this.grid.on("change", () => {
-      console.log("Changed");
-      //this.webStorageOnInit()
+      this.webStorageAfterInit();
     });
     
     this.printService.printableObject = this.printableArea;
 
-    //this.webStorageAfterInit();
+    this.webStorageOnInit();
   }
 
   ngOnDestroy(): void {
+    this.grid.destroy();
+
+    this.webStorageOnDestroy();
+
     this.dashboardService.destroy().subscribe();
 
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
     });
-
-    this.webStorageOnDestroy();
   }
 
   loadCard(card: CardModel) {
@@ -168,22 +176,14 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Web
   saveGrid() {
     console.log("Saving...");
     
-    this.serializedData = this.grid.save(false);
-    console.log(this.serializedData);
+    this.webStorageAfterInit();
     
-
-    this.webStorageOnInit();
   }
 
   loadGrid() {
     console.log("Loading...");
-    //console.log(this.serializedData);
 
-    //if(this.serializedData !== undefined) {
-      //this.grid.load(this.serializedData);
-
-      this.webStorageAfterInit();
-    //}
+    this.webStorageOnInit();
   }
 
 

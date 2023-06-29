@@ -1,17 +1,6 @@
-import { Injectable, Type } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { CardModel } from '../../models/card.model';
-import { CardMapper, StringCardMapper } from '../../models/mappers/card.mapper';
-import { Observable, Subject, from } from 'rxjs';
-import { DatosPersonalesComponent } from '../../components/cards/datos-personales/datos-personales.component';
-import { CurriculumComponent } from '../../components/cards/curriculum/curriculum.component';
-import { EstudiosComponent } from '../../components/cards/estudios/estudios.component';
-import { ContratoComponent } from '../../components/cards/contrato/contrato.component';
-import { HorarioComponent } from '../../components/cards/horario/horario.component';
-import { DocumentosComponent } from '../../components/cards/documentos/documentos.component';
-import { NominaComponent } from '../../components/cards/nomina/nomina.component';
-import { ActasComponent } from '../../components/cards/actas/actas.component';
-import { TrayectoriaComponent } from '../../components/cards/trayectoria/trayectoria.component';
-import { CursosComponent } from '../../components/cards/cursos/cursos.component';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -82,14 +71,18 @@ export class DashboardService {
     return this.loadedCards;
   }
   
-  addCard(card: CardModel): void {
+  addCard(card: CardModel, emmitEvent: boolean = true): void {
     if(this.isIndashboard(card)) {
-      this.cardInDashboard.next(1);
+      if(emmitEvent) {
+        this.cardInDashboard.next(1);
+      }
     } else {
       this.loadedCards.push(card);
 
-      this.cardsChanged.next(true);
-      this.cardAdded.next(card);
+      if(emmitEvent) {
+        this.cardsChanged.next(true);
+        this.cardAdded.next(card);
+      }
     }
   }
 
@@ -105,14 +98,16 @@ export class DashboardService {
     return result;
   }
 
-  deleteCard(card: CardModel): void {
+  deleteCard(card: CardModel, emmitEvent: boolean = true): void {
     if(this.isIndashboard(card)) {
       let index = this.loadedCards.indexOf(card);
 
       let deletedCard = this.loadedCards.splice(index, 1)[0];
 
-      this.cardsChanged.next(true);
-      this.cardDeleted.next(deletedCard);
+      if(emmitEvent) {
+        this.cardsChanged.next(true);
+        this.cardDeleted.next(deletedCard);
+      }
     }
   }
 
