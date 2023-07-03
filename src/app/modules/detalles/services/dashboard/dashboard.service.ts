@@ -48,6 +48,16 @@ export class DashboardService {
       selector: "app-actas",
       w: 4, h: 1,
     } as CardModel,
+    TRAYECTORIA: {
+      title: "Trayectoria",
+      selector: "app-trayectoria",
+      w: 2, h: 2,
+    } as CardModel,
+    CURSOS: {
+      title: "Cursos",
+      selector: "app-cursos",
+      w: 6, h: 1,
+    } as CardModel
     
   }
 
@@ -65,6 +75,18 @@ export class DashboardService {
 
   constructor() {
     this.loadedCards = [];
+  }
+
+  getCard(selector: string): CardModel | null {
+    let cardKey: keyof typeof this.cards;
+
+    for(cardKey in this.cards) {
+      if(this.cards[cardKey].selector === selector) {
+        return this.cards[cardKey];
+      }
+    }
+
+    return null;
   }
 
   getCards(): CardModel[] {
@@ -86,21 +108,15 @@ export class DashboardService {
     }
   }
 
-  isIndashboard(card: CardModel) {
-    let result = false;
-
-    this.loadedCards.forEach((loadedCard: CardModel) => {
-      if(card === loadedCard) {
-        result = true;
-      }
-    });
-
-    return result;
-  }
-
   deleteCard(card: CardModel, emmitEvent: boolean = true): void {
+    console.log("Delete card: ");
+    console.log(card);
+
+    console.log("IsIndashboard: " + this.isIndashboard(card));
+
     if(this.isIndashboard(card)) {
-      let index = this.loadedCards.indexOf(card);
+      let index = this.indexOf(card);
+      console.log("Index:" + index);
 
       let deletedCard = this.loadedCards.splice(index, 1)[0];
 
@@ -109,6 +125,38 @@ export class DashboardService {
         this.cardDeleted.next(deletedCard);
       }
     }
+  }
+
+  cardEquals(card1: CardModel, card2: CardModel): boolean {
+    let propKey: keyof CardModel;
+
+    for(propKey in card1) {
+      if(card1[propKey] != card2[propKey]) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  isIndashboard(card: CardModel) {
+    //return this.indexOf(card) >= 0;
+
+    return this.indexOf(card) >= 0;
+  }
+
+  indexOf(card: CardModel): number {
+    let index = -1;
+
+    let count = 0;
+    this.loadedCards.forEach((loadedCard) => {
+      if(this.cardEquals(card, loadedCard)) {
+        index = count;
+      }
+      count ++;
+    })
+
+    return index;
   }
 
   destroy(): Observable<void> {

@@ -35,15 +35,36 @@ export class SidebarComponent {
   }
 
   addAllCardsToDashboard() {
-    this.cardTypes.forEach((type) => {
-      //this.addCardToDashboard(type);
-    });
+    let cardlist = this.dashboardService.cards;
+
+    let cardKey: keyof typeof cardlist;
+
+    for(cardKey in this.dashboardService.cards) {
+      this.addCardToDashboard(cardlist[cardKey]);
+    }
+
+    /* 
+    // Tambien funciona:
+    Object.entries(this.dashboardService.cards).forEach((card) => {
+      this.addCardToDashboard(card[1]);
+    })
+    */
   }
 
   removeAllCardsFromDashboard() {
-    this.cardTypes.forEach((type) => {
-      //this.dashboardService.deleteCard(this.stringCardMapper.mapFrom(type)).subscribe();
-    })
+    let cardlist = this.dashboardService.cards;
+
+    let cardKey: keyof typeof cardlist;
+
+    for(cardKey in this.dashboardService.cards) {
+      //console.log("Deleta card: ");
+      //console.log(cardlist[cardKey]);
+
+      this.dashboardService.deleteCard(cardlist[cardKey]);
+    }
+
+    console.log("Loaded Cards:");
+    console.log(this.dashboardService.getCards()); 
   }
 
 }

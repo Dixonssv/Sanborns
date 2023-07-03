@@ -48,13 +48,17 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit, Web
     console.log("Loading...");
     
     let serializedData = this.webStorageService.getData("dashboardSerializedData");
-
     
     if(serializedData !== null) {
       this.grid.load(serializedData);
 
       serializedData.forEach((widget: any) => {
-        this.dashboardService.addCard(widget.input?.["card"], false);
+        let card = this.dashboardService.getCard(widget.input?.["card"].selector);
+        console.log(card);
+
+        if(card != null) {
+          this.dashboardService.addCard(card, false);
+        }
       });
     }
   }
